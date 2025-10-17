@@ -153,14 +153,16 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     marginTop: 50,
-    width: "100%",
+    width: '100%',
+    alignSelf: 'center',
   },
   primaryButton: {
-    backgroundColor: "#1E5AA8",
+    backgroundColor: '#1E5AA8',
     borderRadius: 25,
     paddingVertical: 16,
     marginBottom: 16,
-    shadowColor: "#000",
+    width: '100%',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 4,
@@ -176,11 +178,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   googleButton: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 25,
     paddingVertical: 16,
     marginBottom: 16,
-    shadowColor: "#000",
+    width: '100%',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -201,10 +204,11 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   guestButton: {
-    backgroundColor: "#28A745",
+    backgroundColor: '#28A745',
     borderRadius: 25,
     paddingVertical: 16,
-    shadowColor: "#000",
+    width: '100%',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 4,
