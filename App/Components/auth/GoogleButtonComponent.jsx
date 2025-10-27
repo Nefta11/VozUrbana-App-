@@ -1,6 +1,6 @@
 import React from "react";
 import { TouchableOpacity, Text, StyleSheet, Image, View } from "react-native";
-import { colors } from "../utils/colors";
+import { colors } from "../../utils/colors";
 
 const GoogleButtonComponent = ({ onPress }) => {
     return (
