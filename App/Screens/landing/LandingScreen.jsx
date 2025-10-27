@@ -12,12 +12,12 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialIcons } from "@expo/vector-icons";
-import { colors, gradients } from "../utils/colors";
-import GoogleButtonComponent from "../Components/GoogleButtonComponent";
+import { colors, gradients } from "../../utils/colors";
+import GoogleButtonComponent from "../../Components/GoogleButtonComponent";
 
 const { width, height } = Dimensions.get("window");
 
-export default function LoginScreen({ animated = false }) {
+export default function LandingScreen({ animated = false }) {
   // Animaciones
   const logoSlideUp = useRef(new Animated.Value(animated ? height : 0)).current;
   const welcomeSlideUp = useRef(new Animated.Value(animated ? height + 100 : 0)).current;

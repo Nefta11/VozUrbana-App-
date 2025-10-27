@@ -10,7 +10,7 @@ import {
   Image,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { colors, gradients } from '../utils/colors';
+import { colors, gradients } from '../../utils/colors';
 
 const { width, height } = Dimensions.get('window');
 
