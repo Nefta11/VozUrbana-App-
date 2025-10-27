@@ -86,7 +86,7 @@ export default function LoginScreen({ navigation }) {
                         <TextInput
                             style={styles.textInput}
                             placeholder="Loisbecket@gmail.com"
-                            placeholderTextColor="#AAAAAA"
+                            placeholderTextColor="#999999"
                             value={email}
                             onChangeText={setEmail}
                             keyboardType="email-address"
@@ -102,11 +102,10 @@ export default function LoginScreen({ navigation }) {
                         <TextInput
                             style={styles.passwordInput}
                             placeholder="********"
-                            placeholderTextColor="#AAAAAA"
+                            placeholderTextColor="#999999"
                             value={password}
                             onChangeText={setPassword}
                             secureTextEntry={!showPassword}
-                            // El estilo del texto se mantiene alineado con la imagen.
                         />
                         <TouchableOpacity
                             style={styles.eyeButton}
@@ -224,58 +223,59 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
     },
     formTitle: {
-        fontSize: 26,
+        fontSize: 28,
         fontWeight: '700',
         color: '#333333',
         textAlign: 'center',
-        marginBottom: 4,
+        marginBottom: 6,
     },
     formSubtitle: {
-        fontSize: 15,
+        fontSize: 16,
         color: '#666666',
         textAlign: 'center',
-        marginBottom: 24,
+        marginBottom: 28,
         fontWeight: '400',
     },
     inputSection: {
-        marginBottom: 18,
+        marginBottom: 20,
     },
     inputLabel: {
         fontSize: 16,
         color: '#333333',
-        marginBottom: 8,
-        fontWeight: '500',
+        marginBottom: 10,
+        fontWeight: '600',
     },
     textInputWrapper: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#F5F5F5',
-        borderRadius: 8,
+        backgroundColor: '#F8F8F8',
+        borderRadius: 12,
         paddingHorizontal: 0,
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.05,
-        shadowRadius: 3,
-        elevation: 2,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.08,
+        shadowRadius: 4,
+        elevation: 3,
         borderWidth: 1,
-        borderColor: '#E0E0E0',
+        borderColor: '#E8E8E8',
     },
     textInput: {
         flex: 1,
-        paddingHorizontal: 15,
-        paddingVertical: 14,
+        paddingHorizontal: 16,
+        paddingVertical: 16,
         fontSize: 16,
         color: '#333333',
     },
     passwordInput: {
         flex: 1,
-        paddingHorizontal: 15,
-        paddingVertical: 14,
+        paddingHorizontal: 16,
+        paddingVertical: 16,
         fontSize: 16,
         color: '#333333',
     },
     eyeButton: {
-        paddingHorizontal: 15, // Padding para el icono
+        paddingHorizontal: 16,
+        paddingVertical: 16,
     },
     // --- BOTÓN DE LOGIN ---
     loginButton: {
@@ -304,17 +304,17 @@ const styles = StyleSheet.create({
     separator: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginVertical: 16,
+        marginVertical: 18,
     },
     separatorLine: {
         flex: 1,
         height: 1,
-        backgroundColor: '#E0E0E0',
+        backgroundColor: '#E5E5E5',
     },
     separatorText: {
-        marginHorizontal: 12,
+        marginHorizontal: 14,
         color: '#666666',
-        fontSize: 14,
+        fontSize: 15,
         fontWeight: '500',
     },
     registerContainer: {
@@ -329,7 +329,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     registerLink: {
-        color: '#000000', // Negro como en la imagen
+        color: '#007AFF', // Azul como en la imagen
         fontSize: 16,
         fontWeight: '600',
     },
