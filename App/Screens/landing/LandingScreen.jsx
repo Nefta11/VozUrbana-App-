@@ -86,21 +86,21 @@ export default function LandingScreen({ animated = false }) {
         locations={gradients.primaryGradient.locations}
       >
         {/* Logo Section */}
-        <Animated.View 
+        <Animated.View
           style={[
             styles.logoContainer,
             { transform: [{ translateY: logoSlideUp }] }
           ]}
         >
-          <Image 
-            source={require('../../../assets/White.png')} 
+          <Image
+            source={require('../../../assets/White.png')}
             style={styles.logoImage}
             resizeMode="contain"
           />
         </Animated.View>
 
         {/* Welcome Section */}
-        <Animated.View 
+        <Animated.View
           style={[
             styles.welcomeContainer,
             { transform: [{ translateY: welcomeSlideUp }] }
@@ -113,7 +113,7 @@ export default function LandingScreen({ animated = false }) {
         </Animated.View>
 
         {/* Buttons Section */}
-        <Animated.View 
+        <Animated.View
           style={[
             styles.buttonsContainer,
             { transform: [{ translateY: buttonsSlideUp }] }
@@ -137,7 +137,7 @@ export default function LandingScreen({ animated = false }) {
         </Animated.View>
 
         {/* Sign Up Section */}
-        <Animated.View 
+        <Animated.View
           style={[
             styles.signUpContainer,
             { transform: [{ translateY: signUpSlideUp }] }
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
     lineHeight: 26,
   },
   buttonsContainer: {
-    marginTop: 25,
+    marginTop: 5,
     width: '100%',
     alignSelf: 'center',
     flex: 1.5,
