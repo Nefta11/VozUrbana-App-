@@ -12,6 +12,7 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialIcons } from "@expo/vector-icons";
 import { colors, gradients } from "../utils/colors";
+import GoogleButtonComponent from "../Components/GoogleButtonComponent";
 
 const { width, height } = Dimensions.get("window");
 
@@ -67,17 +68,7 @@ export default function LoginScreen() {
           </TouchableOpacity>
 
           {/* Google Login Button */}
-          <TouchableOpacity
-            style={styles.googleButton}
-            onPress={handleGoogleLogin}
-          >
-            <View style={styles.googleButtonContent}>
-              <MaterialIcons name="account-circle" size={20} color={colors.buttonGoogle} />
-              <Text style={styles.googleButtonText}>
-                Iniciar sesión con google
-              </Text>
-            </View>
-          </TouchableOpacity>
+          <GoogleButtonComponent onPress={handleGoogleLogin} />
 
           {/* Guest Entry Button */}
           <TouchableOpacity
@@ -125,7 +116,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   welcomeTitle: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "600",
     color: colors.textWhite,
     marginBottom: 12,
@@ -163,32 +154,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     textAlign: "center",
   },
-  googleButton: {
-    backgroundColor: colors.backgroundWhite,
-    borderRadius: 25,
-    paddingVertical: 16,
-    marginBottom: 16,
-    width: '100%',
-    shadowColor: colors.shadowColor,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  googleButtonContent: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  googleButtonText: {
-    color: colors.textDark,
-    fontSize: 16,
-    fontWeight: "500",
-    marginLeft: 8,
-  },
+
   guestButton: {
     backgroundColor: colors.buttonSecondary,
     borderRadius: 25,
