@@ -92,7 +92,7 @@ export default function LoginScreen({ navigation }) {
                         <TextInput
                             style={styles.textInput}
                             placeholder="Loisbecket@gmail.com"
-                            placeholderTextColor="#999999"
+                            placeholderTextColor={colors.textPlaceholder}
                             value={email}
                             onChangeText={setEmail}
                             keyboardType="email-address"
@@ -108,7 +108,7 @@ export default function LoginScreen({ navigation }) {
                         <TextInput
                             style={styles.passwordInput}
                             placeholder="********"
-                            placeholderTextColor="#999999"
+                            placeholderTextColor={colors.textPlaceholder}
                             value={password}
                             onChangeText={setPassword}
                             secureTextEntry={!showPassword}
@@ -120,7 +120,7 @@ export default function LoginScreen({ navigation }) {
                             <MaterialIcons
                                 name={showPassword ? "visibility" : "visibility-off"}
                                 size={20}
-                                color="#666666"
+                                color={colors.textGray}
                             />
                         </TouchableOpacity>
                     </View>
@@ -154,7 +154,7 @@ export default function LoginScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: colors.backgroundWhite,
     },
     // --- HEADER Y IMAGEN DE FONDO ---
     header: {
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     headerTitle: {
-        color: '#FFFFFF',
+        color: colors.textWhite,
         fontSize: 16,
         fontWeight: '700',
         textAlign: 'center',
@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
         letterSpacing: 1.2,
     },
     headerSubtitle: {
-        color: '#FFFFFF',
+        color: colors.textWhite,
         fontSize: 14,
         textAlign: 'center',
         lineHeight: 20,
@@ -218,14 +218,14 @@ const styles = StyleSheet.create({
     // --- FORMULARIO Y CAMPOS DE TEXTO ---
     formContainer: {
         flex: 1,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: colors.backgroundWhite,
         paddingHorizontal: 32,
         paddingTop: 28,
         paddingBottom: 32,
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
         marginTop: -30,
-        shadowColor: '#000',
+        shadowColor: colors.shadowColor,
         shadowOffset: {
             width: 0,
             height: -2,
@@ -238,13 +238,13 @@ const styles = StyleSheet.create({
     formTitle: {
         fontSize: 28,
         fontWeight: '700',
-        color: '#333333',
+        color: colors.textDark,
         textAlign: 'center',
         marginBottom: 6,
     },
     formSubtitle: {
         fontSize: 16,
-        color: '#666666',
+        color: colors.textGray,
         textAlign: 'center',
         marginBottom: 28,
         fontWeight: '400',
@@ -254,37 +254,37 @@ const styles = StyleSheet.create({
     },
     inputLabel: {
         fontSize: 16,
-        color: '#333333',
+        color: colors.textDark,
         marginBottom: 10,
         fontWeight: '600',
     },
     textInputWrapper: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#F8F8F8',
+        backgroundColor: colors.backgroundInput,
         borderRadius: 12,
         paddingHorizontal: 0,
-        shadowColor: '#000',
+        shadowColor: colors.shadowColor,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.08,
         shadowRadius: 4,
         elevation: 3,
         borderWidth: 1,
-        borderColor: '#E8E8E8',
+        borderColor: colors.borderLight,
     },
     textInput: {
         flex: 1,
         paddingHorizontal: 16,
         paddingVertical: 16,
         fontSize: 16,
-        color: '#333333',
+        color: colors.textDark,
     },
     passwordInput: {
         flex: 1,
         paddingHorizontal: 16,
         paddingVertical: 16,
         fontSize: 16,
-        color: '#333333',
+        color: colors.textDark,
     },
     eyeButton: {
         paddingHorizontal: 16,
@@ -292,12 +292,12 @@ const styles = StyleSheet.create({
     },
     // --- BOTÓN DE LOGIN ---
     loginButton: {
-        backgroundColor: '#28A745', 
+        backgroundColor: colors.buttonSecondary, 
         borderRadius: 30,
         paddingVertical: 16,
         marginTop: 12,
         marginBottom: 8,
-        shadowColor: '#28A745',
+        shadowColor: colors.buttonSecondary,
         shadowOffset: {
             width: 0,
             height: 6,
@@ -307,7 +307,7 @@ const styles = StyleSheet.create({
         elevation: 8,
     },
     loginButtonText: {
-        color: '#FFFFFF',
+        color: colors.textWhite,
         fontSize: 17,
         fontWeight: '700',
         textAlign: 'center',
@@ -322,11 +322,11 @@ const styles = StyleSheet.create({
     separatorLine: {
         flex: 1,
         height: 1,
-        backgroundColor: '#E5E5E5',
+        backgroundColor: colors.borderSeparator,
     },
     separatorText: {
         marginHorizontal: 14,
-        color: '#666666',
+        color: colors.textGray,
         fontSize: 15,
         fontWeight: '500',
     },
@@ -338,11 +338,11 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     registerQuestion: {
-        color: '#666666',
+        color: colors.textGray,
         fontSize: 16,
     },
     registerLink: {
-        color: '#007AFF', // Azul como en la imagen
+        color: colors.buttonPrimary,
         fontSize: 16,
         fontWeight: '600',
     },

@@ -14,10 +14,17 @@ export const colors = {
     textWhite: '#FFFFFF',
     textDark: '#333333',
     textLight: 'rgba(255, 255, 255, 0.85)',
+    textGray: '#666666',
+    textPlaceholder: '#999999',
 
     // Colores de fondo
     backgroundWhite: '#FFFFFF',
     backgroundTransparent: 'rgba(255, 255, 255, 0.15)',
+    backgroundInput: '#F8F8F8',
+
+    // Colores de bordes
+    borderLight: '#E8E8E8',
+    borderSeparator: '#E5E5E5',
 
     // Colores de sombra
     shadowColor: '#000000',
