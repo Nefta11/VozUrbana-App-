@@ -43,12 +43,10 @@ export default function LoginScreen() {
         {/* Logo Section */}
         <View style={styles.logoContainer}>
           <Image 
-            source={require('../../assets/vozUrbana.png')} 
+            source={require('../../assets/White.png')} 
             style={styles.logoImage}
             resizeMode="contain"
           />
-          <Text style={styles.logoText}>mi voz</Text>
-          <Text style={styles.logoSubtext}>urbana</Text>
         </View>
 
         {/* Welcome Section */}
@@ -116,25 +114,13 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
   logoImage: {
-    width: 120,
-    height: 120,
-    marginBottom: 16,
-  },
-  logoText: {
-    fontSize: 28,
-    fontWeight: "600",
-    color: "white",
-    marginBottom: -5,
-  },
-  logoSubtext: {
-    fontSize: 16,
-    fontWeight: "400",
-    color: "white",
-    opacity: 0.9,
+    width: 132,
+    height: 132,
+    marginBottom: 8,
   },
   welcomeContainer: {
     alignItems: "center",
-    marginTop: 60,
+    marginTop: 20,
   },
   welcomeTitle: {
     fontSize: 24,
@@ -156,7 +142,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   primaryButton: {
-    backgroundColor: '#1E5AA8',
+    backgroundColor: '#1778F2',
     borderRadius: 25,
     paddingVertical: 16,
     marginBottom: 16,
@@ -203,7 +189,7 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   guestButton: {
-    backgroundColor: '#28A745',
+    backgroundColor: '#039a6c',
     borderRadius: 25,
     paddingVertical: 16,
     width: '100%',
