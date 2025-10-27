@@ -46,13 +46,13 @@ export default function LoginScreen({ navigation }) {
 
             {/* Header con imagen de fondo */}
             <ImageBackground 
-                source={require('../../../assets/login.jpg')}
+                source={require('../../../assets/uno.jpg')}
                 style={styles.header}
                 resizeMode="cover"
-                imageStyle={styles.headerImage}
+                imageStyle={styles.headerBackgroundImage}
             >
                 <LinearGradient
-                    colors={['rgba(0,0,0,0.6)', 'rgba(0,0,0,0.4)']}
+                    colors={['rgba(0,0,0,0.5)', 'rgba(0,0,0,0.3)']}
                     style={styles.headerOverlay}
                 >
                     {/* Botón de regreso */}
@@ -160,9 +160,14 @@ const styles = StyleSheet.create({
     header: {
         height: '40%',
         position: 'relative',
+        overflow: 'hidden',
     },
-    headerImage: {
-        top: '20%', // Mueve la imagen hacia abajo
+    headerBackgroundImage: {
+        width: '100%',
+        height: '100%',
+        position: 'absolute',
+        top: 0,
+        left: 0,
     },
     headerOverlay: {
         flex: 1,
