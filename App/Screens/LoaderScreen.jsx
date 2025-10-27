@@ -130,7 +130,7 @@ export default function LoaderScreen({ onComplete }) {
                 opacity: logoOpacity,
                 transform: [
                   { translateY: logoFallAnim },
-                  { rotate: logoRotate }
+                  { rotateY: logoRotate }
                 ],
               },
             ]}
