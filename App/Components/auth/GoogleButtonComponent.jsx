@@ -1,13 +1,13 @@
 import React from "react";
 import { TouchableOpacity, Text, StyleSheet, Image, View } from "react-native";
-import { colors } from "../utils/colors";
+import { colors } from "../../utils/colors";
 
 const GoogleButtonComponent = ({ onPress }) => {
     return (
         <TouchableOpacity style={styles.googleButton} onPress={onPress}>
             <View style={styles.googleButtonContent}>
                 {/* Cargar la imagen del ícono de Google desde assets */}
-                <Image source={require("../../assets/google.png")} style={styles.icon} />
+                <Image source={require("../../../assets/google.png")} style={styles.icon} />
                 <Text style={styles.socialButtonText}>Iniciar sesión con google</Text>
             </View>
         </TouchableOpacity>

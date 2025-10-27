@@ -1,10 +1,11 @@
+import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import LoginScreen from './App/Screens/LoginScreen';
+import AppStack from './App/navigation/AppStack';
 
 export default function App() {
   return (
     <>
-      <LoginScreen />
+      <AppStack />
       <StatusBar style="light" />
     </>
   );

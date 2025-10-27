@@ -12,12 +12,12 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialIcons } from "@expo/vector-icons";
-import { colors, gradients } from "../utils/colors";
-import GoogleButtonComponent from "../Components/auth/GoogleButtonComponent";
+import { colors, gradients } from "../../utils/colors";
+import GoogleButtonComponent from "../../Components/auth/GoogleButtonComponent";
 
 const { width, height } = Dimensions.get("window");
 
-export default function LoginScreen({ animated = false }) {
+export default function LandingScreen({ animated = false }) {
   // Animaciones
   const logoSlideUp = useRef(new Animated.Value(animated ? height : 0)).current;
   const welcomeSlideUp = useRef(new Animated.Value(animated ? height + 100 : 0)).current;
@@ -86,21 +86,21 @@ export default function LoginScreen({ animated = false }) {
         locations={gradients.primaryGradient.locations}
       >
         {/* Logo Section */}
-        <Animated.View 
+        <Animated.View
           style={[
             styles.logoContainer,
             { transform: [{ translateY: logoSlideUp }] }
           ]}
         >
-          <Image 
-            source={require('../../assets/White.png')} 
+          <Image
+            source={require('../../../assets/White.png')}
             style={styles.logoImage}
             resizeMode="contain"
           />
         </Animated.View>
 
         {/* Welcome Section */}
-        <Animated.View 
+        <Animated.View
           style={[
             styles.welcomeContainer,
             { transform: [{ translateY: welcomeSlideUp }] }
@@ -113,7 +113,7 @@ export default function LoginScreen({ animated = false }) {
         </Animated.View>
 
         {/* Buttons Section */}
-        <Animated.View 
+        <Animated.View
           style={[
             styles.buttonsContainer,
             { transform: [{ translateY: buttonsSlideUp }] }
@@ -137,7 +137,7 @@ export default function LoginScreen({ animated = false }) {
         </Animated.View>
 
         {/* Sign Up Section */}
-        <Animated.View 
+        <Animated.View
           style={[
             styles.signUpContainer,
             { transform: [{ translateY: signUpSlideUp }] }
@@ -159,7 +159,6 @@ const styles = StyleSheet.create({
   },
   gradient: {
     flex: 1,
-    justifyContent: "space-between",
     paddingHorizontal: 32,
     paddingTop: 60,
     paddingBottom: 40,
@@ -167,33 +166,39 @@ const styles = StyleSheet.create({
   logoContainer: {
     alignItems: "center",
     marginTop: 40,
+    flex: 1,
+    justifyContent: 'center',
   },
   logoImage: {
     width: 132,
     height: 132,
-    marginBottom: 8,
+    marginBottom: 2,
   },
   welcomeContainer: {
     alignItems: "center",
-    marginTop: 20,
+    marginTop: 5,
+    flex: 1,
+    justifyContent: 'center',
   },
   welcomeTitle: {
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: "600",
     color: colors.textWhite,
-    marginBottom: 12,
+    marginBottom: 16,
     textAlign: "center",
   },
   welcomeSubtitle: {
-    fontSize: 16,
+    fontSize: 18,
     color: colors.textLight,
     textAlign: "center",
-    lineHeight: 22,
+    lineHeight: 26,
   },
   buttonsContainer: {
-    marginTop: 50,
+    marginTop: 5,
     width: '100%',
     alignSelf: 'center',
+    flex: 1.5,
+    justifyContent: 'center',
   },
   primaryButton: {
     backgroundColor: colors.buttonPrimary,
@@ -241,7 +246,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 30,
+    marginTop: 20,
+    marginBottom: 20,
   },
   signUpQuestion: {
     color: colors.textLight,
