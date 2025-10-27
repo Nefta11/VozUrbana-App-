@@ -141,7 +141,7 @@ export default function LoaderScreen({ onComplete }) {
             ]}
           >
             <Image 
-              source={require('../../assets/White.png')} 
+              source={require('../../../assets/White.png')} 
               style={styles.logoImage}
               resizeMode="contain"
             />
