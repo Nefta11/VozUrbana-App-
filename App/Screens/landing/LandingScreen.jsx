@@ -17,7 +17,7 @@ import GoogleButtonComponent from "../../Components/auth/GoogleButtonComponent";
 
 const { width, height } = Dimensions.get("window");
 
-export default function LandingScreen({ animated = false }) {
+export default function LandingScreen({ animated = false, onNavigateToLogin }) {
   // Animaciones
   const logoSlideUp = useRef(new Animated.Value(animated ? height : 0)).current;
   const welcomeSlideUp = useRef(new Animated.Value(animated ? height + 100 : 0)).current;
@@ -61,6 +61,9 @@ export default function LandingScreen({ animated = false }) {
 
   const handleLogin = () => {
     console.log("Iniciar sesión pressed");
+    if (onNavigateToLogin) {
+      onNavigateToLogin();
+    }
   };
 
   const handleGoogleLogin = () => {
