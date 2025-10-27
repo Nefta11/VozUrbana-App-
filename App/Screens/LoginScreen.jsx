@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   StatusBar,
   Image,
+  Animated,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -16,7 +17,48 @@ import GoogleButtonComponent from "../Components/GoogleButtonComponent";
 
 const { width, height } = Dimensions.get("window");
 
-export default function LoginScreen() {
+export default function LoginScreen({ animated = false }) {
+  // Animaciones
+  const logoSlideUp = useRef(new Animated.Value(animated ? height : 0)).current;
+  const welcomeSlideUp = useRef(new Animated.Value(animated ? height + 100 : 0)).current;
+  const buttonsSlideUp = useRef(new Animated.Value(animated ? height + 200 : 0)).current;
+  const signUpSlideUp = useRef(new Animated.Value(animated ? height + 300 : 0)).current;
+
+  useEffect(() => {
+    if (animated) {
+      startEntranceAnimation();
+    }
+  }, [animated]);
+
+  const startEntranceAnimation = () => {
+    const animationDuration = 600;
+    const staggerDelay = 100;
+
+    // Secuencia de animaciones escalonadas
+    Animated.stagger(staggerDelay, [
+      Animated.timing(logoSlideUp, {
+        toValue: 0,
+        duration: animationDuration,
+        useNativeDriver: true,
+      }),
+      Animated.timing(welcomeSlideUp, {
+        toValue: 0,
+        duration: animationDuration,
+        useNativeDriver: true,
+      }),
+      Animated.timing(buttonsSlideUp, {
+        toValue: 0,
+        duration: animationDuration,
+        useNativeDriver: true,
+      }),
+      Animated.timing(signUpSlideUp, {
+        toValue: 0,
+        duration: animationDuration,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+
   const handleLogin = () => {
     console.log("Iniciar sesión pressed");
   };
@@ -44,24 +86,39 @@ export default function LoginScreen() {
         locations={gradients.primaryGradient.locations}
       >
         {/* Logo Section */}
-        <View style={styles.logoContainer}>
+        <Animated.View 
+          style={[
+            styles.logoContainer,
+            { transform: [{ translateY: logoSlideUp }] }
+          ]}
+        >
           <Image 
             source={require('../../assets/White.png')} 
             style={styles.logoImage}
             resizeMode="contain"
           />
-        </View>
+        </Animated.View>
 
         {/* Welcome Section */}
-        <View style={styles.welcomeContainer}>
+        <Animated.View 
+          style={[
+            styles.welcomeContainer,
+            { transform: [{ translateY: welcomeSlideUp }] }
+          ]}
+        >
           <Text style={styles.welcomeTitle}>Bienvenido de Nuevo</Text>
           <Text style={styles.welcomeSubtitle}>
             Inicia sesión para acceder a tu cuenta y{"\n"}gestionar tus reportes
           </Text>
-        </View>
+        </Animated.View>
 
         {/* Buttons Section */}
-        <View style={styles.buttonsContainer}>
+        <Animated.View 
+          style={[
+            styles.buttonsContainer,
+            { transform: [{ translateY: buttonsSlideUp }] }
+          ]}
+        >
           {/* Main Login Button */}
           <TouchableOpacity style={styles.primaryButton} onPress={handleLogin}>
             <Text style={styles.primaryButtonText}>Iniciar sesión</Text>
@@ -77,15 +134,20 @@ export default function LoginScreen() {
           >
             <Text style={styles.guestButtonText}>Entrar como invitado</Text>
           </TouchableOpacity>
-        </View>
+        </Animated.View>
 
         {/* Sign Up Section */}
-        <View style={styles.signUpContainer}>
+        <Animated.View 
+          style={[
+            styles.signUpContainer,
+            { transform: [{ translateY: signUpSlideUp }] }
+          ]}
+        >
           <Text style={styles.signUpQuestion}>¿No tienes una cuenta?</Text>
           <TouchableOpacity onPress={handleSignUp}>
             <Text style={styles.signUpLink}> Sign In</Text>
           </TouchableOpacity>
-        </View>
+        </Animated.View>
       </LinearGradient>
     </SafeAreaView>
   );

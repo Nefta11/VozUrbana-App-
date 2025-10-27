@@ -1,10 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
-import LoginScreen from './App/Screens/LoginScreen';
+import MainScreen from './App/Screens/MainScreen';
 
 export default function App() {
   return (
     <>
-      <LoginScreen />
+      <MainScreen />
       <StatusBar style="light" />
     </>
   );
