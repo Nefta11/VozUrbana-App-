@@ -24,8 +24,6 @@ export default function LoginScreen({ navigation }) {
             Alert.alert('Error', 'Por favor ingresa tu correo y contraseña');
             return;
         }
-
-        // Aquí iría la lógica de autenticación
         console.log('Login attempt:', { email, password });
         Alert.alert('Login', 'Funcionalidad de login en desarrollo');
     };
@@ -43,7 +41,7 @@ export default function LoginScreen({ navigation }) {
 
     return (
         <SafeAreaView style={styles.container}>
-            <StatusBar barStyle="light-content" backgroundColor={colors.primary} />
+            <StatusBar barStyle="light-content" backgroundColor="transparent" translucent={true} />
 
             {/* Header con imagen de fondo */}
             <View style={styles.header}>
@@ -53,24 +51,25 @@ export default function LoginScreen({ navigation }) {
                 >
                     {/* Botón de regreso */}
                     <TouchableOpacity style={styles.backButton} onPress={handleGoBack}>
-                        <MaterialIcons name="arrow-back" size={24} color="white" />
+                        <MaterialIcons name="arrow-back" size={26} color="white" />
                     </TouchableOpacity>
 
-                    {/* Logo */}
-                    <View style={styles.logoContainer}>
+                    {/* Contenido del Header (Logo y Texto) */}
+                    <View style={styles.headerContent}>
+                        {/* Logo */}
                         <Image
                             source={require('../../../assets/White.png')}
                             style={styles.logoImage}
                             resizeMode="contain"
                         />
-                    </View>
-
-                    {/* Texto descriptivo */}
-                    <View style={styles.headerTextContainer}>
-                        <Text style={styles.headerTitle}>CONECTA. REPORTA. TRANSFORMA.</Text>
-                        <Text style={styles.headerSubtitle}>
-                            Tu voz cuenta para hacer de tu ciudad un lugar{'\n'}mejor para todos
-                        </Text>
+                        
+                        {/* Texto descriptivo */}
+                        <View style={styles.headerTextContainer}>
+                            <Text style={styles.headerTitle}>CONECTA. REPORTA. TRANSFORMA.</Text>
+                            <Text style={styles.headerSubtitle}>
+                                Tu voz cuenta para hacer de tu ciudad un lugar{'\n'}mejor para todos
+                            </Text>
+                        </View>
                     </View>
                 </LinearGradient>
             </View>
@@ -81,30 +80,33 @@ export default function LoginScreen({ navigation }) {
                 <Text style={styles.formSubtitle}>Ingresa tus datos</Text>
 
                 {/* Campo de correo */}
-                <View style={styles.inputContainer}>
-                    <Text style={styles.inputLabel}>Correo Electrónico</Text>
-                    <TextInput
-                        style={styles.textInput}
-                        placeholder="Loisbecket@gmail.com"
-                        placeholderTextColor="#999999"
-                        value={email}
-                        onChangeText={setEmail}
-                        keyboardType="email-address"
-                        autoCapitalize="none"
-                    />
+                <View style={styles.inputSection}>
+                    <Text style={styles.inputLabel}>Correo Electronico</Text>
+                    <View style={styles.textInputWrapper}>
+                        <TextInput
+                            style={styles.textInput}
+                            placeholder="Loisbecket@gmail.com"
+                            placeholderTextColor="#AAAAAA"
+                            value={email}
+                            onChangeText={setEmail}
+                            keyboardType="email-address"
+                            autoCapitalize="none"
+                        />
+                    </View>
                 </View>
 
                 {/* Campo de contraseña */}
-                <View style={styles.inputContainer}>
+                <View style={styles.inputSection}>
                     <Text style={styles.inputLabel}>Contraseña</Text>
-                    <View style={styles.passwordContainer}>
+                    <View style={styles.textInputWrapper}>
                         <TextInput
                             style={styles.passwordInput}
-                            placeholder="••••••••"
-                            placeholderTextColor="#999999"
+                            placeholder="********"
+                            placeholderTextColor="#AAAAAA"
                             value={password}
                             onChangeText={setPassword}
                             secureTextEntry={!showPassword}
+                            // El estilo del texto se mantiene alineado con la imagen.
                         />
                         <TouchableOpacity
                             style={styles.eyeButton}
@@ -113,7 +115,7 @@ export default function LoginScreen({ navigation }) {
                             <MaterialIcons
                                 name={showPassword ? "visibility" : "visibility-off"}
                                 size={20}
-                                color={colors.textLight}
+                                color="#666666"
                             />
                         </TouchableOpacity>
                     </View>
@@ -124,7 +126,8 @@ export default function LoginScreen({ navigation }) {
                     <Text style={styles.loginButtonText}>Iniciar Sesión</Text>
                 </TouchableOpacity>
 
-                {/* Separador */}
+                {/* Separador - NOTA: La imagen no muestra un separador 'O', pero lo he dejado simplificado */}
+                {/* Si no lo necesitas, puedes borrar el componente 'separator' y sus estilos. */}
                 <View style={styles.separator}>
                     <View style={styles.separatorLine} />
                     <Text style={styles.separatorText}>O</Text>
@@ -146,11 +149,12 @@ export default function LoginScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.backgroundWhite,
+        backgroundColor: '#FFFFFF',
     },
+    // --- HEADER Y IMAGEN DE FONDO ---
     header: {
-        height: '42%',
-        backgroundColor: '#8B7355', // Color café de la imagen
+        height: '40%',
+        backgroundColor: '#8B7355', // Color café de fondo
         position: 'relative',
     },
     headerOverlay: {
@@ -160,18 +164,24 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
     },
     backButton: {
-        alignSelf: 'flex-start',
-        padding: 8,
-        marginBottom: 20,
+        // La flecha en la imagen está en la esquina superior izquierda
+        position: 'absolute',
+        top: StatusBar.currentHeight + 10 || 40, 
+        left: 20,
+        zIndex: 10,
+        padding: 5,
     },
-    logoContainer: {
+    headerContent: {
         alignItems: 'center',
-        marginTop: 20,
-        marginBottom: 15,
+        flex: 1,
+        justifyContent: 'center',
+        marginTop: 10,
     },
     logoImage: {
         width: 80,
         height: 80,
+        marginBottom: 15,
+        alignSelf: 'center',
     },
     headerTextContainer: {
         alignItems: 'center',
@@ -179,26 +189,26 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     headerTitle: {
-        color: colors.textWhite,
-        fontSize: 18,
+        color: '#FFFFFF',
+        fontSize: 16,
         fontWeight: '700',
         textAlign: 'center',
-        marginBottom: 12,
+        marginBottom: 10,
         letterSpacing: 1.2,
     },
     headerSubtitle: {
-        color: colors.textWhite,
-        fontSize: 16,
+        color: '#FFFFFF',
+        fontSize: 14,
         textAlign: 'center',
-        opacity: 0.95,
-        lineHeight: 22,
+        lineHeight: 20,
         fontWeight: '400',
     },
+    // --- FORMULARIO Y CAMPOS DE TEXTO ---
     formContainer: {
         flex: 1,
-        backgroundColor: colors.backgroundWhite,
+        backgroundColor: '#FFFFFF',
         paddingHorizontal: 32,
-        paddingTop: 24,
+        paddingTop: 28,
         paddingBottom: 32,
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
@@ -211,77 +221,65 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 8,
         elevation: 5,
-        justifyContent: 'space-between',
+        justifyContent: 'flex-start',
     },
     formTitle: {
         fontSize: 26,
         fontWeight: '700',
-        color: colors.textDark,
+        color: '#333333',
         textAlign: 'center',
         marginBottom: 4,
     },
     formSubtitle: {
-        fontSize: 16,
-        color: colors.textLight,
+        fontSize: 15,
+        color: '#666666',
         textAlign: 'center',
         marginBottom: 24,
         fontWeight: '400',
     },
-    inputContainer: {
-        marginBottom: 16,
+    inputSection: {
+        marginBottom: 18,
     },
     inputLabel: {
         fontSize: 16,
-        color: colors.textDark,
+        color: '#333333',
         marginBottom: 8,
-        fontWeight: '600',
+        fontWeight: '500',
     },
-    textInput: {
-        borderWidth: 1.5,
-        borderColor: '#E8E8E8',
-        borderRadius: 12,
-        paddingHorizontal: 20,
-        paddingVertical: 16,
-        fontSize: 16,
-        color: colors.textDark,
-        backgroundColor: '#FAFAFA',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 1,
-        },
-        shadowOpacity: 0.05,
-        shadowRadius: 2,
-        elevation: 1,
-    },
-    passwordContainer: {
+    textInputWrapper: {
         flexDirection: 'row',
         alignItems: 'center',
-        borderWidth: 1.5,
-        borderColor: '#E8E8E8',
-        borderRadius: 12,
-        backgroundColor: '#FAFAFA',
+        backgroundColor: '#F5F5F5',
+        borderRadius: 8,
+        paddingHorizontal: 0,
         shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 1,
-        },
+        shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.05,
-        shadowRadius: 2,
-        elevation: 1,
+        shadowRadius: 3,
+        elevation: 2,
+        borderWidth: 1,
+        borderColor: '#E0E0E0',
+    },
+    textInput: {
+        flex: 1,
+        paddingHorizontal: 15,
+        paddingVertical: 14,
+        fontSize: 16,
+        color: '#333333',
     },
     passwordInput: {
         flex: 1,
-        paddingHorizontal: 20,
-        paddingVertical: 16,
+        paddingHorizontal: 15,
+        paddingVertical: 14,
         fontSize: 16,
-        color: colors.textDark,
+        color: '#333333',
     },
     eyeButton: {
-        padding: 16,
+        paddingHorizontal: 15, // Padding para el icono
     },
+    // --- BOTÓN DE LOGIN ---
     loginButton: {
-        backgroundColor: '#28A745', // Verde como en la imagen
+        backgroundColor: '#28A745', 
         borderRadius: 30,
         paddingVertical: 16,
         marginTop: 12,
@@ -296,25 +294,26 @@ const styles = StyleSheet.create({
         elevation: 8,
     },
     loginButtonText: {
-        color: colors.textWhite,
+        color: '#FFFFFF',
         fontSize: 17,
         fontWeight: '700',
         textAlign: 'center',
         letterSpacing: 0.5,
     },
+    // --- SEPARADOR (O) y REGISTRO ---
     separator: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginVertical: 12,
+        marginVertical: 16,
     },
     separatorLine: {
         flex: 1,
         height: 1,
-        backgroundColor: '#E8E8E8',
+        backgroundColor: '#E0E0E0',
     },
     separatorText: {
-        marginHorizontal: 16,
-        color: colors.textLight,
+        marginHorizontal: 12,
+        color: '#666666',
         fontSize: 14,
         fontWeight: '500',
     },
@@ -323,14 +322,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 8,
-        marginBottom: 16,
+        marginBottom: 20,
     },
     registerQuestion: {
-        color: colors.textLight,
+        color: '#666666',
         fontSize: 16,
     },
     registerLink: {
-        color: '#007AFF',
+        color: '#000000', // Negro como en la imagen
         fontSize: 16,
         fontWeight: '600',
     },
