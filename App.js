@@ -1,22 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import LoaderScreen from './App/Screens/landing/LoaderScreen';
-import LandingScreen from './App/Screens/landing/LandingScreen';
+import AppStack from './App/navigation/AppStack';
 
 export default function App() {
-  const [showLanding, setShowLanding] = useState(false);
-
-  const handleLoaderComplete = () => {
-    setShowLanding(true);
-  };
-
   return (
     <>
-      {!showLanding ? (
-        <LoaderScreen onComplete={handleLoaderComplete} />
-      ) : (
-        <LandingScreen animated={true} />
-      )}
+      <AppStack />
       <StatusBar style="light" />
     </>
   );
