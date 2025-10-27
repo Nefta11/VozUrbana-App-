@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.backgroundWhite,
     },
     header: {
-        height: '50%',
+        height: '42%',
         backgroundColor: '#8B7355', // Color café de la imagen
         position: 'relative',
     },
@@ -166,17 +166,17 @@ const styles = StyleSheet.create({
     },
     logoContainer: {
         alignItems: 'center',
-        marginTop: 40,
-        marginBottom: 30,
+        marginTop: 20,
+        marginBottom: 15,
     },
     logoImage: {
-        width: 100,
-        height: 100,
+        width: 80,
+        height: 80,
     },
     headerTextContainer: {
         alignItems: 'center',
         paddingHorizontal: 20,
-        marginTop: 20,
+        marginTop: 10,
     },
     headerTitle: {
         color: colors.textWhite,
@@ -198,8 +198,8 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: colors.backgroundWhite,
         paddingHorizontal: 32,
-        paddingTop: 32,
-        paddingBottom: 20,
+        paddingTop: 24,
+        paddingBottom: 32,
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
         marginTop: -30,
@@ -211,28 +211,29 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 8,
         elevation: 5,
+        justifyContent: 'space-between',
     },
     formTitle: {
-        fontSize: 28,
+        fontSize: 26,
         fontWeight: '700',
         color: colors.textDark,
         textAlign: 'center',
-        marginBottom: 6,
+        marginBottom: 4,
     },
     formSubtitle: {
         fontSize: 16,
         color: colors.textLight,
         textAlign: 'center',
-        marginBottom: 32,
+        marginBottom: 24,
         fontWeight: '400',
     },
     inputContainer: {
-        marginBottom: 20,
+        marginBottom: 16,
     },
     inputLabel: {
         fontSize: 16,
         color: colors.textDark,
-        marginBottom: 10,
+        marginBottom: 8,
         fontWeight: '600',
     },
     textInput: {
@@ -282,8 +283,9 @@ const styles = StyleSheet.create({
     loginButton: {
         backgroundColor: '#28A745', // Verde como en la imagen
         borderRadius: 30,
-        paddingVertical: 18,
-        marginTop: 16,
+        paddingVertical: 16,
+        marginTop: 12,
+        marginBottom: 8,
         shadowColor: '#28A745',
         shadowOffset: {
             width: 0,
@@ -303,7 +305,7 @@ const styles = StyleSheet.create({
     separator: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginVertical: 20,
+        marginVertical: 12,
     },
     separatorLine: {
         flex: 1,
@@ -320,8 +322,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 12,
-        marginBottom: 30,
+        marginTop: 8,
+        marginBottom: 16,
     },
     registerQuestion: {
         color: colors.textLight,
