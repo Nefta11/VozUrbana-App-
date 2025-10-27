@@ -9,6 +9,7 @@ import {
     StatusBar,
     Image,
     Alert,
+    ImageBackground,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -44,9 +45,14 @@ export default function LoginScreen({ navigation }) {
             <StatusBar barStyle="light-content" backgroundColor="transparent" translucent={true} />
 
             {/* Header con imagen de fondo */}
-            <View style={styles.header}>
+            <ImageBackground 
+                source={require('../../../assets/login.jpg')}
+                style={styles.header}
+                resizeMode="cover"
+                imageStyle={styles.headerImage}
+            >
                 <LinearGradient
-                    colors={['rgba(0,0,0,0.5)', 'rgba(0,0,0,0.3)']}
+                    colors={['rgba(0,0,0,0.6)', 'rgba(0,0,0,0.4)']}
                     style={styles.headerOverlay}
                 >
                     {/* Botón de regreso */}
@@ -72,7 +78,7 @@ export default function LoginScreen({ navigation }) {
                         </View>
                     </View>
                 </LinearGradient>
-            </View>
+            </ImageBackground>
 
             {/* Formulario de login */}
             <View style={styles.formContainer}>
@@ -153,8 +159,10 @@ const styles = StyleSheet.create({
     // --- HEADER Y IMAGEN DE FONDO ---
     header: {
         height: '40%',
-        backgroundColor: '#8B7355', // Color café de fondo
         position: 'relative',
+    },
+    headerImage: {
+        top: '20%', // Mueve la imagen hacia abajo
     },
     headerOverlay: {
         flex: 1,
