@@ -81,12 +81,17 @@ export default function LoaderScreen({ onComplete }) {
       }).start();
     }, 4000);
 
+    // Paso 4: Finalizando
+    setTimeout(() => {
+      setLoadingText('Finalizando...');
+    }, 5500);
+
     // Finalizar y hacer transición
     setTimeout(() => {
       if (onComplete) {
         onComplete();
       }
-    }, 6000);
+    }, 6500);
   };
 
   const startLogoRotation = () => {
@@ -151,7 +156,14 @@ export default function LoaderScreen({ onComplete }) {
                   styles.progressBar,
                   { width: progressWidth }
                 ]} 
-              />
+              >
+                {/* Líneas diagonales para efecto rayado */}
+                <View style={styles.stripes}>
+                  {[...Array(20)].map((_, i) => (
+                    <View key={i} style={[styles.stripe, { left: i * 10 }]} />
+                  ))}
+                </View>
+              </Animated.View>
             </View>
             
             {/* Texto de carga */}
@@ -191,9 +203,9 @@ const styles = StyleSheet.create({
   },
   progressBarContainer: {
     width: '80%',
-    height: 12,
+    height: 18,
     backgroundColor: 'rgba(255, 255, 255, 0.25)',
-    borderRadius: 6,
+    borderRadius: 9,
     marginBottom: 24,
     overflow: 'hidden',
     borderWidth: 1,
@@ -202,12 +214,30 @@ const styles = StyleSheet.create({
   progressBar: {
     height: '100%',
     backgroundColor: colors.textWhite,
-    borderRadius: 6,
+    borderRadius: 9,
     shadowColor: colors.textWhite,
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.8,
     shadowRadius: 4,
     elevation: 4,
+    position: 'relative',
+    overflow: 'hidden',
+  },
+  stripes: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    flexDirection: 'row',
+  },
+  stripe: {
+    position: 'absolute',
+    width: 2,
+    height: '150%',
+    backgroundColor: 'rgba(255, 255, 255, 0.4)',
+    transform: [{ rotate: '45deg' }],
+    top: -5,
   },
   loadingText: {
     color: colors.textWhite,
