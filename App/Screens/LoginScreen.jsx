@@ -7,6 +7,7 @@ import {
   Dimensions,
   SafeAreaView,
   StatusBar,
+  Image,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -41,9 +42,11 @@ export default function LoginScreen() {
       >
         {/* Logo Section */}
         <View style={styles.logoContainer}>
-          <View style={styles.logoIconContainer}>
-            <MaterialIcons name="wifi" size={32} color="white" />
-          </View>
+          <Image 
+            source={require('../../assets/vozUrbana.png')} 
+            style={styles.logoImage}
+            resizeMode="contain"
+          />
           <Text style={styles.logoText}>mi voz</Text>
           <Text style={styles.logoSubtext}>urbana</Text>
         </View>
@@ -112,13 +115,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 40,
   },
-  logoIconContainer: {
-    width: 60,
-    height: 60,
-    borderRadius: 12,
-    backgroundColor: "rgba(255, 255, 255, 0.15)",
-    justifyContent: "center",
-    alignItems: "center",
+  logoImage: {
+    width: 120,
+    height: 120,
     marginBottom: 16,
   },
   logoText: {
