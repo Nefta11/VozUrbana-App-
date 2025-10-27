@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialIcons } from "@expo/vector-icons";
+import { colors, gradients } from "../utils/colors";
 
 const { width, height } = Dimensions.get("window");
 
@@ -33,12 +34,13 @@ export default function LoginScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#4A90E2" />
+      <StatusBar barStyle="light-content" backgroundColor={colors.primary} />
       <LinearGradient
-        colors={["#4A90E2", "#357ABD", "#2E5C8A"]}
+        colors={gradients.primaryGradient.colors}
         style={styles.gradient}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 0, y: 1 }}
+        start={gradients.primaryGradient.start}
+        end={gradients.primaryGradient.end}
+        locations={gradients.primaryGradient.locations}
       >
         {/* Logo Section */}
         <View style={styles.logoContainer}>
@@ -70,7 +72,7 @@ export default function LoginScreen() {
             onPress={handleGoogleLogin}
           >
             <View style={styles.googleButtonContent}>
-              <MaterialIcons name="account-circle" size={20} color="#4285F4" />
+              <MaterialIcons name="account-circle" size={20} color={colors.buttonGoogle} />
               <Text style={styles.googleButtonText}>
                 Iniciar sesión con google
               </Text>
@@ -125,14 +127,13 @@ const styles = StyleSheet.create({
   welcomeTitle: {
     fontSize: 24,
     fontWeight: "600",
-    color: "white",
+    color: colors.textWhite,
     marginBottom: 12,
     textAlign: "center",
   },
   welcomeSubtitle: {
     fontSize: 16,
-    color: "white",
-    opacity: 0.85,
+    color: colors.textLight,
     textAlign: "center",
     lineHeight: 22,
   },
@@ -142,12 +143,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   primaryButton: {
-    backgroundColor: '#1778F2',
+    backgroundColor: colors.buttonPrimary,
     borderRadius: 25,
     paddingVertical: 16,
     marginBottom: 16,
     width: '100%',
-    shadowColor: '#000',
+    shadowColor: colors.shadowColor,
     shadowOffset: {
       width: 0,
       height: 4,
@@ -157,18 +158,18 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   primaryButtonText: {
-    color: "white",
+    color: colors.textWhite,
     fontSize: 16,
     fontWeight: "600",
     textAlign: "center",
   },
   googleButton: {
-    backgroundColor: 'white',
+    backgroundColor: colors.backgroundWhite,
     borderRadius: 25,
     paddingVertical: 16,
     marginBottom: 16,
     width: '100%',
-    shadowColor: '#000',
+    shadowColor: colors.shadowColor,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -183,17 +184,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   googleButtonText: {
-    color: "#333",
+    color: colors.textDark,
     fontSize: 16,
     fontWeight: "500",
     marginLeft: 8,
   },
   guestButton: {
-    backgroundColor: '#039a6c',
+    backgroundColor: colors.buttonSecondary,
     borderRadius: 25,
     paddingVertical: 16,
     width: '100%',
-    shadowColor: '#000',
+    shadowColor: colors.shadowColor,
     shadowOffset: {
       width: 0,
       height: 4,
@@ -203,7 +204,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   guestButtonText: {
-    color: "white",
+    color: colors.textWhite,
     fontSize: 16,
     fontWeight: "600",
     textAlign: "center",
@@ -215,12 +216,11 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   signUpQuestion: {
-    color: "white",
+    color: colors.textLight,
     fontSize: 16,
-    opacity: 0.85,
   },
   signUpLink: {
-    color: "white",
+    color: colors.textWhite,
     fontSize: 16,
     fontWeight: "600",
     textDecorationLine: "underline",
