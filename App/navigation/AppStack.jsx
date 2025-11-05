@@ -5,6 +5,11 @@ import LoaderScreen from '../Screens/landing/LoaderScreen';
 import LandingScreen from '../Screens/landing/LandingScreen';
 import LoginScreen from '../Screens/auth/LoginScreen';
 import RegisterScreen from '../Screens/auth/RegisterScreen';
+import HomeScreen from '../Screens/HomeScreen';
+import ReportsScreen from '../Screens/ReportsScreen';
+import ReportDetailScreen from '../Screens/ReportDetailScreen';
+import CreateReportScreen from '../Screens/CreateReportScreen';
+import ProfileScreen from '../Screens/ProfileScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -61,6 +66,7 @@ const AppStack = () => {
                             animated={true}
                             onNavigateToLogin={() => navigation.navigate('Login')}
                             onNavigateToRegister={() => navigation.navigate('Register')}
+                            onNavigateToHome={() => navigation.navigate('Home')}
                         />
                     )}
                 </Stack.Screen>
@@ -86,19 +92,52 @@ const AppStack = () => {
                         gestureDirection: 'horizontal',
                     }}
                 />
-                {/* Aquí se pueden agregar más pantallas en el futuro */}
-                {/*
-        <Stack.Screen
-          name="Home"
-          component={TabNavigator}
-          options={{
-            headerShown: false,
-            animation: 'fade',
-            animationDuration: 350,
-            gestureEnabled: false,
-          }}
-        />
-        */}
+                <Stack.Screen
+                    name="Home"
+                    component={HomeScreen}
+                    options={{
+                        headerShown: false,
+                        animation: 'fade',
+                        animationDuration: 350,
+                        gestureEnabled: false,
+                    }}
+                />
+                <Stack.Screen
+                    name="Reports"
+                    component={ReportsScreen}
+                    options={{
+                        title: 'Reportes',
+                        animation: 'slide_from_right',
+                        animationDuration: 350,
+                    }}
+                />
+                <Stack.Screen
+                    name="ReportDetail"
+                    component={ReportDetailScreen}
+                    options={{
+                        title: 'Detalle del Reporte',
+                        animation: 'slide_from_right',
+                        animationDuration: 350,
+                    }}
+                />
+                <Stack.Screen
+                    name="CreateReport"
+                    component={CreateReportScreen}
+                    options={{
+                        title: 'Crear Reporte',
+                        animation: 'slide_from_bottom',
+                        animationDuration: 350,
+                    }}
+                />
+                <Stack.Screen
+                    name="Profile"
+                    component={ProfileScreen}
+                    options={{
+                        title: 'Mi Perfil',
+                        animation: 'slide_from_right',
+                        animationDuration: 350,
+                    }}
+                />
             </Stack.Navigator>
         </NavigationContainer>
     );

@@ -4,6 +4,9 @@ export const colors = {
     // Colores principales
     primary: '#4196E3',
     secondary: '#373598',
+    success: '#10b981',
+    warning: '#f59e0b',
+    danger: '#ef4444',
 
     // Colores de botones
     buttonPrimary: '#1778F2',
@@ -19,6 +22,7 @@ export const colors = {
 
     // Colores de fondo
     backgroundWhite: '#FFFFFF',
+    backgroundLight: '#F8FAFC',
     backgroundTransparent: 'rgba(255, 255, 255, 0.15)',
     backgroundInput: '#F8F8F8',
 
@@ -28,6 +32,22 @@ export const colors = {
 
     // Colores de sombra
     shadowColor: '#000000',
+
+    // Colores de estadísticas
+    statTotal: 'rgba(37, 99, 235, 0.1)',
+    statResolved: 'rgba(16, 185, 129, 0.1)',
+    statInProcess: 'rgba(245, 158, 11, 0.1)',
+    statClosed: 'rgba(107, 114, 128, 0.1)',
+
+    // Colores de categorías
+    categoryBlue: '#3b82f6',
+    categoryOrange: '#f97316',
+    categoryRed: '#ef4444',
+    categoryPurple: '#8b5cf6',
+    categoryGreen: '#10b981',
+    categoryCyan: '#06b6d4',
+    categoryYellow: '#f59e0b',
+    categoryGray: '#6b7280',
 };
 
 export const gradients = {

@@ -27,21 +27,9 @@ export default function LoginScreen({ navigation }) {
             return;
         }
 
-        // Validar formato de email
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            Alert.alert('Error', 'Por favor ingresa un correo electrónico válido');
-            return;
-        }
-
-        // Validar longitud mínima de contraseña
-        if (password.length < 6) {
-            Alert.alert('Error', 'La contraseña debe tener al menos 6 caracteres');
-            return;
-        }
-
-        // Aquí iría la lógica de autenticación
-        Alert.alert('Login', 'Funcionalidad de login en desarrollo');
+        // Permitir cualquier correo y contraseña (modo demo)
+        // TODO: Conectar con tu backend real más adelante
+        navigation.navigate('Home');
     };
 
     const handleGoBack = () => {

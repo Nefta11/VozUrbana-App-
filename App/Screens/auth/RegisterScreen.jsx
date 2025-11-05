@@ -344,7 +344,7 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         paddingVertical: 16,
         marginTop: 16,
-        marginBottom: 16,
+        marginBottom: 8,
         shadowColor: colors.buttonPrimary,
         shadowOffset: {
             width: 0,
@@ -366,8 +366,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 8,
-        marginBottom: 32,
+        marginTop: 4,
+        marginBottom: 16,
     },
     loginQuestion: {
         color: colors.textGray,
