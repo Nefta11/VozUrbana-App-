@@ -352,7 +352,7 @@ const styles = StyleSheet.create({
   heroSection: {
     paddingHorizontal: 20,
     paddingVertical: 40,
-    paddingTop: 20,
+    paddingTop: 28,
   },
   heroContent: {
     alignItems: 'center',

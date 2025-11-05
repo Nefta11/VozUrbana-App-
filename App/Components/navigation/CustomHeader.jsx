@@ -73,17 +73,15 @@ const CustomHeader = ({
 
 const styles = StyleSheet.create({
     safeArea: {
-        backgroundColor: colors.headerBackground || colors.primary,
+        backgroundColor: '#FFFF', // Un poco más oscuro que el header para crear contraste
     },
     container: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingHorizontal: 20,
-        paddingTop: 20,
-        paddingBottom: 16,
+        paddingTop: 30,
         backgroundColor: colors.headerBackground || colors.primary,
-        minHeight: 70,
     },
     leftSection: {
         flex: 1,
@@ -96,8 +94,8 @@ const styles = StyleSheet.create({
         gap: 8,
     },
     logoImage: {
-        width: 40,
-        height: 40,
+        width: 58,
+        height: 58,
     },
     titleContainer: {
         flexDirection: 'column',
