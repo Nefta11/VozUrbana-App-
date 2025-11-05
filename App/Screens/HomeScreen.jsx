@@ -198,32 +198,26 @@ export default function HomeScreen({ navigation }) {
         {/* Stats Section */}
         <View style={styles.statsSection}>
           <View style={styles.statCard}>
-            <View style={styles.statIconContainer}>
-              <MaterialIcons name="description" size={32} color={colors.primary} />
-            </View>
+            <MaterialIcons name="description" size={24} color={colors.primary} />
             <View style={styles.statTextContainer}>
-              <Text style={styles.statNumber}>{stats.total}</Text>
               <Text style={styles.statLabel}>Total reportes</Text>
+              <Text style={styles.statNumber}>{stats.total}</Text>
             </View>
           </View>
 
           <View style={styles.statCard}>
-            <View style={styles.statIconContainer}>
-              <MaterialIcons name="schedule" size={32} color={colors.warning} />
-            </View>
+            <MaterialIcons name="schedule" size={24} color={colors.warning} />
             <View style={styles.statTextContainer}>
-              <Text style={styles.statNumber}>{stats.inProcess}</Text>
               <Text style={styles.statLabel}>En Proceso</Text>
+              <Text style={styles.statNumber}>{stats.inProcess}</Text>
             </View>
           </View>
 
           <View style={styles.statCard}>
-            <View style={styles.statIconContainer}>
-              <MaterialIcons name="check-circle" size={32} color={colors.success} />
-            </View>
+            <MaterialIcons name="check-circle" size={24} color={colors.success} />
             <View style={styles.statTextContainer}>
-              <Text style={styles.statNumber}>{stats.resolved}</Text>
               <Text style={styles.statLabel}>Resueltos</Text>
+              <Text style={styles.statNumber}>{stats.resolved}</Text>
             </View>
           </View>
         </View>
@@ -358,15 +352,16 @@ const styles = StyleSheet.create({
   // Stats Section
   statsSection: {
     paddingHorizontal: 20,
-    paddingVertical: 24,
+    paddingVertical: 12,
     backgroundColor: colors.backgroundLight,
-    gap: 16,
+    gap: 8,
   },
   statCard: {
     backgroundColor: colors.backgroundWhite,
-    borderRadius: 16,
-    padding: 20,
-    flexDirection: 'column',
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    flexDirection: 'row',
     alignItems: 'center',
     shadowColor: colors.shadowColor,
     shadowOffset: { width: 0, height: 2 },
@@ -375,24 +370,25 @@ const styles = StyleSheet.create({
     elevation: 3,
     borderWidth: 1,
     borderColor: colors.borderLight,
+    gap: 10,
   },
   statIconContainer: {
     marginBottom: 12,
   },
   statTextContainer: {
-    alignItems: 'center',
-  },
-  statNumber: {
-    fontSize: 32,
-    fontWeight: '800',
-    color: colors.textDark,
-    marginBottom: 4,
+    flex: 1,
+    justifyContent: 'center',
   },
   statLabel: {
-    fontSize: 14,
+    fontSize: 12,
     color: colors.textGray,
     fontWeight: '600',
-    textAlign: 'center',
+    marginBottom: 2,
+  },
+  statNumber: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: colors.textDark,
   },
 
   // Section Common Styles
