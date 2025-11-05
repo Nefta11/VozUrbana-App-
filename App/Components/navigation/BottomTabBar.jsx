@@ -97,7 +97,7 @@ const BottomTabBar = ({ state, descriptors, navigation }) => {
                   {renderIcon(
                     isFocused ? config.activeIcon : config.icon,
                     config.iconType,
-                    28,
+                    30,
                     colors.textWhite
                   )}
                 </View>
@@ -121,7 +121,7 @@ const BottomTabBar = ({ state, descriptors, navigation }) => {
                 {renderIcon(
                   isFocused ? config.activeIcon : config.icon,
                   config.iconType,
-                  24,
+                  26,
                   isFocused ? colors.primary : colors.textGray
                 )}
                 <Text 
@@ -161,32 +161,32 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    paddingTop: 12,
-    paddingHorizontal: 16,
-    minHeight: 65,
+    paddingTop: 10,
+    paddingHorizontal: 20,
+    minHeight: 70,
   },
   tab: {
     flex: 1,
     alignItems: 'center',
-    paddingVertical: 8,
-    paddingHorizontal: 4,
+    paddingVertical: 6,
+    paddingHorizontal: 8,
   },
   tabContent: {
     alignItems: 'center',
     position: 'relative',
   },
   tabLabel: {
-    fontSize: 11,
-    fontWeight: '600',
-    marginTop: 4,
+    fontSize: 10,
+    fontWeight: '500',
+    marginTop: 2,
     textAlign: 'center',
   },
   activeIndicator: {
     position: 'absolute',
-    top: -8,
-    width: 4,
-    height: 4,
-    borderRadius: 2,
+    top: -6,
+    width: 3,
+    height: 3,
+    borderRadius: 1.5,
     backgroundColor: colors.primary,
   },
   

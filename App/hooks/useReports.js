@@ -240,7 +240,7 @@ export const useReports = (filters = {}) => {
     }
 
     setFilteredReports(filtered);
-  }, [reports, filters]);
+  }, [reports, filters.category, filters.status, filters.priority, filters.search, filters.sortBy]);
 
   // Función para obtener un reporte por ID
   const getReportById = (id) => {
