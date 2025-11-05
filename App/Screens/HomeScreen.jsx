@@ -111,8 +111,8 @@ export default function HomeScreen({ navigation }) {
   ];
 
   const renderCategoryIcon = (category, size = 24) => {
-    // Usar el color específico de cada categoría
-    return renderFallbackIcon(category.fallbackIcon, category.fallbackType, size, category.color);
+    // Usar color azul para todos los iconos
+    return renderFallbackIcon(category.fallbackIcon, category.fallbackType, size, '#465eef');
   };
 
   const renderFallbackIcon = (iconName, iconType, size, color) => {
@@ -237,8 +237,8 @@ export default function HomeScreen({ navigation }) {
                 onPress={() => handleCategoryPress(category)}
                 activeOpacity={0.7}
               >
-                <View style={[styles.newCategoryIcon, { backgroundColor: category.color }]}>
-                  {renderCategoryIcon(category, 24, colors.textWhite)}
+                <View style={[styles.newCategoryIcon, { backgroundColor: '#dbe1fb' }]}>
+                  {renderCategoryIcon(category, 24)}
                 </View>
                 <View style={styles.categoryTextContainer}>
                   <Text style={styles.newCategoryName}>{category.nombre}</Text>
