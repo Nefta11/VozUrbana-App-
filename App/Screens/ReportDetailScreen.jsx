@@ -38,12 +38,7 @@ const STATUS_CONFIG = {
     color: colors.success,
     bgColor: 'rgba(16, 185, 129, 0.15)',
   },
-  cerrado: {
-    text: 'Cerrado',
-    icon: 'cancel',
-    color: colors.textGray,
-    bgColor: 'rgba(107, 114, 128, 0.15)',
-  },
+
 };
 
 // Función para formatear fechas

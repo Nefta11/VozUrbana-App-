@@ -34,7 +34,7 @@ export default function ProfileScreen({ navigation }) {
           style: 'destructive',
           onPress: () => {
             // TODO: Limpiar token/sesión
-            navigation.reset({
+            navigation.getParent()?.reset({
               index: 0,
               routes: [{ name: 'Landing' }],
             });

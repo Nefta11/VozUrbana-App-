@@ -29,7 +29,7 @@ export default function LoginScreen({ navigation }) {
 
         // Permitir cualquier correo y contraseña (modo demo)
         // TODO: Conectar con tu backend real más adelante
-        navigation.navigate('Home');
+        navigation.navigate('MainTabs');
     };
 
     const handleGoBack = () => {
