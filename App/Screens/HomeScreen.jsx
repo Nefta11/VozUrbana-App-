@@ -19,7 +19,6 @@ import {
   Ionicons,
   FontAwesome5
 } from '@expo/vector-icons';
-import { Image } from 'react-native';
 import { colors, gradients } from '../utils/colors';
 import Constants from 'expo-constants';
 import CustomHeader from '../Components/navigation/CustomHeader';
@@ -52,59 +51,83 @@ export default function HomeScreen({ navigation }) {
     {
       id: 1,
       nombre: 'Saneamiento',
+      title: 'Saneamiento',
       descripcion: 'Agua potable, drenaje y alcantarillado',
-      iconImage: require('../../assets/icons/saneamiento.png'),
+      fallbackIcon: 'water',
+      fallbackType: 'Ionicons',
       color: colors.categoryBlue,
+      count: 15,
     },
     {
       id: 2,
       nombre: 'Infraestructura',
+      title: 'Infraestructura',
       descripcion: 'Calles, banquetas y vialidades',
-      iconImage: require('../../assets/icons/infraestructura.png'),
+      fallbackIcon: 'construction',
+      fallbackType: 'MaterialIcons',
       color: colors.categoryOrange,
+      count: 23,
     },
     {
       id: 3,
       nombre: 'Seguridad Pública',
+      title: 'Seguridad Pública',
       descripcion: 'Servicios médicos y sanitarios',
-      iconImage: require('../../assets/icons/seguridadPublica.png'),
+      fallbackIcon: 'medical-services',
+      fallbackType: 'MaterialIcons',
       color: colors.categoryRed,
+      count: 8,
     },
     {
       id: 4,
       nombre: 'Seguridad',
+      title: 'Seguridad',
       descripcion: 'Iluminación y vigilancia',
-      iconImage: require('../../assets/icons/seguridad.png'),
+      fallbackIcon: 'shield-checkmark',
+      fallbackType: 'Ionicons',
       color: colors.categoryPurple,
+      count: 12,
     },
     {
       id: 5,
       nombre: 'Medio Ambiente',
+      title: 'Medio Ambiente',
       descripcion: 'Áreas verdes y reciclaje',
-      iconImage: require('../../assets/icons/medioAmbiente.png'),
+      fallbackIcon: 'leaf',
+      fallbackType: 'Ionicons',
       color: colors.categoryGreen,
+      count: 19,
     },
     {
       id: 6,
       nombre: 'Servicios Públicos',
+      title: 'Servicios Públicos',
       descripcion: 'Electricidad y alumbrado',
-      iconImage: require('../../assets/icons/ServiciosPublicos.png'),
+      fallbackIcon: 'flash',
+      fallbackType: 'Ionicons',
       color: colors.categoryCyan,
+      count: 7,
     },
   ];
 
-  const renderCategoryIcon = (iconImage, size = 24) => {
-    return (
-      <Image
-        source={iconImage}
-        style={{
-          width: size,
-          height: size,
-          tintColor: colors.textWhite,
-        }}
-        resizeMode="contain"
-      />
-    );
+  const renderCategoryIcon = (category, size = 24) => {
+    // Usar el color específico de cada categoría
+    return renderFallbackIcon(category.fallbackIcon, category.fallbackType, size, category.color);
+  };
+
+  const renderFallbackIcon = (iconName, iconType, size, color) => {
+    switch (iconType) {
+      case 'MaterialIcons':
+        return <MaterialIcons name={iconName} size={size} color={color} />;
+      case 'MaterialCommunityIcons':
+        return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
+      case 'Ionicons':
+        return <Ionicons name={iconName} size={size} color={color} />;
+      case 'FontAwesome5':
+        return <FontAwesome5 name={iconName} size={size} color={color} />;
+      default:
+        return <MaterialIcons name="info" size={size} color={color} />;
+    }
   };
 
   const handleCreateReport = () => {
@@ -215,11 +238,13 @@ export default function HomeScreen({ navigation }) {
                 activeOpacity={0.7}
               >
                 <View style={[styles.newCategoryIcon, { backgroundColor: category.color }]}>
-                  {renderCategoryIcon(category.iconImage, 24)}
+                  {renderCategoryIcon(category, 24, colors.textWhite)}
                 </View>
-                <Text style={styles.newCategoryName}>{category.nombre}</Text>
-                <Text style={styles.newCategoryDescription}>{category.descripcion}</Text>
-                <MaterialIcons name="chevron-right" size={16} color={colors.textGray} />
+                <View style={styles.categoryTextContainer}>
+                  <Text style={styles.newCategoryName}>{category.nombre}</Text>
+                  <Text style={styles.newCategoryDescription}>{category.descripcion}</Text>
+                </View>
+                <MaterialIcons name="chevron-right" size={20} color={colors.textGray} />
               </TouchableOpacity>
             ))}
           </View>
@@ -357,39 +382,41 @@ const styles = StyleSheet.create({
   },
   newCategoryCard: {
     backgroundColor: colors.backgroundWhite,
-    borderRadius: 12,
-    padding: 16,
+    borderRadius: 16,
+    padding: 20,
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 12,
     shadowColor: colors.shadowColor,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 2,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 3,
     borderWidth: 1,
     borderColor: colors.borderLight,
   },
   newCategoryIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 16,
+  },
+  categoryTextContainer: {
+    flex: 1,
+    marginRight: 12,
   },
   newCategoryName: {
     fontSize: 16,
     fontWeight: '600',
     color: colors.textDark,
-    flex: 1,
-    marginRight: 8,
+    marginBottom: 4,
   },
   newCategoryDescription: {
-    fontSize: 12,
+    fontSize: 13,
     color: colors.textGray,
-    flex: 2,
-    marginRight: 8,
+    lineHeight: 18,
   },
   
   // Estilos antiguos de categorías (mantener por compatibilidad)
