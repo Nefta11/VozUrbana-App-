@@ -19,6 +19,7 @@ import {
   Ionicons,
   FontAwesome5
 } from '@expo/vector-icons';
+import { Image } from 'react-native';
 import { colors, gradients } from '../utils/colors';
 import Constants from 'expo-constants';
 import CustomHeader from '../Components/navigation/CustomHeader';
@@ -52,81 +53,58 @@ export default function HomeScreen({ navigation }) {
       id: 1,
       nombre: 'Saneamiento',
       descripcion: 'Agua potable, drenaje y alcantarillado',
-      icono: 'water',
-      iconType: 'Ionicons',
+      iconImage: require('../../assets/icons/saneamiento.png'),
       color: colors.categoryBlue,
     },
     {
       id: 2,
       nombre: 'Infraestructura',
       descripcion: 'Calles, banquetas y vialidades',
-      icono: 'road-variant',
-      iconType: 'MaterialCommunityIcons',
+      iconImage: require('../../assets/icons/infraestructura.png'),
       color: colors.categoryOrange,
     },
     {
       id: 3,
-      nombre: 'Salud Pública',
+      nombre: 'Seguridad Pública',
       descripcion: 'Servicios médicos y sanitarios',
-      icono: 'medical-services',
-      iconType: 'MaterialIcons',
+      iconImage: require('../../assets/icons/seguridadPublica.png'),
       color: colors.categoryRed,
     },
     {
       id: 4,
       nombre: 'Seguridad',
       descripcion: 'Iluminación y vigilancia',
-      icono: 'shield-checkmark',
-      iconType: 'Ionicons',
+      iconImage: require('../../assets/icons/seguridad.png'),
       color: colors.categoryPurple,
     },
     {
       id: 5,
       nombre: 'Medio Ambiente',
       descripcion: 'Áreas verdes y reciclaje',
-      icono: 'leaf',
-      iconType: 'Ionicons',
+      iconImage: require('../../assets/icons/medioAmbiente.png'),
       color: colors.categoryGreen,
     },
     {
       id: 6,
       nombre: 'Servicios Públicos',
       descripcion: 'Electricidad y alumbrado',
-      icono: 'flash',
-      iconType: 'Ionicons',
+      iconImage: require('../../assets/icons/ServiciosPublicos.png'),
       color: colors.categoryCyan,
-    },
-    {
-      id: 7,
-      nombre: 'Transporte',
-      descripcion: 'Transporte público y movilidad',
-      icono: 'bus',
-      iconType: 'Ionicons',
-      color: colors.categoryYellow,
-    },
-    {
-      id: 8,
-      nombre: 'Residuos',
-      descripcion: 'Recolección de basura',
-      icono: 'trash-bin',
-      iconType: 'Ionicons',
-      color: colors.categoryGray,
     },
   ];
 
-  const renderIcon = (iconName, iconType, size, color) => {
-    switch (iconType) {
-      case 'MaterialIcons':
-        return <MaterialIcons name={iconName} size={size} color={color} />;
-      case 'MaterialCommunityIcons':
-        return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
-      case 'Ionicons':
-        return <Ionicons name={iconName} size={size} color={color} />;
-      case 'FontAwesome5':
-        return <FontAwesome5 name={iconName} size={size} color={color} />;
-      default:
-        return <MaterialIcons name="info" size={size} color={color} />;
-    }
+  const renderCategoryIcon = (iconImage, size = 24) => {
+    return (
+      <Image
+        source={iconImage}
+        style={{
+          width: size,
+          height: size,
+          tintColor: colors.textWhite,
+        }}
+        resizeMode="contain"
+      />
+    );
   };
 
   const handleCreateReport = () => {
@@ -229,7 +207,7 @@ export default function HomeScreen({ navigation }) {
           </View>
 
           <View style={styles.categoriesGrid}>
-            {categories.slice(0, 6).map((category) => (
+            {categories.map((category) => (
               <TouchableOpacity
                 key={category.id}
                 style={styles.newCategoryCard}
@@ -237,7 +215,7 @@ export default function HomeScreen({ navigation }) {
                 activeOpacity={0.7}
               >
                 <View style={[styles.newCategoryIcon, { backgroundColor: category.color }]}>
-                  {renderIcon(category.icono, category.iconType, 24, colors.textWhite)}
+                  {renderCategoryIcon(category.iconImage, 24)}
                 </View>
                 <Text style={styles.newCategoryName}>{category.nombre}</Text>
                 <Text style={styles.newCategoryDescription}>{category.descripcion}</Text>

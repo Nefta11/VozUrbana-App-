@@ -24,14 +24,12 @@ export default function CreateReportScreen({ navigation }) {
   const [prioridad, setPrioridad] = useState('media');
 
   const categories = [
-    { id: 1, nombre: 'Saneamiento', icon: 'water', iconType: 'Ionicons', value: 'saneamiento' },
-    { id: 2, nombre: 'Infraestructura', icon: 'construction', iconType: 'MaterialIcons', value: 'infraestructura' },
-    { id: 3, nombre: 'Salud Pública', icon: 'medical-services', iconType: 'MaterialIcons', value: 'salud_publica' },
-    { id: 4, nombre: 'Seguridad', icon: 'shield-checkmark', iconType: 'Ionicons', value: 'seguridad' },
-    { id: 5, nombre: 'Medio Ambiente', icon: 'leaf', iconType: 'Ionicons', value: 'medio_ambiente' },
-    { id: 6, nombre: 'Servicios Públicos', icon: 'flash', iconType: 'Ionicons', value: 'servicios_publicos' },
-    { id: 7, nombre: 'Transporte', icon: 'bus', iconType: 'Ionicons', value: 'transporte' },
-    { id: 8, nombre: 'Residuos', icon: 'trash-bin', iconType: 'Ionicons', value: 'residuos' },
+    { id: 1, nombre: 'Saneamiento', iconImage: require('../../assets/icons/saneamiento.png'), value: 'saneamiento', color: colors.categoryBlue },
+    { id: 2, nombre: 'Infraestructura', iconImage: require('../../assets/icons/infraestructura.png'), value: 'infraestructura', color: colors.categoryOrange },
+    { id: 3, nombre: 'Seguridad Pública', iconImage: require('../../assets/icons/seguridadPublica.png'), value: 'seguridad_publica', color: colors.categoryRed },
+    { id: 4, nombre: 'Seguridad', iconImage: require('../../assets/icons/seguridad.png'), value: 'seguridad', color: colors.categoryPurple },
+    { id: 5, nombre: 'Medio Ambiente', iconImage: require('../../assets/icons/medioAmbiente.png'), value: 'medio_ambiente', color: colors.categoryGreen },
+    { id: 6, nombre: 'Servicios Públicos', iconImage: require('../../assets/icons/ServiciosPublicos.png'), value: 'servicios_publicos', color: colors.categoryCyan },
   ];
 
   const priorities = [
@@ -91,11 +89,18 @@ export default function CreateReportScreen({ navigation }) {
     Alert.alert('Notificaciones', 'No tienes notificaciones nuevas');
   };
 
-  const renderIcon = (iconName, iconType, size, color) => {
-    if (iconType === 'MaterialIcons') {
-      return <MaterialIcons name={iconName} size={size} color={color} />;
-    }
-    return <Ionicons name={iconName} size={size} color={color} />;
+  const renderCategoryIcon = (iconImage, size = 24, isSelected = false) => {
+    return (
+      <Image
+        source={iconImage}
+        style={{
+          width: size,
+          height: size,
+          tintColor: isSelected ? colors.primary : colors.textGray,
+        }}
+        resizeMode="contain"
+      />
+    );
   };
 
   return (
@@ -166,11 +171,10 @@ export default function CreateReportScreen({ navigation }) {
                   onPress={() => setCategoria(cat.value)}
                   activeOpacity={0.7}
                 >
-                  {renderIcon(
-                    cat.icon,
-                    cat.iconType,
+                  {renderCategoryIcon(
+                    cat.iconImage,
                     24,
-                    categoria === cat.value ? colors.primary : colors.textGray
+                    categoria === cat.value
                   )}
                   <Text
                     style={[
