@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoaderScreen from '../Screens/landing/LoaderScreen';
@@ -12,26 +12,6 @@ const Stack = createNativeStackNavigator();
  * Maneja el flujo de pantallas y transiciones usando React Navigation
  */
 const AppStack = () => {
-    const [isLoading, setIsLoading] = useState(true);
-
-    // Componente wrapper para el LoaderScreen
-    const LoaderWrapper = ({ navigation }) => {
-        const handleLoaderComplete = () => {
-            setIsLoading(false);
-            navigation.replace('Landing');
-        };
-
-        return <LoaderScreen onComplete={handleLoaderComplete} />;
-    };
-
-    // Componente wrapper para el LandingScreen
-    const LandingWrapper = ({ navigation }) => {
-        const handleNavigateToLogin = () => {
-            navigation.navigate('Login');
-        };
-
-        return <LandingScreen animated={true} onNavigateToLogin={handleNavigateToLogin} />;
-    };
 
     return (
         <NavigationContainer>
@@ -53,24 +33,35 @@ const AppStack = () => {
             >
                 <Stack.Screen
                     name="Loader"
-                    component={LoaderWrapper}
                     options={{
                         headerShown: false,
                         animation: 'fade',
                         animationDuration: 300,
                         gestureEnabled: false,
                     }}
-                />
+                >
+                    {({ navigation }) => (
+                        <LoaderScreen
+                            onComplete={() => navigation.replace('Landing')}
+                        />
+                    )}
+                </Stack.Screen>
                 <Stack.Screen
                     name="Landing"
-                    component={LandingWrapper}
                     options={{
                         headerShown: false,
                         animation: 'fade',
                         animationDuration: 400,
                         gestureEnabled: false,
                     }}
-                />
+                >
+                    {({ navigation }) => (
+                        <LandingScreen
+                            animated={true}
+                            onNavigateToLogin={() => navigation.navigate('Login')}
+                        />
+                    )}
+                </Stack.Screen>
                 <Stack.Screen
                     name="Login"
                     component={LoginScreen}
@@ -112,14 +103,3 @@ const AppStack = () => {
 };
 
 export default AppStack;
-
-// Registro de pantallas disponibles
-export const screens = {
-    LOADER: 'Loader',
-    LANDING: 'Landing',
-    LOGIN: 'Login',
-    // Aquí se pueden agregar más pantallas en el futuro
-    // REGISTER: 'Register',
-    // HOME: 'Home',
-    // PROFILE: 'Profile',
-};

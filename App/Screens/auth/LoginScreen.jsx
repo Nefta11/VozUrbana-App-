@@ -21,11 +21,26 @@ export default function LoginScreen({ navigation }) {
     const [showPassword, setShowPassword] = useState(false);
 
     const handleLogin = () => {
+        // Validar que los campos no estén vacíos
         if (!email || !password) {
             Alert.alert('Error', 'Por favor ingresa tu correo y contraseña');
             return;
         }
-        console.log('Login attempt:', { email, password });
+
+        // Validar formato de email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            Alert.alert('Error', 'Por favor ingresa un correo electrónico válido');
+            return;
+        }
+
+        // Validar longitud mínima de contraseña
+        if (password.length < 6) {
+            Alert.alert('Error', 'La contraseña debe tener al menos 6 caracteres');
+            return;
+        }
+
+        // Aquí iría la lógica de autenticación
         Alert.alert('Login', 'Funcionalidad de login en desarrollo');
     };
 
@@ -36,7 +51,6 @@ export default function LoginScreen({ navigation }) {
     };
 
     const handleRegister = () => {
-        console.log('Navigate to Register');
         Alert.alert('Registro', 'Navegación a registro en desarrollo');
     };
 

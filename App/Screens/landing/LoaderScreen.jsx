@@ -26,6 +26,14 @@ export default function LoaderScreen({ onComplete }) {
 
   useEffect(() => {
     startLoadingSequence();
+
+    // Cleanup: detener animaciones al desmontar el componente
+    return () => {
+      progressAnim.stopAnimation();
+      logoRotation.stopAnimation();
+      logoOpacity.stopAnimation();
+      logoFallAnim.stopAnimation();
+    };
   }, []);
 
   const startLoadingSequence = () => {

@@ -28,6 +28,14 @@ export default function LandingScreen({ animated = false, onNavigateToLogin }) {
     if (animated) {
       startEntranceAnimation();
     }
+
+    // Cleanup: detener animaciones al desmontar el componente
+    return () => {
+      logoSlideUp.stopAnimation();
+      welcomeSlideUp.stopAnimation();
+      buttonsSlideUp.stopAnimation();
+      signUpSlideUp.stopAnimation();
+    };
   }, [animated]);
 
   const startEntranceAnimation = () => {
@@ -60,22 +68,21 @@ export default function LandingScreen({ animated = false, onNavigateToLogin }) {
   };
 
   const handleLogin = () => {
-    console.log("Iniciar sesión pressed");
     if (onNavigateToLogin) {
       onNavigateToLogin();
     }
   };
 
   const handleGoogleLogin = () => {
-    console.log("Iniciar sesión con Google pressed");
+    // TODO: Implementar autenticación con Google
   };
 
   const handleGuestEntry = () => {
-    console.log("Entrar como invitado pressed");
+    // TODO: Implementar entrada como invitado
   };
 
   const handleSignUp = () => {
-    console.log("Sign In pressed");
+    // TODO: Implementar navegación a registro
   };
 
   return (
@@ -148,7 +155,7 @@ export default function LandingScreen({ animated = false, onNavigateToLogin }) {
         >
           <Text style={styles.signUpQuestion}>¿No tienes una cuenta?</Text>
           <TouchableOpacity onPress={handleSignUp}>
-            <Text style={styles.signUpLink}> Sign In</Text>
+            <Text style={styles.signUpLink}> Regístrate</Text>
           </TouchableOpacity>
         </Animated.View>
       </LinearGradient>
