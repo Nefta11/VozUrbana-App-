@@ -22,6 +22,7 @@ import {
 import { colors, gradients } from '../utils/colors';
 import Constants from 'expo-constants';
 import CustomHeader from '../Components/navigation/CustomHeader';
+import LeafletMap from '../Components/MapView/LeafletMap';
 
 const { width } = Dimensions.get('window');
 
@@ -176,52 +177,46 @@ export default function HomeScreen({ navigation }) {
               Plataforma ciudadana para reportar problemas de salud pública e
               infraestructura en tu comunidad
             </Text>
-            <View style={styles.heroButtons}>
-              <TouchableOpacity
-                style={styles.primaryButton}
-                onPress={handleCreateReport}
-              >
-                <MaterialIcons name="add-circle-outline" size={20} color="white" />
-                <Text style={styles.primaryButtonText}>Crear Reporte</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.secondaryButton}
-                onPress={handleViewReports}
-              >
-                <MaterialIcons name="list" size={20} color={colors.primary} />
-                <Text style={styles.secondaryButtonText}>Ver Reportes</Text>
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity
+              style={styles.primaryButton}
+              onPress={handleCreateReport}
+            >
+              <Text style={styles.primaryButtonText}>Crear Reporte</Text>
+            </TouchableOpacity>
           </View>
         </LinearGradient>
 
         {/* Stats Section */}
         <View style={styles.statsSection}>
-          <View style={styles.statsGrid}>
-            <View style={[styles.statCard, { backgroundColor: colors.statTotal }]}>
-              <View style={styles.statIconContainer}>
-                <MaterialIcons name="description" size={24} color={colors.primary} />
-              </View>
-              <Text style={styles.statLabel}>Total Reportes</Text>
+          <View style={styles.statCard}>
+            <MaterialIcons name="description" size={40} color={colors.primary} />
+            <View style={styles.statInfo}>
               <Text style={styles.statNumber}>{stats.total}</Text>
-            </View>
-
-            <View style={[styles.statCard, { backgroundColor: colors.statInProcess }]}>
-              <View style={styles.statIconContainer}>
-                <MaterialIcons name="schedule" size={24} color={colors.warning} />
-              </View>
-              <Text style={styles.statLabel}>En Proceso</Text>
-              <Text style={styles.statNumber}>{stats.inProcess}</Text>
-            </View>
-
-            <View style={[styles.statCard, { backgroundColor: colors.statResolved }]}>
-              <View style={styles.statIconContainer}>
-                <MaterialIcons name="check-circle" size={24} color={colors.success} />
-              </View>
-              <Text style={styles.statLabel}>Resueltos</Text>
-              <Text style={styles.statNumber}>{stats.resolved}</Text>
+              <Text style={styles.statLabel}>Total reportes</Text>
             </View>
           </View>
+
+          <View style={styles.statCard}>
+            <MaterialIcons name="schedule" size={40} color={colors.warning} />
+            <View style={styles.statInfo}>
+              <Text style={styles.statNumber}>{stats.inProcess}</Text>
+              <Text style={styles.statLabel}>En Proceso</Text>
+            </View>
+          </View>
+
+          <View style={styles.statCard}>
+            <MaterialIcons name="check-circle" size={40} color={colors.success} />
+            <View style={styles.statInfo}>
+              <Text style={styles.statNumber}>{stats.resolved}</Text>
+              <Text style={styles.statLabel}>Resueltos</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Mapa de Reportes */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Mapa de Reportes</Text>
+          <LeafletMap />
         </View>
 
         {/* Categories Section */}
@@ -234,96 +229,25 @@ export default function HomeScreen({ navigation }) {
           </View>
 
           <View style={styles.categoriesGrid}>
-            {categories.map((category) => (
+            {categories.slice(0, 6).map((category) => (
               <TouchableOpacity
                 key={category.id}
-                style={styles.categoryCard}
+                style={styles.newCategoryCard}
                 onPress={() => handleCategoryPress(category)}
                 activeOpacity={0.7}
               >
-                <View style={[styles.categoryIconContainer, { backgroundColor: category.color + '20' }]}>
-                  {renderIcon(category.icono, category.iconType, 28, category.color)}
+                <View style={[styles.newCategoryIcon, { backgroundColor: category.color }]}>
+                  {renderIcon(category.icono, category.iconType, 24, colors.textWhite)}
                 </View>
-                <View style={styles.categoryContent}>
-                  <Text style={styles.categoryName}>{category.nombre}</Text>
-                  <Text style={styles.categoryDescription}>{category.descripcion}</Text>
-                </View>
-                <MaterialIcons name="chevron-right" size={20} color={colors.textGray} />
+                <Text style={styles.newCategoryName}>{category.nombre}</Text>
+                <Text style={styles.newCategoryDescription}>{category.descripcion}</Text>
+                <MaterialIcons name="chevron-right" size={16} color={colors.textGray} />
               </TouchableOpacity>
             ))}
           </View>
         </View>
 
-        {/* How It Works Section */}
-        <View style={[styles.section, styles.howItWorksSection]}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Cómo Funciona</Text>
-            <Text style={styles.sectionSubtitle}>
-              Participa en la mejora de tu comunidad en simples pasos
-            </Text>
-          </View>
 
-          <View style={styles.stepsContainer}>
-            <View style={styles.stepCard}>
-              <View style={styles.stepNumber}>
-                <Text style={styles.stepNumberText}>1</Text>
-              </View>
-              <Text style={styles.stepTitle}>Crea un Reporte</Text>
-              <Text style={styles.stepDescription}>
-                Identifica un problema en tu comunidad y créalo usando el formulario
-              </Text>
-            </View>
-
-            <View style={styles.stepCard}>
-              <View style={styles.stepNumber}>
-                <Text style={styles.stepNumberText}>2</Text>
-              </View>
-              <Text style={styles.stepTitle}>Geolocaliza el Problema</Text>
-              <Text style={styles.stepDescription}>
-                Marca la ubicación exacta en el mapa interactivo
-              </Text>
-            </View>
-
-            <View style={styles.stepCard}>
-              <View style={styles.stepNumber}>
-                <Text style={styles.stepNumberText}>3</Text>
-              </View>
-              <Text style={styles.stepTitle}>Añade Detalles</Text>
-              <Text style={styles.stepDescription}>
-                Describe el problema y añade fotos si es posible
-              </Text>
-            </View>
-
-            <View style={styles.stepCard}>
-              <View style={styles.stepNumber}>
-                <Text style={styles.stepNumberText}>4</Text>
-              </View>
-              <Text style={styles.stepTitle}>Seguimiento</Text>
-              <Text style={styles.stepDescription}>
-                Sigue el estado del reporte y recibe actualizaciones
-              </Text>
-            </View>
-          </View>
-        </View>
-
-        {/* Call to Action */}
-        <LinearGradient
-          colors={[colors.secondary, colors.success]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.ctaSection}
-        >
-          <Text style={styles.ctaTitle}>¿Ves un problema en tu comunidad?</Text>
-          <Text style={styles.ctaSubtitle}>
-            Tu participación es clave para mejorar nuestra ciudad
-          </Text>
-          <TouchableOpacity
-            style={styles.ctaButton}
-            onPress={handleCreateReport}
-          >
-            <Text style={styles.ctaButtonText}>Crear un Reporte Ahora</Text>
-          </TouchableOpacity>
-        </LinearGradient>
 
         {/* Espaciado inferior */}
         <View style={styles.bottomSpacing} />
@@ -352,62 +276,42 @@ const styles = StyleSheet.create({
   heroSection: {
     paddingHorizontal: 20,
     paddingVertical: 40,
-    paddingTop: 28,
+    paddingTop: 20,
   },
   heroContent: {
     alignItems: 'center',
   },
   heroTitle: {
-    fontSize: 42,
+    fontSize: 32,
     fontWeight: '800',
     color: colors.textWhite,
     textAlign: 'center',
-    marginBottom: 15,
+    marginBottom: 12,
     textShadowColor: 'rgba(0, 0, 0, 0.3)',
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 4,
   },
   heroSubtitle: {
-    fontSize: 16,
+    fontSize: 14,
     color: colors.textWhite,
     textAlign: 'center',
-    lineHeight: 24,
-    marginBottom: 30,
-    opacity: 0.95,
-    paddingHorizontal: 10,
-  },
-  heroButtons: {
-    flexDirection: 'row',
-    gap: 15,
-    flexWrap: 'wrap',
-    justifyContent: 'center',
+    lineHeight: 20,
+    marginBottom: 24,
+    opacity: 0.9,
+    paddingHorizontal: 16,
   },
   primaryButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.25)',
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 24,
-    paddingVertical: 14,
+    backgroundColor: colors.textWhite,
+    paddingHorizontal: 32,
+    paddingVertical: 12,
     borderRadius: 25,
-    gap: 8,
-    borderWidth: 2,
-    borderColor: 'rgba(255, 255, 255, 0.3)',
+    shadowColor: colors.shadowColor,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 5,
   },
   primaryButtonText: {
-    color: colors.textWhite,
-    fontSize: 16,
-    fontWeight: '700',
-  },
-  secondaryButton: {
-    backgroundColor: colors.textWhite,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 24,
-    paddingVertical: 14,
-    borderRadius: 25,
-    gap: 8,
-  },
-  secondaryButtonText: {
     color: colors.primary,
     fontSize: 16,
     fontWeight: '700',
@@ -416,39 +320,37 @@ const styles = StyleSheet.create({
   // Stats Section
   statsSection: {
     paddingHorizontal: 20,
-    paddingVertical: 30,
-  },
-  statsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    paddingVertical: 0,
+    marginTop: -20,
     gap: 12,
-    justifyContent: 'center',
   },
   statCard: {
-    width: (width - 64) / 3,
-    backgroundColor: colors.backgroundLight,
-    borderRadius: 16,
-    padding: 16,
+    backgroundColor: colors.backgroundWhite,
+    borderRadius: 12,
+    padding: 20,
+    flexDirection: 'row',
     alignItems: 'center',
-    elevation: 2,
+    marginBottom: 8,
     shadowColor: colors.shadowColor,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+    elevation: 3,
   },
-  statIconContainer: {
-    marginBottom: 10,
+  statInfo: {
+    marginLeft: 20,
+    flex: 1,
+  },
+  statNumber: {
+    fontSize: 36,
+    fontWeight: '700',
+    color: colors.textDark,
+    marginBottom: 4,
   },
   statLabel: {
     fontSize: 14,
     color: colors.textGray,
-    textAlign: 'center',
-    marginBottom: 5,
-  },
-  statNumber: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: colors.textDark,
+    fontWeight: '500',
   },
 
   // Section Common Styles
@@ -473,8 +375,46 @@ const styles = StyleSheet.create({
 
   // Categories Section
   categoriesGrid: {
-    gap: 12,
+    gap: 8,
   },
+  newCategoryCard: {
+    backgroundColor: colors.backgroundWhite,
+    borderRadius: 12,
+    padding: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+    shadowColor: colors.shadowColor,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 2,
+    borderWidth: 1,
+    borderColor: colors.borderLight,
+  },
+  newCategoryIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
+  },
+  newCategoryName: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.textDark,
+    flex: 1,
+    marginRight: 8,
+  },
+  newCategoryDescription: {
+    fontSize: 12,
+    color: colors.textGray,
+    flex: 2,
+    marginRight: 8,
+  },
+  
+  // Estilos antiguos de categorías (mantener por compatibilidad)
   categoryCard: {
     backgroundColor: colors.backgroundWhite,
     borderRadius: 16,
@@ -512,86 +452,7 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
 
-  // How It Works Section
-  howItWorksSection: {
-    backgroundColor: colors.backgroundLight,
-    marginTop: 10,
-  },
-  stepsContainer: {
-    gap: 15,
-  },
-  stepCard: {
-    backgroundColor: colors.backgroundWhite,
-    borderRadius: 16,
-    padding: 20,
-    alignItems: 'center',
-    elevation: 2,
-    shadowColor: colors.shadowColor,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  stepNumber: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: colors.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 15,
-  },
-  stepNumberText: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: colors.textWhite,
-  },
-  stepTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: colors.textDark,
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  stepDescription: {
-    fontSize: 14,
-    color: colors.textGray,
-    textAlign: 'center',
-    lineHeight: 20,
-  },
 
-  // CTA Section
-  ctaSection: {
-    marginHorizontal: 20,
-    marginTop: 20,
-    borderRadius: 20,
-    padding: 30,
-    alignItems: 'center',
-  },
-  ctaTitle: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: colors.textWhite,
-    textAlign: 'center',
-    marginBottom: 10,
-  },
-  ctaSubtitle: {
-    fontSize: 15,
-    color: colors.textWhite,
-    textAlign: 'center',
-    marginBottom: 25,
-    opacity: 0.95,
-  },
-  ctaButton: {
-    backgroundColor: colors.textWhite,
-    paddingHorizontal: 30,
-    paddingVertical: 15,
-    borderRadius: 25,
-  },
-  ctaButtonText: {
-    color: colors.secondary,
-    fontSize: 16,
-    fontWeight: '700',
-  },
 
   // Bottom Spacing
   bottomSpacing: {
