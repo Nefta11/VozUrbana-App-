@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoaderScreen from '../Screens/landing/LoaderScreen';
 import LandingScreen from '../Screens/landing/LandingScreen';
 import LoginScreen from '../Screens/auth/LoginScreen';
+import RegisterScreen from '../Screens/auth/RegisterScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -59,6 +60,7 @@ const AppStack = () => {
                         <LandingScreen
                             animated={true}
                             onNavigateToLogin={() => navigation.navigate('Login')}
+                            onNavigateToRegister={() => navigation.navigate('Register')}
                         />
                     )}
                 </Stack.Screen>
@@ -73,19 +75,19 @@ const AppStack = () => {
                         gestureDirection: 'horizontal',
                     }}
                 />
+                <Stack.Screen
+                    name="Register"
+                    component={RegisterScreen}
+                    options={{
+                        headerShown: false,
+                        animation: 'slide_from_right',
+                        animationDuration: 400,
+                        gestureEnabled: true,
+                        gestureDirection: 'horizontal',
+                    }}
+                />
                 {/* Aquí se pueden agregar más pantallas en el futuro */}
                 {/*
-        <Stack.Screen
-          name="Register"
-          component={RegisterScreen}
-          options={{
-            headerShown: false,
-            animation: 'slide_from_right',
-            animationDuration: 400,
-            gestureEnabled: true,
-            gestureDirection: 'horizontal',
-          }}
-        />
         <Stack.Screen
           name="Home"
           component={TabNavigator}

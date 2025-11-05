@@ -10,20 +10,24 @@ import {
     Image,
     Alert,
     ImageBackground,
+    ScrollView,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons } from '@expo/vector-icons';
 import { colors, gradients } from '../../utils/colors';
 
-export default function LoginScreen({ navigation }) {
+export default function RegisterScreen({ navigation }) {
+    const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-    const handleLogin = () => {
+    const handleRegister = () => {
         // Validar que los campos no estén vacíos
-        if (!email || !password) {
-            Alert.alert('Error', 'Por favor ingresa tu correo y contraseña');
+        if (!fullName || !email || !password || !confirmPassword) {
+            Alert.alert('Error', 'Por favor completa todos los campos');
             return;
         }
 
@@ -40,8 +44,14 @@ export default function LoginScreen({ navigation }) {
             return;
         }
 
-        // Aquí iría la lógica de autenticación
-        Alert.alert('Login', 'Funcionalidad de login en desarrollo');
+        // Validar que las contraseñas coincidan
+        if (password !== confirmPassword) {
+            Alert.alert('Error', 'Las contraseñas no coinciden');
+            return;
+        }
+
+        // Aquí iría la lógica de registro
+        Alert.alert('Registro', 'Funcionalidad de registro en desarrollo');
     };
 
     const handleGoBack = () => {
@@ -50,10 +60,9 @@ export default function LoginScreen({ navigation }) {
         }
     };
 
-    const handleRegister = () => {
-        console.log('Navigate to Register');
+    const handleLogin = () => {
         if (navigation) {
-            navigation.navigate('Register');
+            navigation.navigate('Login');
         }
     };
 
@@ -97,18 +106,33 @@ export default function LoginScreen({ navigation }) {
                 </LinearGradient>
             </ImageBackground>
 
-            {/* Formulario de login */}
-            <View style={styles.formContainer}>
-                <Text style={styles.formTitle}>Inicia Sesión</Text>
-                <Text style={styles.formSubtitle}>Ingresa tus datos</Text>
+            {/* Formulario de registro */}
+            <ScrollView style={styles.formContainer} showsVerticalScrollIndicator={false}>
+                <Text style={styles.formTitle}>Crea tu cuenta</Text>
+                <Text style={styles.formSubtitle}>Únete a Voz Urbana y ayuda a mejorar tu comunidad</Text>
 
-                {/* Campo de correo */}
+                {/* Campo de nombre completo */}
                 <View style={styles.inputSection}>
-                    <Text style={styles.inputLabel}>Correo Electronico</Text>
+                    <Text style={styles.inputLabel}>Nombre Completo</Text>
                     <View style={styles.textInputWrapper}>
                         <TextInput
                             style={styles.textInput}
-                            placeholder="Loisbecket@gmail.com"
+                            placeholder="Tu nombre completo"
+                            placeholderTextColor={colors.textPlaceholder}
+                            value={fullName}
+                            onChangeText={setFullName}
+                            autoCapitalize="words"
+                        />
+                    </View>
+                </View>
+
+                {/* Campo de correo */}
+                <View style={styles.inputSection}>
+                    <Text style={styles.inputLabel}>Correo Electrónico</Text>
+                    <View style={styles.textInputWrapper}>
+                        <TextInput
+                            style={styles.textInput}
+                            placeholder="tuemail.com"
                             placeholderTextColor={colors.textPlaceholder}
                             value={email}
                             onChangeText={setEmail}
@@ -124,7 +148,7 @@ export default function LoginScreen({ navigation }) {
                     <View style={styles.textInputWrapper}>
                         <TextInput
                             style={styles.passwordInput}
-                            placeholder="********"
+                            placeholder="Mínimo 6 caracteres"
                             placeholderTextColor={colors.textPlaceholder}
                             value={password}
                             onChangeText={setPassword}
@@ -143,27 +167,44 @@ export default function LoginScreen({ navigation }) {
                     </View>
                 </View>
 
-                {/* Botón de login */}
-                <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-                    <Text style={styles.loginButtonText}>Iniciar Sesión</Text>
+                {/* Campo de confirmar contraseña */}
+                <View style={styles.inputSection}>
+                    <Text style={styles.inputLabel}>Confirmar Contraseña</Text>
+                    <View style={styles.textInputWrapper}>
+                        <TextInput
+                            style={styles.passwordInput}
+                            placeholder="Repite tu Contraseña"
+                            placeholderTextColor={colors.textPlaceholder}
+                            value={confirmPassword}
+                            onChangeText={setConfirmPassword}
+                            secureTextEntry={!showConfirmPassword}
+                        />
+                        <TouchableOpacity
+                            style={styles.eyeButton}
+                            onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+                        >
+                            <MaterialIcons
+                                name={showConfirmPassword ? "visibility" : "visibility-off"}
+                                size={20}
+                                color={colors.textGray}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+                {/* Botón de registro */}
+                <TouchableOpacity style={styles.registerButton} onPress={handleRegister}>
+                    <Text style={styles.registerButtonText}>Crear tu cuenta</Text>
                 </TouchableOpacity>
 
-                {/* Separador - NOTA: La imagen no muestra un separador 'O', pero lo he dejado simplificado */}
-                {/* Si no lo necesitas, puedes borrar el componente 'separator' y sus estilos. */}
-                <View style={styles.separator}>
-                    <View style={styles.separatorLine} />
-                    <Text style={styles.separatorText}>O</Text>
-                    <View style={styles.separatorLine} />
-                </View>
-
-                {/* Texto de registro */}
-                <View style={styles.registerContainer}>
-                    <Text style={styles.registerQuestion}>¿No tienes una cuenta?</Text>
-                    <TouchableOpacity onPress={handleRegister}>
-                        <Text style={styles.registerLink}> Regístrate aquí</Text>
+                {/* Texto de login */}
+                <View style={styles.loginContainer}>
+                    <Text style={styles.loginQuestion}>¿Ya tienes una cuenta?</Text>
+                    <TouchableOpacity onPress={handleLogin}>
+                        <Text style={styles.loginLink}> Inicia sesión</Text>
                     </TouchableOpacity>
                 </View>
-            </View>
+            </ScrollView>
         </SafeAreaView>
     );
 }
@@ -175,7 +216,7 @@ const styles = StyleSheet.create({
     },
     // --- HEADER Y IMAGEN DE FONDO ---
     header: {
-        height: '40%',
+        height: '35%',
         position: 'relative',
         overflow: 'hidden',
     },
@@ -193,7 +234,6 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
     },
     backButton: {
-        // La flecha en la imagen está en la esquina superior izquierda
         position: 'absolute',
         top: StatusBar.currentHeight + 10 || 40, 
         left: 20,
@@ -207,29 +247,29 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     logoImage: {
-        width: 120,
-        height: 120,
+        width: 100,
+        height: 100,
         marginBottom: 15,
         alignSelf: 'center',
     },
     headerTextContainer: {
         alignItems: 'center',
         paddingHorizontal: 20,
-        marginTop: 10,
+        marginTop: 5,
     },
     headerTitle: {
         color: colors.textWhite,
-        fontSize: 16,
+        fontSize: 15,
         fontWeight: '700',
         textAlign: 'center',
-        marginBottom: 10,
-        letterSpacing: 1.2,
+        marginBottom: 8,
+        letterSpacing: 1.0,
     },
     headerSubtitle: {
         color: colors.textWhite,
-        fontSize: 14,
+        fontSize: 13,
         textAlign: 'center',
-        lineHeight: 20,
+        lineHeight: 18,
         fontWeight: '400',
     },
     // --- FORMULARIO Y CAMPOS DE TEXTO ---
@@ -237,42 +277,33 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: colors.backgroundWhite,
         paddingHorizontal: 32,
-        paddingTop: 28,
+        paddingTop: 24,
         paddingBottom: 32,
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
         marginTop: -30,
-        shadowColor: colors.shadowColor,
-        shadowOffset: {
-            width: 0,
-            height: -2,
-        },
-        shadowOpacity: 0.1,
-        shadowRadius: 8,
-        elevation: 5,
-        justifyContent: 'flex-start',
     },
     formTitle: {
-        fontSize: 28,
+        fontSize: 26,
         fontWeight: '700',
         color: colors.textDark,
         textAlign: 'center',
         marginBottom: 6,
     },
     formSubtitle: {
-        fontSize: 16,
+        fontSize: 15,
         color: colors.textGray,
         textAlign: 'center',
-        marginBottom: 28,
+        marginBottom: 24,
         fontWeight: '400',
     },
     inputSection: {
-        marginBottom: 20,
+        marginBottom: 18,
     },
     inputLabel: {
         fontSize: 16,
         color: colors.textDark,
-        marginBottom: 10,
+        marginBottom: 8,
         fontWeight: '600',
     },
     textInputWrapper: {
@@ -307,14 +338,14 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         paddingVertical: 16,
     },
-    // --- BOTÓN DE LOGIN ---
-    loginButton: {
-        backgroundColor: colors.buttonSecondary, 
+    // --- BOTÓN DE REGISTRO ---
+    registerButton: {
+        backgroundColor: colors.buttonPrimary,
         borderRadius: 30,
         paddingVertical: 16,
-        marginTop: 12,
-        marginBottom: 8,
-        shadowColor: colors.buttonSecondary,
+        marginTop: 16,
+        marginBottom: 16,
+        shadowColor: colors.buttonPrimary,
         shadowOffset: {
             width: 0,
             height: 6,
@@ -323,42 +354,26 @@ const styles = StyleSheet.create({
         shadowRadius: 10,
         elevation: 8,
     },
-    loginButtonText: {
+    registerButtonText: {
         color: colors.textWhite,
         fontSize: 17,
         fontWeight: '700',
         textAlign: 'center',
         letterSpacing: 0.5,
     },
-    // --- SEPARADOR (O) y REGISTRO ---
-    separator: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginVertical: 18,
-    },
-    separatorLine: {
-        flex: 1,
-        height: 1,
-        backgroundColor: colors.borderSeparator,
-    },
-    separatorText: {
-        marginHorizontal: 14,
-        color: colors.textGray,
-        fontSize: 15,
-        fontWeight: '500',
-    },
-    registerContainer: {
+    // --- TEXTO DE LOGIN ---
+    loginContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 8,
-        marginBottom: 20,
+        marginBottom: 32,
     },
-    registerQuestion: {
+    loginQuestion: {
         color: colors.textGray,
         fontSize: 16,
     },
-    registerLink: {
+    loginLink: {
         color: colors.buttonPrimary,
         fontSize: 16,
         fontWeight: '600',

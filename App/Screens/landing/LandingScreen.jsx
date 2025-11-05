@@ -17,7 +17,7 @@ import GoogleButtonComponent from "../../Components/auth/GoogleButtonComponent";
 
 const { width, height } = Dimensions.get("window");
 
-export default function LandingScreen({ animated = false, onNavigateToLogin }) {
+export default function LandingScreen({ animated = false, onNavigateToLogin, onNavigateToRegister }) {
   // Animaciones
   const logoSlideUp = useRef(new Animated.Value(animated ? height : 0)).current;
   const welcomeSlideUp = useRef(new Animated.Value(animated ? height + 100 : 0)).current;
@@ -82,7 +82,10 @@ export default function LandingScreen({ animated = false, onNavigateToLogin }) {
   };
 
   const handleSignUp = () => {
-    // TODO: Implementar navegación a registro
+    console.log("Sign Up pressed");
+    if (onNavigateToRegister) {
+      onNavigateToRegister();
+    }
   };
 
   return (
