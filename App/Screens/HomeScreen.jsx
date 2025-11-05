@@ -198,7 +198,9 @@ export default function HomeScreen({ navigation }) {
         {/* Stats Section */}
         <View style={styles.statsSection}>
           <View style={styles.statCard}>
-            <MaterialIcons name="description" size={24} color={colors.primary} />
+            <View style={styles.statIconContainer}>
+              <MaterialIcons name="description" size={24} color={colors.primary} />
+            </View>
             <View style={styles.statTextContainer}>
               <Text style={styles.statLabel}>Total reportes</Text>
               <Text style={styles.statNumber}>{stats.total}</Text>
@@ -206,7 +208,9 @@ export default function HomeScreen({ navigation }) {
           </View>
 
           <View style={styles.statCard}>
-            <MaterialIcons name="schedule" size={24} color={colors.warning} />
+            <View style={styles.statIconContainer}>
+              <MaterialIcons name="schedule" size={24} color={colors.warning} />
+            </View>
             <View style={styles.statTextContainer}>
               <Text style={styles.statLabel}>En Proceso</Text>
               <Text style={styles.statNumber}>{stats.inProcess}</Text>
@@ -214,7 +218,9 @@ export default function HomeScreen({ navigation }) {
           </View>
 
           <View style={styles.statCard}>
-            <MaterialIcons name="check-circle" size={24} color={colors.success} />
+            <View style={styles.statIconContainer}>
+              <MaterialIcons name="check-circle" size={24} color={colors.success} />
+            </View>
             <View style={styles.statTextContainer}>
               <Text style={styles.statLabel}>Resueltos</Text>
               <Text style={styles.statNumber}>{stats.resolved}</Text>
@@ -352,42 +358,44 @@ const styles = StyleSheet.create({
   // Stats Section
   statsSection: {
     paddingHorizontal: 20,
-    paddingVertical: 12,
+    paddingTop: 16,
+    paddingBottom: 8,
     backgroundColor: colors.backgroundLight,
     gap: 8,
   },
   statCard: {
     backgroundColor: colors.backgroundWhite,
-    borderRadius: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
+    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
     flexDirection: 'row',
     alignItems: 'center',
     shadowColor: colors.shadowColor,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
     borderWidth: 1,
     borderColor: colors.borderLight,
-    gap: 10,
   },
   statIconContainer: {
-    marginBottom: 12,
+    backgroundColor: colors.backgroundLight,
+    padding: 8,
+    borderRadius: 8,
+    marginRight: 12,
   },
   statTextContainer: {
     flex: 1,
-    justifyContent: 'center',
   },
   statLabel: {
     fontSize: 12,
     color: colors.textGray,
-    fontWeight: '600',
+    fontWeight: '500',
     marginBottom: 2,
   },
   statNumber: {
-    fontSize: 20,
-    fontWeight: '800',
+    fontSize: 24,
+    fontWeight: '700',
     color: colors.textDark,
   },
 
