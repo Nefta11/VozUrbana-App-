@@ -157,7 +157,7 @@ export default function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
       {/* Header personalizado */}
-      <CustomHeader 
+      <CustomHeader
         onInfoPress={handleInfoPress}
         onNotificationPress={handleNotificationPress}
       />
@@ -198,7 +198,7 @@ export default function HomeScreen({ navigation }) {
         {/* Stats Section */}
         <View style={styles.statsSection}>
           <View style={styles.statCard}>
-            <View style={styles.statIconContainer}>
+            <View style={[styles.statIconContainer, { backgroundColor: '#e3f2fd' }]}>
               <MaterialIcons name="description" size={24} color={colors.primary} />
             </View>
             <View style={styles.statTextContainer}>
@@ -208,7 +208,7 @@ export default function HomeScreen({ navigation }) {
           </View>
 
           <View style={styles.statCard}>
-            <View style={styles.statIconContainer}>
+            <View style={[styles.statIconContainer, { backgroundColor: '#fff3e0' }]}>
               <MaterialIcons name="schedule" size={24} color={colors.warning} />
             </View>
             <View style={styles.statTextContainer}>
@@ -218,7 +218,7 @@ export default function HomeScreen({ navigation }) {
           </View>
 
           <View style={styles.statCard}>
-            <View style={styles.statIconContainer}>
+            <View style={[styles.statIconContainer, { backgroundColor: '#e8f5e8' }]}>
               <MaterialIcons name="check-circle" size={24} color={colors.success} />
             </View>
             <View style={styles.statTextContainer}>
@@ -361,47 +361,50 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     paddingBottom: 12,
     backgroundColor: colors.backgroundLight,
-    gap: 10,
+    gap: 12,
   },
   statCard: {
     backgroundColor: colors.backgroundWhite,
-    borderRadius: 12,
-    paddingVertical: 16,
-    paddingHorizontal: 16,
+    borderRadius: 16,
+    paddingVertical: 20,
+    paddingHorizontal: 40,
     flexDirection: 'row',
     alignItems: 'center',
     shadowColor: colors.shadowColor,
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 6,
-    elevation: 2,
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 3,
     borderWidth: 1,
     borderColor: colors.borderLight,
-    height: 70,
+    height: 140,
+    width: '70%',
   },
   statIconContainer: {
-    backgroundColor: '#f0f4ff',
-    padding: 10,
-    borderRadius: 10,
-    marginRight: 14,
-    width: 44,
-    height: 44,
+    padding: 8,
+    borderRadius: 12,
+    marginRight: 16,
+    width: 60,
+    height: 60,
     justifyContent: 'center',
     alignItems: 'center',
   },
   statTextContainer: {
     flex: 1,
+    alignItems: 'flex-end',
   },
   statLabel: {
-    fontSize: 13,
+    fontSize: 14,
     color: colors.textGray,
     fontWeight: '500',
-    marginBottom: 3,
+    marginBottom: 4,
+    textAlign: 'right',
   },
   statNumber: {
-    fontSize: 26,
-    fontWeight: '700',
+    fontSize: 32,
+    fontWeight: '800',
     color: colors.textDark,
+    textAlign: 'right',
   },
 
   // Section Common Styles
@@ -466,7 +469,7 @@ const styles = StyleSheet.create({
     color: colors.textGray,
     lineHeight: 18,
   },
-  
+
   // Estilos antiguos de categorías (mantener por compatibilidad)
   categoryCard: {
     backgroundColor: colors.backgroundWhite,
