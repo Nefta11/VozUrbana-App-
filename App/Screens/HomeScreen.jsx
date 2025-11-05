@@ -361,7 +361,8 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     paddingBottom: 12,
     backgroundColor: colors.backgroundLight,
-    gap: 12,
+    gap: 22,
+    alignItems: 'center',
   },
   statCard: {
     backgroundColor: colors.backgroundWhite,
@@ -378,7 +379,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.borderLight,
     height: 140,
-    width: '70%',
+    width: '75%',
   },
   statIconContainer: {
     padding: 8,
