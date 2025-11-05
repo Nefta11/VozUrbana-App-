@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
   Dimensions,
   Platform,
+  Alert,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
@@ -20,6 +21,7 @@ import {
 } from '@expo/vector-icons';
 import { colors, gradients } from '../utils/colors';
 import Constants from 'expo-constants';
+import CustomHeader from '../Components/navigation/CustomHeader';
 
 const { width } = Dimensions.get('window');
 
@@ -141,9 +143,21 @@ export default function HomeScreen({ navigation }) {
     navigation.navigate('Reports', { category: category.nombre });
   };
 
+  const handleInfoPress = () => {
+    Alert.alert('Información', 'Voz Urbana - Tu plataforma ciudadana para reportar problemas en tu comunidad');
+  };
+
+  const handleNotificationPress = () => {
+    Alert.alert('Notificaciones', 'No tienes notificaciones nuevas');
+  };
+
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor={colors.primary} />
+    <View style={styles.container}>
+      {/* Header personalizado */}
+      <CustomHeader 
+        onInfoPress={handleInfoPress}
+        onNotificationPress={handleNotificationPress}
+      />
 
       <ScrollView
         style={styles.scrollView}
@@ -321,7 +335,7 @@ export default function HomeScreen({ navigation }) {
           <ActivityIndicator size="large" color={colors.primary} />
         </View>
       )}
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -337,8 +351,8 @@ const styles = StyleSheet.create({
   // Hero Section
   heroSection: {
     paddingHorizontal: 20,
-    paddingVertical: 60,
-    paddingTop: StatusBar.currentHeight + 40 || 60,
+    paddingVertical: 40,
+    paddingTop: 20,
   },
   heroContent: {
     alignItems: 'center',

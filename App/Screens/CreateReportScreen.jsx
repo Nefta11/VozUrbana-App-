@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { MaterialIcons, Ionicons } from '@expo/vector-icons';
 import { colors } from '../utils/colors';
+import CustomHeader from '../Components/navigation/CustomHeader';
 
 export default function CreateReportScreen({ navigation }) {
   const [titulo, setTitulo] = useState('');
@@ -82,6 +83,14 @@ export default function CreateReportScreen({ navigation }) {
     );
   };
 
+  const handleInfoPress = () => {
+    Alert.alert('Información', 'Formulario para crear un nuevo reporte ciudadano');
+  };
+
+  const handleNotificationPress = () => {
+    Alert.alert('Notificaciones', 'No tienes notificaciones nuevas');
+  };
+
   const renderIcon = (iconName, iconType, size, color) => {
     if (iconType === 'MaterialIcons') {
       return <MaterialIcons name={iconName} size={size} color={color} />;
@@ -90,8 +99,11 @@ export default function CreateReportScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.backgroundWhite} />
+    <View style={styles.container}>
+      <CustomHeader 
+        onInfoPress={handleInfoPress}
+        onNotificationPress={handleNotificationPress}
+      />
 
       <ScrollView
         style={styles.scrollView}
@@ -258,7 +270,7 @@ export default function CreateReportScreen({ navigation }) {
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 

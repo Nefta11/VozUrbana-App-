@@ -33,6 +33,9 @@ export const colors = {
     // Colores de sombra
     shadowColor: '#000000',
 
+    // Colores específicos de componentes
+    headerBackground: '#1e3a5f', // Azul oscuro del header como en la imagen
+
     // Colores de estadísticas
     statTotal: 'rgba(37, 99, 235, 0.1)',
     statResolved: 'rgba(16, 185, 129, 0.1)',

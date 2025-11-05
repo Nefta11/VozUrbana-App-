@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { MaterialIcons, Ionicons } from '@expo/vector-icons';
 import { colors } from '../utils/colors';
+import CustomHeader from '../Components/navigation/CustomHeader';
 
 export default function ProfileScreen({ navigation }) {
   const [user, setUser] = useState({
@@ -50,6 +51,14 @@ export default function ProfileScreen({ navigation }) {
 
   const handleChangePassword = () => {
     Alert.alert('Cambiar Contraseña', 'Funcionalidad en desarrollo');
+  };
+
+  const handleInfoPress = () => {
+    Alert.alert('Información', 'Perfil de usuario y configuraciones de la cuenta');
+  };
+
+  const handleNotificationPress = () => {
+    Alert.alert('Notificaciones', 'Configurar preferencias de notificaciones');
   };
 
   const menuItems = [
@@ -105,8 +114,11 @@ export default function ProfileScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor={colors.primary} />
+    <View style={styles.container}>
+      <CustomHeader 
+        onInfoPress={handleInfoPress}
+        onNotificationPress={handleNotificationPress}
+      />
 
       <ScrollView
         style={styles.scrollView}
@@ -198,7 +210,7 @@ export default function ProfileScreen({ navigation }) {
         {/* Versión */}
         <Text style={styles.versionText}>Voz Urbana v1.0.0</Text>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 

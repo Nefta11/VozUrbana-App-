@@ -10,11 +10,13 @@ import {
   TextInput,
   ActivityIndicator,
   FlatList,
+  Alert,
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { colors } from '../utils/colors';
 import { useReports } from '../hooks/useReports';
 import ReportCard from '../Components/ReportCard/ReportCard';
+import CustomHeader from '../Components/navigation/CustomHeader';
 // import MapView from '../Components/MapView/MapView'; // Temporalmente deshabilitado
 
 export default function ReportsScreen({ navigation, route }) {
@@ -63,6 +65,14 @@ export default function ReportsScreen({ navigation, route }) {
 
   const handleReportPress = (report) => {
     navigation.navigate('ReportDetail', { reportId: report.id });
+  };
+
+  const handleInfoPress = () => {
+    Alert.alert('Información', 'Lista de todos los reportes de la comunidad');
+  };
+
+  const handleNotificationPress = () => {
+    Alert.alert('Notificaciones', 'No tienes notificaciones nuevas');
   };
 
   const handleClearFilters = () => {
@@ -240,8 +250,11 @@ export default function ReportsScreen({ navigation, route }) {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.backgroundWhite} />
+    <View style={styles.container}>
+      <CustomHeader 
+        onInfoPress={handleInfoPress}
+        onNotificationPress={handleNotificationPress}
+      />
 
       {viewMode === 'list' ? (
         <FlatList
@@ -285,7 +298,7 @@ export default function ReportsScreen({ navigation, route }) {
       >
         <MaterialIcons name="add" size={28} color={colors.textWhite} />
       </TouchableOpacity>
-    </SafeAreaView>
+    </View>
   );
 }
 
