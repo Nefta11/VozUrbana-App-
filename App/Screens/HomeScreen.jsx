@@ -11,6 +11,7 @@ import {
   Dimensions,
   Platform,
   Alert,
+  ImageBackground,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
@@ -166,11 +167,10 @@ export default function HomeScreen({ navigation }) {
         showsVerticalScrollIndicator={false}
       >
         {/* Hero Section con imagen de fondo */}
-        <LinearGradient
-          colors={['#2c5530', '#1e3a5f', '#4a6741']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
+        <ImageBackground
+          source={require('../../assets/xicotepec.jpg')}
           style={styles.heroSection}
+          resizeMode="cover"
         >
           <View style={styles.heroOverlay}>
             <Text style={styles.heroTitle}>Voz Urbana</Text>
@@ -193,7 +193,7 @@ export default function HomeScreen({ navigation }) {
               </TouchableOpacity>
             </View>
           </View>
-        </LinearGradient>
+        </ImageBackground>
 
         {/* Stats Section */}
         <View style={styles.statsSection}>
