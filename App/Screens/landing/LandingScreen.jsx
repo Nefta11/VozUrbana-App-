@@ -17,7 +17,7 @@ import GoogleButtonComponent from "../../Components/auth/GoogleButtonComponent";
 
 const { width, height } = Dimensions.get("window");
 
-export default function LandingScreen({ animated = false }) {
+export default function LandingScreen({ animated = false, onNavigateToLogin, onNavigateToRegister, onNavigateToHome }) {
   // Animaciones
   const logoSlideUp = useRef(new Animated.Value(animated ? height : 0)).current;
   const welcomeSlideUp = useRef(new Animated.Value(animated ? height + 100 : 0)).current;
@@ -28,6 +28,14 @@ export default function LandingScreen({ animated = false }) {
     if (animated) {
       startEntranceAnimation();
     }
+
+    // Cleanup: detener animaciones al desmontar el componente
+    return () => {
+      logoSlideUp.stopAnimation();
+      welcomeSlideUp.stopAnimation();
+      buttonsSlideUp.stopAnimation();
+      signUpSlideUp.stopAnimation();
+    };
   }, [animated]);
 
   const startEntranceAnimation = () => {
@@ -60,19 +68,26 @@ export default function LandingScreen({ animated = false }) {
   };
 
   const handleLogin = () => {
-    console.log("Iniciar sesión pressed");
+    if (onNavigateToLogin) {
+      onNavigateToLogin();
+    }
   };
 
   const handleGoogleLogin = () => {
-    console.log("Iniciar sesión con Google pressed");
+    // TODO: Implementar autenticación con Google
   };
 
   const handleGuestEntry = () => {
-    console.log("Entrar como invitado pressed");
+    if (onNavigateToHome) {
+      onNavigateToHome();
+    }
   };
 
   const handleSignUp = () => {
-    console.log("Sign In pressed");
+    console.log("Sign Up pressed");
+    if (onNavigateToRegister) {
+      onNavigateToRegister();
+    }
   };
 
   return (
@@ -145,7 +160,7 @@ export default function LandingScreen({ animated = false }) {
         >
           <Text style={styles.signUpQuestion}>¿No tienes una cuenta?</Text>
           <TouchableOpacity onPress={handleSignUp}>
-            <Text style={styles.signUpLink}> Sign In</Text>
+            <Text style={styles.signUpLink}> Regístrate</Text>
           </TouchableOpacity>
         </Animated.View>
       </LinearGradient>
