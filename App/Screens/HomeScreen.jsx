@@ -165,49 +165,63 @@ export default function HomeScreen({ navigation }) {
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
       >
-        {/* Hero Section */}
+        {/* Hero Section con imagen de fondo */}
         <LinearGradient
-          colors={[colors.primary, colors.secondary]}
+          colors={['#2c5530', '#1e3a5f', '#4a6741']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.heroSection}
         >
-          <View style={styles.heroContent}>
+          <View style={styles.heroOverlay}>
             <Text style={styles.heroTitle}>Voz Urbana</Text>
             <Text style={styles.heroSubtitle}>
-              Plataforma ciudadana para reportar problemas de salud pública e
-              infraestructura en tu comunidad
+              Plataforma ciudadana para reportar problemas de
+              salud pública e infraestructura en tu comunidad
             </Text>
-            <TouchableOpacity
-              style={styles.primaryButton}
-              onPress={handleCreateReport}
-            >
-              <Text style={styles.primaryButtonText}>Crear Reporte</Text>
-            </TouchableOpacity>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.createButton}
+                onPress={handleCreateReport}
+              >
+                <Text style={styles.createButtonText}>Crear Reporte</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.viewButton}
+                onPress={handleViewReports}
+              >
+                <Text style={styles.viewButtonText}>Ver Reportes</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </LinearGradient>
 
         {/* Stats Section */}
         <View style={styles.statsSection}>
           <View style={styles.statCard}>
-            <MaterialIcons name="description" size={40} color={colors.primary} />
-            <View style={styles.statInfo}>
+            <View style={styles.statIconContainer}>
+              <MaterialIcons name="description" size={32} color={colors.primary} />
+            </View>
+            <View style={styles.statTextContainer}>
               <Text style={styles.statNumber}>{stats.total}</Text>
               <Text style={styles.statLabel}>Total reportes</Text>
             </View>
           </View>
 
           <View style={styles.statCard}>
-            <MaterialIcons name="schedule" size={40} color={colors.warning} />
-            <View style={styles.statInfo}>
+            <View style={styles.statIconContainer}>
+              <MaterialIcons name="schedule" size={32} color={colors.warning} />
+            </View>
+            <View style={styles.statTextContainer}>
               <Text style={styles.statNumber}>{stats.inProcess}</Text>
               <Text style={styles.statLabel}>En Proceso</Text>
             </View>
           </View>
 
           <View style={styles.statCard}>
-            <MaterialIcons name="check-circle" size={40} color={colors.success} />
-            <View style={styles.statInfo}>
+            <View style={styles.statIconContainer}>
+              <MaterialIcons name="check-circle" size={32} color={colors.success} />
+            </View>
+            <View style={styles.statTextContainer}>
               <Text style={styles.statNumber}>{stats.resolved}</Text>
               <Text style={styles.statLabel}>Resueltos</Text>
             </View>
@@ -277,45 +291,66 @@ const styles = StyleSheet.create({
 
   // Hero Section
   heroSection: {
-    paddingHorizontal: 20,
-    paddingVertical: 40,
-    paddingTop: 20,
+    height: 300,
+    position: 'relative',
   },
-  heroContent: {
+  heroOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)', // Overlay oscuro
+    justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: 20,
   },
   heroTitle: {
-    fontSize: 32,
-    fontWeight: '800',
+    fontSize: 48,
+    fontWeight: '900',
     color: colors.textWhite,
     textAlign: 'center',
-    marginBottom: 12,
-    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    marginBottom: 16,
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
     textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 4,
+    textShadowRadius: 8,
   },
   heroSubtitle: {
-    fontSize: 14,
+    fontSize: 16,
     color: colors.textWhite,
     textAlign: 'center',
-    lineHeight: 20,
-    marginBottom: 24,
-    opacity: 0.9,
-    paddingHorizontal: 16,
+    lineHeight: 22,
+    marginBottom: 32,
+    opacity: 0.95,
+    paddingHorizontal: 20,
+    fontWeight: '400',
   },
-  primaryButton: {
-    backgroundColor: colors.textWhite,
-    paddingHorizontal: 32,
-    paddingVertical: 12,
+  buttonContainer: {
+    flexDirection: 'row',
+    gap: 16,
+  },
+  createButton: {
+    backgroundColor: colors.primary,
+    paddingHorizontal: 24,
+    paddingVertical: 14,
     borderRadius: 25,
     shadowColor: colors.shadowColor,
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.3,
     shadowRadius: 8,
-    elevation: 5,
+    elevation: 6,
   },
-  primaryButtonText: {
-    color: colors.primary,
+  createButtonText: {
+    color: colors.textWhite,
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  viewButton: {
+    backgroundColor: 'transparent',
+    paddingHorizontal: 24,
+    paddingVertical: 14,
+    borderRadius: 25,
+    borderWidth: 2,
+    borderColor: colors.textWhite,
+  },
+  viewButtonText: {
+    color: colors.textWhite,
     fontSize: 16,
     fontWeight: '700',
   },
@@ -323,37 +358,41 @@ const styles = StyleSheet.create({
   // Stats Section
   statsSection: {
     paddingHorizontal: 20,
-    paddingVertical: 0,
-    marginTop: -20,
-    gap: 12,
+    paddingVertical: 24,
+    backgroundColor: colors.backgroundLight,
+    gap: 16,
   },
   statCard: {
     backgroundColor: colors.backgroundWhite,
-    borderRadius: 12,
+    borderRadius: 16,
     padding: 20,
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'center',
-    marginBottom: 8,
     shadowColor: colors.shadowColor,
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
     elevation: 3,
+    borderWidth: 1,
+    borderColor: colors.borderLight,
   },
-  statInfo: {
-    marginLeft: 20,
-    flex: 1,
+  statIconContainer: {
+    marginBottom: 12,
+  },
+  statTextContainer: {
+    alignItems: 'center',
   },
   statNumber: {
-    fontSize: 36,
-    fontWeight: '700',
+    fontSize: 32,
+    fontWeight: '800',
     color: colors.textDark,
     marginBottom: 4,
   },
   statLabel: {
     fontSize: 14,
     color: colors.textGray,
-    fontWeight: '500',
+    fontWeight: '600',
+    textAlign: 'center',
   },
 
   // Section Common Styles
