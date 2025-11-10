@@ -11,10 +11,12 @@ import {
     Alert,
     ImageBackground,
     ScrollView,
+    ActivityIndicator,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons } from '@expo/vector-icons';
 import { colors, gradients } from '../../utils/colors';
+import { useAuth } from '../../context/AuthContext';
 
 export default function RegisterScreen({ navigation }) {
     const [fullName, setFullName] = useState('');
@@ -23,8 +25,11 @@ export default function RegisterScreen({ navigation }) {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-    const handleRegister = () => {
+    const { register } = useAuth();
+
+    const handleRegister = async () => {
         // Validar que los campos no estén vacíos
         if (!fullName || !email || !password || !confirmPassword) {
             Alert.alert('Error', 'Por favor completa todos los campos');
@@ -50,8 +55,43 @@ export default function RegisterScreen({ navigation }) {
             return;
         }
 
-        // Aquí iría la lógica de registro
-        Alert.alert('Registro', 'Funcionalidad de registro en desarrollo');
+        setLoading(true);
+
+        try {
+            const userData = {
+                name: fullName.trim(),
+                email: email.trim().toLowerCase(),
+                password: password,
+            };
+
+            const result = await register(userData);
+
+            if (result.success) {
+                Alert.alert(
+                    'Registro exitoso',
+                    'Tu cuenta ha sido creada. Ahora puedes iniciar sesión.',
+                    [
+                        {
+                            text: 'OK',
+                            onPress: () => navigation.navigate('Login')
+                        }
+                    ]
+                );
+                
+                // Limpiar formulario
+                setFullName('');
+                setEmail('');
+                setPassword('');
+                setConfirmPassword('');
+            } else {
+                Alert.alert('Error de registro', result.error);
+            }
+        } catch (error) {
+            Alert.alert('Error', 'Ha ocurrido un error inesperado');
+            console.error('Registration error:', error);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleGoBack = () => {
@@ -82,7 +122,11 @@ export default function RegisterScreen({ navigation }) {
                     style={styles.headerOverlay}
                 >
                     {/* Botón de regreso */}
-                    <TouchableOpacity style={styles.backButton} onPress={handleGoBack}>
+                    <TouchableOpacity 
+                        style={styles.backButton} 
+                        onPress={handleGoBack}
+                        disabled={loading}
+                    >
                         <MaterialIcons name="arrow-back" size={26} color="white" />
                     </TouchableOpacity>
 
@@ -107,7 +151,11 @@ export default function RegisterScreen({ navigation }) {
             </ImageBackground>
 
             {/* Formulario de registro */}
-            <ScrollView style={styles.formContainer} showsVerticalScrollIndicator={false}>
+            <ScrollView 
+                style={styles.formContainer} 
+                showsVerticalScrollIndicator={false}
+                keyboardShouldPersistTaps="handled"
+            >
                 <Text style={styles.formTitle}>Crea tu cuenta</Text>
                 <Text style={styles.formSubtitle}>Únete a Voz Urbana y ayuda a mejorar tu comunidad</Text>
 
@@ -122,6 +170,7 @@ export default function RegisterScreen({ navigation }) {
                             value={fullName}
                             onChangeText={setFullName}
                             autoCapitalize="words"
+                            editable={!loading}
                         />
                     </View>
                 </View>
@@ -132,12 +181,13 @@ export default function RegisterScreen({ navigation }) {
                     <View style={styles.textInputWrapper}>
                         <TextInput
                             style={styles.textInput}
-                            placeholder="tuemail.com"
+                            placeholder="tu@email.com"
                             placeholderTextColor={colors.textPlaceholder}
                             value={email}
                             onChangeText={setEmail}
                             keyboardType="email-address"
                             autoCapitalize="none"
+                            editable={!loading}
                         />
                     </View>
                 </View>
@@ -153,10 +203,12 @@ export default function RegisterScreen({ navigation }) {
                             value={password}
                             onChangeText={setPassword}
                             secureTextEntry={!showPassword}
+                            editable={!loading}
                         />
                         <TouchableOpacity
                             style={styles.eyeButton}
                             onPress={() => setShowPassword(!showPassword)}
+                            disabled={loading}
                         >
                             <MaterialIcons
                                 name={showPassword ? "visibility" : "visibility-off"}
@@ -173,15 +225,17 @@ export default function RegisterScreen({ navigation }) {
                     <View style={styles.textInputWrapper}>
                         <TextInput
                             style={styles.passwordInput}
-                            placeholder="Repite tu Contraseña"
+                            placeholder="Repite tu contraseña"
                             placeholderTextColor={colors.textPlaceholder}
                             value={confirmPassword}
                             onChangeText={setConfirmPassword}
                             secureTextEntry={!showConfirmPassword}
+                            editable={!loading}
                         />
                         <TouchableOpacity
                             style={styles.eyeButton}
                             onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+                            disabled={loading}
                         >
                             <MaterialIcons
                                 name={showConfirmPassword ? "visibility" : "visibility-off"}
@@ -193,14 +247,22 @@ export default function RegisterScreen({ navigation }) {
                 </View>
 
                 {/* Botón de registro */}
-                <TouchableOpacity style={styles.registerButton} onPress={handleRegister}>
-                    <Text style={styles.registerButtonText}>Crear tu cuenta</Text>
+                <TouchableOpacity 
+                    style={[styles.registerButton, loading && styles.registerButtonDisabled]} 
+                    onPress={handleRegister}
+                    disabled={loading}
+                >
+                    {loading ? (
+                        <ActivityIndicator size="small" color={colors.textWhite} />
+                    ) : (
+                        <Text style={styles.registerButtonText}>Crear tu cuenta</Text>
+                    )}
                 </TouchableOpacity>
 
                 {/* Texto de login */}
                 <View style={styles.loginContainer}>
                     <Text style={styles.loginQuestion}>¿Ya tienes una cuenta?</Text>
-                    <TouchableOpacity onPress={handleLogin}>
+                    <TouchableOpacity onPress={handleLogin} disabled={loading}>
                         <Text style={styles.loginLink}> Inicia sesión</Text>
                     </TouchableOpacity>
                 </View>
@@ -353,6 +415,9 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.3,
         shadowRadius: 10,
         elevation: 8,
+    },
+    registerButtonDisabled: {
+        opacity: 0.7,
     },
     registerButtonText: {
         color: colors.textWhite,

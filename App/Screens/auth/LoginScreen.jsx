@@ -10,26 +10,42 @@ import {
     Image,
     Alert,
     ImageBackground,
+    ActivityIndicator
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons } from '@expo/vector-icons';
 import { colors, gradients } from '../../utils/colors';
+import { useAuth } from '../../context/AuthContext';
 
 export default function LoginScreen({ navigation }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-    const handleLogin = () => {
-        // Validar que los campos no estén vacíos
+    const { login } = useAuth();
+
+ const handleLogin = async () => {
         if (!email || !password) {
             Alert.alert('Error', 'Por favor ingresa tu correo y contraseña');
             return;
         }
 
-        // Permitir cualquier correo y contraseña (modo demo)
-        // TODO: Conectar con tu backend real más adelante
-        navigation.navigate('MainTabs');
+        setLoading(true);
+        
+        try {
+            const result = await login(email, password);
+            
+            if (result.success) {
+                navigation.navigate('MainTabs');
+            } else {
+                Alert.alert('Error de inicio de sesión', result.error);
+            }
+        } catch (error) {
+            Alert.alert('Error', 'Ha ocurrido un error inesperado');
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleGoBack = () => {
@@ -102,6 +118,7 @@ export default function LoginScreen({ navigation }) {
                             onChangeText={setEmail}
                             keyboardType="email-address"
                             autoCapitalize="none"
+                            editable={!loading}
                         />
                     </View>
                 </View>
@@ -117,10 +134,12 @@ export default function LoginScreen({ navigation }) {
                             value={password}
                             onChangeText={setPassword}
                             secureTextEntry={!showPassword}
+                            editable={!loading}
                         />
                         <TouchableOpacity
                             style={styles.eyeButton}
                             onPress={() => setShowPassword(!showPassword)}
+                            disabled={loading}
                         >
                             <MaterialIcons
                                 name={showPassword ? "visibility" : "visibility-off"}
@@ -132,12 +151,19 @@ export default function LoginScreen({ navigation }) {
                 </View>
 
                 {/* Botón de login */}
-                <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-                    <Text style={styles.loginButtonText}>Iniciar Sesión</Text>
+                <TouchableOpacity 
+                    style={[styles.loginButton, loading && styles.loginButtonDisabled]} 
+                    onPress={handleLogin}
+                    disabled={loading}
+                >
+                    {loading ? (
+                        <ActivityIndicator size="small" color={colors.textWhite} />
+                    ) : (
+                        <Text style={styles.loginButtonText}>Iniciar Sesión</Text>
+                    )}
                 </TouchableOpacity>
 
-                {/* Separador - NOTA: La imagen no muestra un separador 'O', pero lo he dejado simplificado */}
-                {/* Si no lo necesitas, puedes borrar el componente 'separator' y sus estilos. */}
+                {/* Separador */}
                 <View style={styles.separator}>
                     <View style={styles.separatorLine} />
                     <Text style={styles.separatorText}>O</Text>
@@ -147,7 +173,7 @@ export default function LoginScreen({ navigation }) {
                 {/* Texto de registro */}
                 <View style={styles.registerContainer}>
                     <Text style={styles.registerQuestion}>¿No tienes una cuenta?</Text>
-                    <TouchableOpacity onPress={handleRegister}>
+                    <TouchableOpacity onPress={handleRegister} disabled={loading}>
                         <Text style={styles.registerLink}> Regístrate aquí</Text>
                     </TouchableOpacity>
                 </View>
@@ -317,6 +343,9 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         textAlign: 'center',
         letterSpacing: 0.5,
+    },
+    loginButtonDisabled: { 
+        opacity: 0.7,
     },
     // --- SEPARADOR (O) y REGISTRO ---
     separator: {
