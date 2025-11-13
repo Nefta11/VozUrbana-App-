@@ -13,7 +13,7 @@ import { colors } from '../../utils/colors';
 const { width } = Dimensions.get('window');
 
 const Toast = ({ visible, message, type = 'success', onHide, duration = 3000 }) => {
-    const translateY = useRef(new Animated.Value(-100)).current;
+    const translateY = useRef(new Animated.Value(100)).current;
     const opacity = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {
@@ -46,7 +46,7 @@ const Toast = ({ visible, message, type = 'success', onHide, duration = 3000 }) 
     const hideToast = () => {
         Animated.parallel([
             Animated.timing(translateY, {
-                toValue: -100,
+                toValue: 100,
                 duration: 300,
                 useNativeDriver: true,
             }),
@@ -92,7 +92,7 @@ const Toast = ({ visible, message, type = 'success', onHide, duration = 3000 }) 
 
     const toastStyle = getToastStyle();
 
-    if (!visible && translateY._value === -100) {
+    if (!visible && translateY._value === 100) {
         return null;
     }
 
@@ -128,7 +128,7 @@ const Toast = ({ visible, message, type = 'success', onHide, duration = 3000 }) 
 const styles = StyleSheet.create({
     container: {
         position: 'absolute',
-        top: 50,
+        bottom: 30,
         left: 20,
         right: 20,
         zIndex: 9999,

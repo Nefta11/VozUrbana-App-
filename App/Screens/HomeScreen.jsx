@@ -26,6 +26,7 @@ import CustomHeader from '../Components/navigation/CustomHeader';
 import LeafletMap from '../Components/MapView/LeafletMap';
 import FeaturedReportCard from '../Components/ReportCard/FeaturedReportCard';
 import HowItWorks from '../Components/HowItWorks/HowItWorks';
+import CallToAction from '../Components/CallToAction/CallToAction';
 
 const { width } = Dimensions.get('window');
 
@@ -323,6 +324,9 @@ export default function HomeScreen({ navigation }) {
 
         {/* How It Works Section */}
         <HowItWorks />
+
+        {/* Call To Action Section */}
+        <CallToAction onCreateReport={handleCreateReport} />
 
         {/* Espaciado inferior */}
         <View style={styles.bottomSpacing} />
