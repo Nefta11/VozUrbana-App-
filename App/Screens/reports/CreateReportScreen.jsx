@@ -230,20 +230,21 @@ export default function CreateReportScreen({ navigation }) {
 
       setAlert({
         visible: true,
-        title: 'Éxito',
-        message: 'Tu reporte ha sido creado correctamente y será revisado por las autoridades',
+        title: 'Reporte Enviado',
+        message: 'Tu reporte ha sido enviado satisfactoriamente, en breve recibirás respuesta',
         type: 'success',
       });
-
-      // Navegar después de cerrar el alert
-      setTimeout(() => {
-        navigation.navigate('Home');
-      }, 2000);
     }
   };
 
   const handleCloseAlert = () => {
+    const wasSuccess = alert.type === 'success' && alert.visible;
     setAlert({ ...alert, visible: false });
+
+    // Si era un alert de éxito, navegar al Home
+    if (wasSuccess) {
+      navigation.navigate('Home');
+    }
   };
 
   const handleInfoPress = () => {
@@ -455,13 +456,21 @@ export default function CreateReportScreen({ navigation }) {
             )}
 
             <TouchableOpacity
-              style={[styles.nextButton, currentStep === 1 && styles.nextButtonFull]}
+              style={[
+                styles.nextButton,
+                currentStep === 1 && styles.nextButtonFull,
+                currentStep === 4 && styles.submitButton
+              ]}
               onPress={currentStep === 4 ? handleSubmit : handleNext}
             >
               <Text style={styles.nextButtonText}>
                 {currentStep === 4 ? 'Enviar reporte' : 'Siguiente'}
               </Text>
-              <MaterialIcons name="chevron-right" size={20} color={colors.textWhite} />
+              <MaterialIcons
+                name={currentStep === 4 ? 'send' : 'chevron-right'}
+                size={20}
+                color={colors.textWhite}
+              />
             </TouchableOpacity>
           </View>
         </View>
@@ -474,6 +483,7 @@ export default function CreateReportScreen({ navigation }) {
         message={alert.message}
         type={alert.type}
         onClose={handleCloseAlert}
+        confirmText={alert.type === 'success' ? 'Aceptar' : 'Entendido'}
       />
     </View>
   );
@@ -573,6 +583,9 @@ const styles = StyleSheet.create({
   },
   nextButtonFull: {
     flex: 1,
+  },
+  submitButton: {
+    backgroundColor: '#10b981',
   },
   nextButtonText: {
     color: colors.textWhite,
