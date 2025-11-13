@@ -53,66 +53,71 @@ const LeafletMap = ({ reports = [], onLocationSelect, selectable = false }) => {
           medioambiente: '#10b981',
           serviciospublicos: '#06b6d4'
         };
-        
-        // Reportes de ejemplo con las nuevas categorías - Zona de Xicotepec de Juárez, Puebla
-        const sampleReports = [
-          { lat: 20.2735, lng: -97.9576, category: 'saneamiento', title: 'Fuga de agua en tubería principal' },
-          { lat: 20.2750, lng: -97.9560, category: 'infraestructura', title: 'Bache profundo en avenida principal' },
-          { lat: 20.2720, lng: -97.9590, category: 'medioambiente', title: 'Área verde abandonada' },
-          { lat: 20.2740, lng: -97.9550, category: 'serviciospublicos', title: 'Luz pública descompuesta' },
-          { lat: 20.2730, lng: -97.9600, category: 'seguridad', title: 'Zona mal iluminada' },
-          { lat: 20.2745, lng: -97.9570, category: 'seguridadpublica', title: 'Accidente vial reportado' }
-        ];
-        
-        // Agregar marcadores al mapa
-        sampleReports.forEach(report => {
-          const icon = categoryIcons[report.category] || '📍';
-          const color = categoryColors[report.category] || '#3b82f6';
-          
-          // Crear icono personalizado
-          const customIcon = L.divIcon({
-            className: 'custom-marker',
-            html: \`
-              <div style="
-                background-color: \${color};
-                width: 30px;
-                height: 30px;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                border: 3px solid white;
-                box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-                font-size: 14px;
-              ">\${icon}</div>
-            \`,
-            iconSize: [30, 30],
-            iconAnchor: [15, 15]
+
+        // Verificar si está en modo selectable
+        const selectable = ${selectable};
+
+        // Solo mostrar reportes de ejemplo si NO está en modo selectable (HomeScreen)
+        if (!selectable) {
+          // Reportes de ejemplo con las nuevas categorías - Zona de Xicotepec de Juárez, Puebla
+          const sampleReports = [
+            { lat: 20.2735, lng: -97.9576, category: 'saneamiento', title: 'Fuga de agua en tubería principal' },
+            { lat: 20.2750, lng: -97.9560, category: 'infraestructura', title: 'Bache profundo en avenida principal' },
+            { lat: 20.2720, lng: -97.9590, category: 'medioambiente', title: 'Área verde abandonada' },
+            { lat: 20.2740, lng: -97.9550, category: 'serviciospublicos', title: 'Luz pública descompuesta' },
+            { lat: 20.2730, lng: -97.9600, category: 'seguridad', title: 'Zona mal iluminada' },
+            { lat: 20.2745, lng: -97.9570, category: 'seguridadpublica', title: 'Accidente vial reportado' }
+          ];
+
+          // Agregar marcadores al mapa
+          sampleReports.forEach(report => {
+            const icon = categoryIcons[report.category] || '📍';
+            const color = categoryColors[report.category] || '#3b82f6';
+
+            // Crear icono personalizado
+            const customIcon = L.divIcon({
+              className: 'custom-marker',
+              html: \`
+                <div style="
+                  background-color: \${color};
+                  width: 30px;
+                  height: 30px;
+                  border-radius: 50%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  border: 3px solid white;
+                  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+                  font-size: 14px;
+                ">\${icon}</div>
+              \`,
+              iconSize: [30, 30],
+              iconAnchor: [15, 15]
+            });
+
+            const marker = L.marker([report.lat, report.lng], { icon: customIcon }).addTo(map);
+            marker.bindPopup(\`
+              <div style="text-align: center; padding: 8px; min-width: 200px;">
+                <div style="
+                  font-size: 18px;
+                  margin-bottom: 8px;
+                  padding: 8px;
+                  background-color: \${color};
+                  color: white;
+                  border-radius: 8px;
+                  font-weight: bold;
+                ">\${icon} \${report.category.charAt(0).toUpperCase() + report.category.slice(1)}</div>
+                <div style="font-weight: bold; margin-bottom: 4px; color: #333;">\${report.title}</div>
+                <div style="font-size: 12px; color: #666;">Toca para más detalles</div>
+              </div>
+            \`);
           });
-          
-          const marker = L.marker([report.lat, report.lng], { icon: customIcon }).addTo(map);
-          marker.bindPopup(\`
-            <div style="text-align: center; padding: 8px; min-width: 200px;">
-              <div style="
-                font-size: 18px; 
-                margin-bottom: 8px; 
-                padding: 8px;
-                background-color: \${color};
-                color: white;
-                border-radius: 8px;
-                font-weight: bold;
-              ">\${icon} \${report.category.charAt(0).toUpperCase() + report.category.slice(1)}</div>
-              <div style="font-weight: bold; margin-bottom: 4px; color: #333;">\${report.title}</div>
-              <div style="font-size: 12px; color: #666;">Toca para más detalles</div>
-            </div>
-          \`);
-        });
-        
+        }
+
         // Deshabilitar zoom con scroll
         map.scrollWheelZoom.disable();
 
         // Agregar funcionalidad para seleccionar ubicación si está habilitada
-        const selectable = ${selectable};
         let selectedMarker = null;
 
         if (selectable) {
