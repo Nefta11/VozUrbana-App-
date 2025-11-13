@@ -13,7 +13,7 @@ export default function HowItWorks() {
             id: 1,
             icon: 'add-circle',
             title: 'Crea un Reporte',
-            description: 'Identifica un problema en tu comunidad y crealo usando el formulario'
+            description: 'Identifica un problema en tu comunidad y créalo usando el formulario'
         },
         {
             id: 2,
@@ -45,16 +45,13 @@ export default function HowItWorks() {
             <View style={styles.stepsContainer}>
                 {steps.map((step, index) => (
                     <View key={step.id} style={styles.stepCard}>
-                        <View style={styles.stepIconContainer}>
-                            <MaterialIcons name={step.icon} size={24} color={colors.textWhite} />
+                        <View style={styles.stepNumber}>
+                            <Text style={styles.stepNumberText}>{step.id}</Text>
                         </View>
                         <View style={styles.stepContent}>
                             <Text style={styles.stepTitle}>{step.title}</Text>
                             <Text style={styles.stepDescription}>{step.description}</Text>
                         </View>
-
-                        {/* Connector line - no mostrar en el último paso */}
-                        {index < steps.length - 1 && <View style={styles.connector} />}
                     </View>
                 ))}
             </View>
@@ -69,63 +66,66 @@ const styles = StyleSheet.create({
     },
     header: {
         paddingHorizontal: 20,
-        marginBottom: 24,
+        marginBottom: 32,
+        alignItems: 'center',
     },
     title: {
-        fontSize: 24,
-        fontWeight: '700',
+        fontSize: 28,
+        fontWeight: '800',
         color: colors.textDark,
         marginBottom: 8,
+        textAlign: 'center',
     },
     subtitle: {
-        fontSize: 14,
+        fontSize: 16,
         color: colors.textGray,
-        lineHeight: 20,
+        lineHeight: 22,
+        textAlign: 'center',
     },
     stepsContainer: {
         paddingHorizontal: 20,
+        gap: 16,
     },
     stepCard: {
-        flexDirection: 'row',
-        alignItems: 'flex-start',
-        marginBottom: 24,
-        position: 'relative',
-    },
-    stepIconContainer: {
-        width: 48,
-        height: 48,
-        borderRadius: 24,
-        backgroundColor: colors.primary,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginRight: 16,
+        backgroundColor: colors.backgroundWhite,
+        borderRadius: 16,
+        padding: 20,
         shadowColor: colors.shadowColor,
         shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
+        shadowOpacity: 0.08,
+        shadowRadius: 8,
         elevation: 3,
+        borderWidth: 1,
+        borderColor: colors.borderLight,
     },
-    stepContent: {
-        flex: 1,
-        paddingTop: 2,
+    stepNumber: {
+        width: 32,
+        height: 32,
+        borderRadius: 16,
+        backgroundColor: colors.textDark,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 16,
     },
-    stepTitle: {
+    stepNumberText: {
         fontSize: 16,
         fontWeight: '700',
+        color: colors.textWhite,
+    },
+    stepContent: {
+        alignItems: 'center',
+    },
+    stepTitle: {
+        fontSize: 18,
+        fontWeight: '700',
         color: colors.textDark,
-        marginBottom: 6,
+        marginBottom: 8,
+        textAlign: 'center',
     },
     stepDescription: {
         fontSize: 14,
         color: colors.textGray,
         lineHeight: 20,
-    },
-    connector: {
-        position: 'absolute',
-        left: 23,
-        top: 48,
-        width: 2,
-        height: 24,
-        backgroundColor: colors.borderLight,
+        textAlign: 'center',
     },
 });
