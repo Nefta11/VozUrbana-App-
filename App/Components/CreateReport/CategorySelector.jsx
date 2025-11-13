@@ -4,14 +4,17 @@ import { MaterialIcons, Ionicons } from '@expo/vector-icons';
 import { colors } from '../../utils/colors';
 
 const CategorySelector = ({ categories, selectedCategory, onSelectCategory }) => {
-  const renderIcon = (category, size = 24) => {
-    const { fallbackIcon, fallbackType, color } = category;
+  const renderCategoryIcon = (category, size = 24) => {
+    // Usar color azul para todos los iconos como en HomeScreen
+    return renderFallbackIcon(category.fallbackIcon, category.fallbackType, size, '#465eef');
+  };
 
-    switch (fallbackType) {
+  const renderFallbackIcon = (iconName, iconType, size, color) => {
+    switch (iconType) {
       case 'MaterialIcons':
-        return <MaterialIcons name={fallbackIcon} size={size} color={color} />;
+        return <MaterialIcons name={iconName} size={size} color={color} />;
       case 'Ionicons':
-        return <Ionicons name={fallbackIcon} size={size} color={color} />;
+        return <Ionicons name={iconName} size={size} color={color} />;
       default:
         return <MaterialIcons name="info" size={size} color={color} />;
     }
@@ -21,22 +24,22 @@ const CategorySelector = ({ categories, selectedCategory, onSelectCategory }) =>
     <View style={styles.container}>
       <Text style={styles.label}>Categoria*</Text>
       <View style={styles.categoriesGrid}>
-        {categories.map((cat) => (
+        {categories.map((category) => (
           <TouchableOpacity
-            key={cat.id}
+            key={category.id}
             style={[
-              styles.categoryCard,
-              selectedCategory === cat.id && styles.categoryCardActive,
+              styles.newCategoryCard,
+              selectedCategory === category.id && styles.categoryCardActive,
             ]}
-            onPress={() => onSelectCategory(cat)}
+            onPress={() => onSelectCategory(category)}
             activeOpacity={0.7}
           >
-            <View style={styles.categoryIconContainer}>
-              {renderIcon(cat, 24)}
+            <View style={[styles.newCategoryIcon, { backgroundColor: '#dbe1fb' }]}>
+              {renderCategoryIcon(category, 24)}
             </View>
-            <View style={styles.categoryInfo}>
-              <Text style={styles.categoryName}>{cat.nombre}</Text>
-              <Text style={styles.categoryDescription}>{cat.descripcion}</Text>
+            <View style={styles.categoryTextContainer}>
+              <Text style={styles.newCategoryName}>{category.nombre}</Text>
+              <Text style={styles.newCategoryDescription}>{category.descripcion}</Text>
             </View>
             <MaterialIcons name="chevron-right" size={20} color={colors.textGray} />
           </TouchableOpacity>
@@ -59,35 +62,50 @@ const styles = StyleSheet.create({
   categoriesGrid: {
     gap: 12,
   },
-  categoryCard: {
+  newCategoryCard: {
     backgroundColor: colors.backgroundLight,
-    borderRadius: 12,
+    borderRadius: 16,
     borderWidth: 1,
     borderColor: colors.borderLight,
     flexDirection: 'row',
     alignItems: 'center',
     padding: 16,
-    marginBottom: 8,
+    marginBottom: 12,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 2,
   },
   categoryCardActive: {
     backgroundColor: colors.primary + '10',
     borderColor: colors.primary,
+    borderWidth: 2,
   },
-  categoryIconContainer: {
-    marginRight: 12,
+  newCategoryIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 16,
   },
-  categoryInfo: {
+  categoryTextContainer: {
     flex: 1,
   },
-  categoryName: {
+  newCategoryName: {
     fontSize: 16,
     fontWeight: '600',
     color: colors.textDark,
-    marginBottom: 2,
+    marginBottom: 4,
   },
-  categoryDescription: {
+  newCategoryDescription: {
     fontSize: 14,
     color: colors.textGray,
+    lineHeight: 18,
   },
 });
 
