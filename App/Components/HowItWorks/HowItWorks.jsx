@@ -48,10 +48,8 @@ export default function HowItWorks() {
                         <View style={styles.stepIconContainer}>
                             <MaterialIcons name="priority-high" size={20} color={colors.textWhite} />
                         </View>
-                        <View style={styles.stepContent}>
-                            <Text style={styles.stepTitle}>{step.title}</Text>
-                            <Text style={styles.stepDescription}>{step.description}</Text>
-                        </View>
+                        <Text style={styles.stepTitle}>{step.title}</Text>
+                        <Text style={styles.stepDescription}>{step.description}</Text>
                     </View>
                 ))}
             </View>
@@ -61,7 +59,7 @@ export default function HowItWorks() {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: colors.backgroundLight,
+        backgroundColor: colors.backgroundWhite,
         paddingVertical: 32,
     },
     header: {
@@ -97,6 +95,7 @@ const styles = StyleSheet.create({
         elevation: 3,
         borderWidth: 1,
         borderColor: colors.borderLight,
+        alignItems: 'center',
     },
     stepIconContainer: {
         width: 32,
@@ -106,9 +105,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 16,
-    },
-    stepContent: {
-        alignItems: 'center',
     },
     stepTitle: {
         fontSize: 18,
