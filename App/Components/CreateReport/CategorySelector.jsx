@@ -63,9 +63,9 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   newCategoryCard: {
-    backgroundColor: colors.backgroundLight,
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
-    borderWidth: 1,
+    borderWidth: 1.5,
     borderColor: colors.borderLight,
     flexDirection: 'row',
     alignItems: 'center',
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   categoryCardActive: {
-    backgroundColor: colors.primary + '10',
+    backgroundColor: '#FFFFFF',
     borderColor: colors.primary,
     borderWidth: 2,
   },
