@@ -17,7 +17,6 @@ import ProgressSteps from '../../Components/CreateReport/ProgressSteps';
 import FormInput from '../../Components/CreateReport/FormInput';
 import CategorySelector from '../../Components/CreateReport/CategorySelector';
 import PrioritySelector from '../../Components/CreateReport/PrioritySelector';
-import MapSelector from '../../Components/CreateReport/MapSelector';
 import ReviewSection from '../../Components/CreateReport/ReviewSection';
 import LeafletMap from '../../Components/MapView/LeafletMap';
 import CustomAlert from '../../Components/generals/CustomAlert';
