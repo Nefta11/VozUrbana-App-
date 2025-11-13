@@ -6,7 +6,7 @@ import LandingScreen from '../Screens/landing/LandingScreen';
 import LoginScreen from '../Screens/auth/LoginScreen';
 import RegisterScreen from '../Screens/auth/RegisterScreen';
 import MainTabNavigator from './MainTabNavigator';
-import ReportDetailScreen from '../Screens/ReportDetailScreen';
+import ReportDetailScreen from '../Screens/reports/ReportDetailScreen';
 
 const Stack = createNativeStackNavigator();
 

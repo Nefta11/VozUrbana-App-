@@ -15,8 +15,8 @@ import {
   Alert,
 } from 'react-native';
 import { MaterialIcons, Ionicons } from '@expo/vector-icons';
-import { colors } from '../utils/colors';
-import { useReports } from '../hooks/useReports';
+import { colors } from '../../utils/colors';
+import { useReports } from '../../hooks/useReports';
 
 // Configuración de estados
 const STATUS_CONFIG = {

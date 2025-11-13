@@ -13,10 +13,10 @@ import {
   Alert,
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { colors } from '../utils/colors';
-import { useReports } from '../hooks/useReports';
-import ReportCard from '../Components/ReportCard/ReportCard';
-import CustomHeader from '../Components/navigation/CustomHeader';
+import { colors } from '../../utils/colors';
+import { useReports } from '../../hooks/useReports';
+import ReportCard from '../../Components/ReportCard/ReportCard';
+import CustomHeader from '../../Components/navigation/CustomHeader';
 // import MapView from '../Components/MapView/MapView'; // Temporalmente deshabilitado
 
 export default function ReportsScreen({ navigation, route }) {
