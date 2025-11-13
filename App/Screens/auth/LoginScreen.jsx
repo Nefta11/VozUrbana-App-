@@ -8,7 +8,6 @@ import {
     SafeAreaView,
     StatusBar,
     Image,
-    Alert,
     ImageBackground,
     ActivityIndicator
 } from 'react-native';
@@ -16,33 +15,46 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons } from '@expo/vector-icons';
 import { colors, gradients } from '../../utils/colors';
 import { useAuth } from '../../context/AuthContext';
+import Toast from '../../Components/Toast';
 
 export default function LoginScreen({ navigation }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [toast, setToast] = useState({ visible: false, message: '', type: 'success' });
 
-    const { login } = useAuth();
+    const { login, user } = useAuth();
 
- const handleLogin = async () => {
+    const showToast = (message, type = 'success') => {
+        setToast({ visible: true, message, type });
+    };
+
+    const handleLogin = async () => {
         if (!email || !password) {
-            Alert.alert('Error', 'Por favor ingresa tu correo y contraseña');
+            showToast('Por favor ingresa tu correo y contraseña', 'error');
             return;
         }
 
         setLoading(true);
-        
+
         try {
             const result = await login(email, password);
-            
+
             if (result.success) {
-                navigation.navigate('MainTabs');
+                // Obtener el nombre del usuario para el mensaje de bienvenida
+                const userName = result.user?.name || email.split('@')[0];
+                showToast(`¡Bienvenido a Voz Urbana, ${userName}!`, 'success');
+
+                // Navegar después de un breve delay para que se vea el toast
+                setTimeout(() => {
+                    navigation.navigate('MainTabs');
+                }, 1500);
             } else {
-                Alert.alert('Error de inicio de sesión', result.error);
+                showToast(result.error || 'Error de inicio de sesión', 'error');
             }
         } catch (error) {
-            Alert.alert('Error', 'Ha ocurrido un error inesperado');
+            showToast('Ha ocurrido un error inesperado', 'error');
         } finally {
             setLoading(false);
         }
@@ -64,6 +76,14 @@ export default function LoginScreen({ navigation }) {
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar barStyle="light-content" backgroundColor="transparent" translucent={true} />
+
+            {/* Toast component */}
+            <Toast
+                visible={toast.visible}
+                message={toast.message}
+                type={toast.type}
+                onHide={() => setToast({ ...toast, visible: false })}
+            />
 
             {/* Header con imagen de fondo */}
             <ImageBackground 

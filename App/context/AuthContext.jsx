@@ -42,11 +42,11 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     console.log(' Attempting login for:', email);
-    
+
     try {
       const response = await ApiService.login(email, password);
       console.log('Login response:', response);
-      
+
       const { token: authToken, user: userData } = response;
 
       await AsyncStorage.setItem('authToken', authToken);
@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }) => {
       setToken(authToken);
       setUser(userData);
 
-      return { success: true };
+      return { success: true, user: userData };
     } catch (error) {
       console.error(' Login error:', error);
       return { success: false, error: error.message };

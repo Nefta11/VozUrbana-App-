@@ -8,7 +8,6 @@ import {
     SafeAreaView,
     StatusBar,
     Image,
-    Alert,
     ImageBackground,
     ScrollView,
     ActivityIndicator,
@@ -17,6 +16,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons } from '@expo/vector-icons';
 import { colors, gradients } from '../../utils/colors';
 import { useAuth } from '../../context/AuthContext';
+import Toast from '../../Components/Toast';
 
 export default function RegisterScreen({ navigation }) {
     const [fullName, setFullName] = useState('');
@@ -26,32 +26,37 @@ export default function RegisterScreen({ navigation }) {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [toast, setToast] = useState({ visible: false, message: '', type: 'success' });
 
     const { register } = useAuth();
+
+    const showToast = (message, type = 'success') => {
+        setToast({ visible: true, message, type });
+    };
 
     const handleRegister = async () => {
         // Validar que los campos no estén vacíos
         if (!fullName || !email || !password || !confirmPassword) {
-            Alert.alert('Error', 'Por favor completa todos los campos');
+            showToast('Por favor completa todos los campos', 'error');
             return;
         }
 
         // Validar formato de email
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            Alert.alert('Error', 'Por favor ingresa un correo electrónico válido');
+            showToast('Por favor ingresa un correo electrónico válido', 'error');
             return;
         }
 
         // Validar longitud mínima de contraseña
         if (password.length < 6) {
-            Alert.alert('Error', 'La contraseña debe tener al menos 6 caracteres');
+            showToast('La contraseña debe tener al menos 6 caracteres', 'error');
             return;
         }
 
         // Validar que las contraseñas coincidan
         if (password !== confirmPassword) {
-            Alert.alert('Error', 'Las contraseñas no coinciden');
+            showToast('Las contraseñas no coinciden', 'error');
             return;
         }
 
@@ -67,27 +72,23 @@ export default function RegisterScreen({ navigation }) {
             const result = await register(userData);
 
             if (result.success) {
-                Alert.alert(
-                    'Registro exitoso',
-                    'Tu cuenta ha sido creada. Ahora puedes iniciar sesión.',
-                    [
-                        {
-                            text: 'OK',
-                            onPress: () => navigation.navigate('Login')
-                        }
-                    ]
-                );
-                
+                showToast('¡Tu cuenta ha sido creada exitosamente!', 'success');
+
                 // Limpiar formulario
                 setFullName('');
                 setEmail('');
                 setPassword('');
                 setConfirmPassword('');
+
+                // Navegar a Login después de un breve delay para que se vea el toast
+                setTimeout(() => {
+                    navigation.navigate('Login');
+                }, 2000);
             } else {
-                Alert.alert('Error de registro', result.error);
+                showToast(result.error || 'Error de registro', 'error');
             }
         } catch (error) {
-            Alert.alert('Error', 'Ha ocurrido un error inesperado');
+            showToast('Ha ocurrido un error inesperado', 'error');
             console.error('Registration error:', error);
         } finally {
             setLoading(false);
@@ -109,6 +110,14 @@ export default function RegisterScreen({ navigation }) {
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar barStyle="light-content" backgroundColor="transparent" translucent={true} />
+
+            {/* Toast component */}
+            <Toast
+                visible={toast.visible}
+                message={toast.message}
+                type={toast.type}
+                onHide={() => setToast({ ...toast, visible: false })}
+            />
 
             {/* Header con imagen de fondo */}
             <ImageBackground 
