@@ -16,7 +16,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons } from '@expo/vector-icons';
 import { colors, gradients } from '../../utils/colors';
 import { useAuth } from '../../context/AuthContext';
-import Toast from '../../Components/Toast';
+import Toast from '../../Components/generals/Toast';
 
 export default function RegisterScreen({ navigation }) {
     const [fullName, setFullName] = useState('');

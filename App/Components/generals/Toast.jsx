@@ -8,7 +8,7 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { colors } from '../utils/colors';
+import { colors } from '../../utils/colors';
 
 const { width } = Dimensions.get('window');
 
