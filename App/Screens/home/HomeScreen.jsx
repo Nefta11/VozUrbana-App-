@@ -201,7 +201,7 @@ export default function HomeScreen({ navigation }) {
       >
         {/* Hero Section con imagen de fondo */}
         <ImageBackground
-          source={require('../../assets/xicotepec.jpg')}
+          source={require('../../../assets/xicotepec.jpg')}
           style={styles.heroSection}
           resizeMode="cover"
         >

@@ -24,12 +24,12 @@ export default function CreateReportScreen({ navigation }) {
   const [prioridad, setPrioridad] = useState('media');
 
   const categories = [
-    { id: 1, nombre: 'Saneamiento', iconImage: require('../../assets/icons/saneamiento.png'), value: 'saneamiento', color: colors.categoryBlue },
-    { id: 2, nombre: 'Infraestructura', iconImage: require('../../assets/icons/infraestructura.png'), value: 'infraestructura', color: colors.categoryOrange },
-    { id: 3, nombre: 'Seguridad Pública', iconImage: require('../../assets/icons/seguridadPublica.png'), value: 'seguridad_publica', color: colors.categoryRed },
-    { id: 4, nombre: 'Seguridad', iconImage: require('../../assets/icons/seguridad.png'), value: 'seguridad', color: colors.categoryPurple },
-    { id: 5, nombre: 'Medio Ambiente', iconImage: require('../../assets/icons/medioAmbiente.png'), value: 'medio_ambiente', color: colors.categoryGreen },
-    { id: 6, nombre: 'Servicios Públicos', iconImage: require('../../assets/icons/ServiciosPublicos.png'), value: 'servicios_publicos', color: colors.categoryCyan },
+    { id: 1, nombre: 'Saneamiento', iconImage: require('../../../assets/icons/saneamiento.png'), value: 'saneamiento', color: colors.categoryBlue },
+    { id: 2, nombre: 'Infraestructura', iconImage: require('../../../assets/icons/infraestructura.png'), value: 'infraestructura', color: colors.categoryOrange },
+    { id: 3, nombre: 'Seguridad Pública', iconImage: require('../../../assets/icons/seguridadPublica.png'), value: 'seguridad_publica', color: colors.categoryRed },
+    { id: 4, nombre: 'Seguridad', iconImage: require('../../../assets/icons/seguridad.png'), value: 'seguridad', color: colors.categoryPurple },
+    { id: 5, nombre: 'Medio Ambiente', iconImage: require('../../../assets/icons/medioAmbiente.png'), value: 'medio_ambiente', color: colors.categoryGreen },
+    { id: 6, nombre: 'Servicios Públicos', iconImage: require('../../../assets/icons/ServiciosPublicos.png'), value: 'servicios_publicos', color: colors.categoryCyan },
   ];
 
   const priorities = [

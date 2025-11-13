@@ -5,7 +5,9 @@
       "Bash(mv:*)",
       "Bash(yarn add:*)",
       "Bash(npx expo install:*)",
-      "Bash(yarn remove:*)"
+      "Bash(yarn remove:*)",
+      "Bash(tree:*)",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []
