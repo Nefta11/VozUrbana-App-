@@ -26,8 +26,8 @@ const LeafletMap = ({ reports = [], onLocationSelect, selectable = false }) => {
       <div id="map"></div>
       <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
       <script>
-        // Inicializar el mapa centrado en México
-        const map = L.map('map').setView([19.4326, -99.1332], 12);
+        // Inicializar el mapa centrado en Xicotepec de Juárez, Puebla
+        const map = L.map('map').setView([20.2735, -97.9576], 14);
         
         // Agregar capa de tiles de OpenStreetMap
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -54,14 +54,14 @@ const LeafletMap = ({ reports = [], onLocationSelect, selectable = false }) => {
           serviciospublicos: '#06b6d4'
         };
         
-        // Reportes de ejemplo con las nuevas categorías
+        // Reportes de ejemplo con las nuevas categorías - Zona de Xicotepec de Juárez, Puebla
         const sampleReports = [
-          { lat: 19.4326, lng: -99.1332, category: 'saneamiento', title: 'Fuga de agua en tubería principal' },
-          { lat: 19.4400, lng: -99.1300, category: 'infraestructura', title: 'Bache profundo en Av. Insurgentes' },
-          { lat: 19.4280, lng: -99.1280, category: 'medioambiente', title: 'Área verde abandonada' },
-          { lat: 19.4350, lng: -99.1350, category: 'serviciospublicos', title: 'Luz pública descompuesta' },
-          { lat: 19.4380, lng: -99.1320, category: 'seguridad', title: 'Zona mal iluminada' },
-          { lat: 19.4310, lng: -99.1310, category: 'seguridadpublica', title: 'Accidente vial reportado' }
+          { lat: 20.2735, lng: -97.9576, category: 'saneamiento', title: 'Fuga de agua en tubería principal' },
+          { lat: 20.2750, lng: -97.9560, category: 'infraestructura', title: 'Bache profundo en avenida principal' },
+          { lat: 20.2720, lng: -97.9590, category: 'medioambiente', title: 'Área verde abandonada' },
+          { lat: 20.2740, lng: -97.9550, category: 'serviciospublicos', title: 'Luz pública descompuesta' },
+          { lat: 20.2730, lng: -97.9600, category: 'seguridad', title: 'Zona mal iluminada' },
+          { lat: 20.2745, lng: -97.9570, category: 'seguridadpublica', title: 'Accidente vial reportado' }
         ];
         
         // Agregar marcadores al mapa
