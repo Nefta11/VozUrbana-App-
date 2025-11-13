@@ -73,7 +73,7 @@ const CustomHeader = ({
 
 const styles = StyleSheet.create({
     safeArea: {
-        backgroundColor: '#FFFF', // Un poco más oscuro que el header para crear contraste
+        backgroundColor: '#FFFF', 
     },
     container: {
         flexDirection: 'row',
