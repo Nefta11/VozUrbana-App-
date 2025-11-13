@@ -6,8 +6,11 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  Image,
+  TextInput,
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
 import { colors } from '../../utils/colors';
 import CustomHeader from '../../Components/navigation/CustomHeader';
 import ProgressSteps from '../../Components/CreateReport/ProgressSteps';
@@ -16,6 +19,7 @@ import CategorySelector from '../../Components/CreateReport/CategorySelector';
 import PrioritySelector from '../../Components/CreateReport/PrioritySelector';
 import MapSelector from '../../Components/CreateReport/MapSelector';
 import ReviewSection from '../../Components/CreateReport/ReviewSection';
+import LeafletMap from '../../Components/maps/LeafletMap';
 
 export default function CreateReportScreen({ navigation }) {
   const [currentStep, setCurrentStep] = useState(1);
@@ -126,8 +130,30 @@ export default function CreateReportScreen({ navigation }) {
     setUbicacion('Loma Chica, Colonia Agustín Olvera, Acatlán, Hidalgo, 43703, México');
   };
 
-  const handleImageSelect = (uri) => {
-    setImagen(uri);
+  const handleImageSelect = async () => {
+    try {
+      // Pedir permisos para acceder a la galería
+      const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      
+      if (permissionResult.granted === false) {
+        Alert.alert('Error', 'Se requiere permiso para acceder a la galería de fotos');
+        return;
+      }
+
+      // Abrir selector de imagen
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 0.8,
+      });
+
+      if (!result.canceled) {
+        setImagen(result.assets[0].uri);
+      }
+    } catch (error) {
+      Alert.alert('Error', 'No se pudo cargar la imagen');
+    }
   };
 
   const handleSubmit = () => {
@@ -244,11 +270,55 @@ export default function CreateReportScreen({ navigation }) {
         Indica dónde se encuentra el problema
       </Text>
 
-      <MapSelector
-        coordenadas={coordenadas}
-        onMapSelect={handleMapSelect}
-        onImageSelect={handleImageSelect}
-      />
+      {/* Campo de coordenadas */}
+      <View style={styles.formGroup}>
+        <Text style={styles.label}>Dirección*</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="20.274500, -97.955700"
+          placeholderTextColor={colors.textPlaceholder}
+          value={coordenadas}
+          onChangeText={setCoordenadas}
+          editable={false}
+        />
+      </View>
+
+      <Text style={styles.mapLabel}>Selecciona en el mapa</Text>
+      
+      <TouchableOpacity 
+        style={styles.mapButton}
+        onPress={handleMapSelect}
+      >
+        <MaterialIcons name="location-pin" size={20} color={colors.textWhite} />
+        <Text style={styles.mapButtonText}>Haz clic en el mapa para seleccionar ubicación</Text>
+      </TouchableOpacity>
+
+      {/* Mapa real integrado */}
+      <View style={styles.mapContainer}>
+        <LeafletMap />
+      </View>
+
+      {/* Sección de carga de imagen */}
+      <View style={styles.uploadSection}>
+        <TouchableOpacity style={styles.uploadImageButton} onPress={handleImageSelect}>
+          <MaterialIcons name="file-upload" size={24} color={colors.primary} />
+          <Text style={styles.uploadImageText}>Subir imagen</Text>
+        </TouchableOpacity>
+        <Text style={styles.uploadImageSubtext}>PNG, JPG, GIF, hasta 5MB</Text>
+        
+        {/* Vista previa de imagen */}
+        {imagen && (
+          <View style={styles.imagePreview}>
+            <Image source={{ uri: imagen }} style={styles.previewImage} />
+            <TouchableOpacity 
+              style={styles.removeImageButton}
+              onPress={() => setImagen(null)}
+            >
+              <MaterialIcons name="close" size={20} color={colors.textWhite} />
+            </TouchableOpacity>
+          </View>
+        )}
+      </View>
     </View>
   );
 
@@ -425,6 +495,107 @@ const styles = StyleSheet.create({
     color: colors.textWhite,
     fontSize: 16,
     fontWeight: '600',
+  },
+  // Estilos para Step 3
+  formGroup: {
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.textDark,
+    marginBottom: 8,
+  },
+  input: {
+    backgroundColor: colors.backgroundLight,
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    fontSize: 16,
+    color: colors.textDark,
+    borderWidth: 1,
+    borderColor: colors.borderLight,
+  },
+  mapLabel: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.textDark,
+    marginBottom: 12,
+  },
+  mapButton: {
+    backgroundColor: colors.primary,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 16,
+    gap: 8,
+  },
+  mapButtonText: {
+    color: colors.textWhite,
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  mapContainer: {
+    height: 300,
+    borderRadius: 12,
+    overflow: 'hidden',
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: colors.borderLight,
+  },
+  uploadSection: {
+    alignItems: 'center',
+  },
+  uploadImageButton: {
+    backgroundColor: colors.primary + '10',
+    borderWidth: 1,
+    borderColor: colors.primary,
+    borderRadius: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    gap: 8,
+    marginBottom: 8,
+  },
+  uploadImageText: {
+    color: colors.primary,
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  uploadImageSubtext: {
+    fontSize: 12,
+    color: colors.textGray,
+    marginBottom: 16,
+  },
+  imagePreview: {
+    position: 'relative',
+    width: '100%',
+    marginTop: 16,
+  },
+  previewImage: {
+    width: '100%',
+    height: 200,
+    borderRadius: 12,
+    resizeMode: 'cover',
+  },
+  removeImageButton: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    backgroundColor: colors.danger,
+    borderRadius: 20,
+    padding: 6,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 
 });
