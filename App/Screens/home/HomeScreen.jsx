@@ -20,13 +20,13 @@ import {
   Ionicons,
   FontAwesome5
 } from '@expo/vector-icons';
-import { colors, gradients } from '../utils/colors';
+import { colors, gradients } from '../../utils/colors';
 import Constants from 'expo-constants';
-import CustomHeader from '../Components/navigation/CustomHeader';
-import LeafletMap from '../Components/MapView/LeafletMap';
-import FeaturedReportCard from '../Components/ReportCard/FeaturedReportCard';
-import HowItWorks from '../Components/HowItWorks/HowItWorks';
-import CallToAction from '../Components/CallToAction/CallToAction';
+import CustomHeader from '../../Components/navigation/CustomHeader';
+import LeafletMap from '../../Components/MapView/LeafletMap';
+import FeaturedReportCard from '../../Components/ReportCard/FeaturedReportCard';
+import HowItWorks from '../../Components/HowItWorks/HowItWorks';
+import CallToAction from '../../Components/CallToAction/CallToAction';
 
 const { width } = Dimensions.get('window');
 

@@ -12,8 +12,8 @@ import {
   Alert,
 } from 'react-native';
 import { MaterialIcons, Ionicons } from '@expo/vector-icons';
-import { colors } from '../utils/colors';
-import CustomHeader from '../Components/navigation/CustomHeader';
+import { colors } from '../../utils/colors';
+import CustomHeader from '../../Components/navigation/CustomHeader';
 
 export default function CreateReportScreen({ navigation }) {
   const [titulo, setTitulo] = useState('');
