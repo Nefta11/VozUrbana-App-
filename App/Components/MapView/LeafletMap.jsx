@@ -7,8 +7,8 @@ const { width, height } = Dimensions.get('window');
 /**
  * LeafletMap - Componente de mapa usando Leaflet
  */
-const LeafletMap = ({ reports = [] }) => {
-  
+const LeafletMap = ({ reports = [], onLocationSelect, selectable = false }) => {
+
   const mapHtml = `
     <!DOCTYPE html>
     <html>
@@ -110,10 +110,81 @@ const LeafletMap = ({ reports = [] }) => {
         
         // Deshabilitar zoom con scroll
         map.scrollWheelZoom.disable();
+
+        // Agregar funcionalidad para seleccionar ubicación si está habilitada
+        const selectable = ${selectable};
+        let selectedMarker = null;
+
+        if (selectable) {
+          map.on('click', function(e) {
+            const lat = e.latlng.lat.toFixed(6);
+            const lng = e.latlng.lng.toFixed(6);
+
+            // Remover marcador anterior si existe
+            if (selectedMarker) {
+              map.removeLayer(selectedMarker);
+            }
+
+            // Crear icono personalizado para ubicación seleccionada
+            const selectedIcon = L.divIcon({
+              className: 'selected-marker',
+              html: \`
+                <div style="
+                  background-color: #ef4444;
+                  width: 40px;
+                  height: 40px;
+                  border-radius: 50% 50% 50% 0;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  border: 3px solid white;
+                  box-shadow: 0 3px 10px rgba(0,0,0,0.4);
+                  transform: rotate(-45deg);
+                  position: relative;
+                ">
+                  <div style="
+                    font-size: 20px;
+                    transform: rotate(45deg);
+                  ">📍</div>
+                </div>
+              \`,
+              iconSize: [40, 40],
+              iconAnchor: [20, 40]
+            });
+
+            // Agregar nuevo marcador
+            selectedMarker = L.marker([lat, lng], { icon: selectedIcon }).addTo(map);
+            selectedMarker.bindPopup(\`
+              <div style="text-align: center; padding: 8px;">
+                <div style="font-weight: bold; margin-bottom: 4px;">Ubicación seleccionada</div>
+                <div style="font-size: 12px; color: #666;">\${lat}, \${lng}</div>
+              </div>
+            \`).openPopup();
+
+            // Enviar coordenadas a React Native
+            if (window.ReactNativeWebView) {
+              window.ReactNativeWebView.postMessage(JSON.stringify({
+                lat: lat,
+                lng: lng
+              }));
+            }
+          });
+        }
       </script>
     </body>
     </html>
   `;
+
+  const handleMessage = (event) => {
+    if (onLocationSelect && selectable) {
+      try {
+        const data = JSON.parse(event.nativeEvent.data);
+        onLocationSelect(data.lat, data.lng);
+      } catch (error) {
+        console.error('Error parsing location data:', error);
+      }
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -123,6 +194,8 @@ const LeafletMap = ({ reports = [] }) => {
         scrollEnabled={false}
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
+        onMessage={handleMessage}
+        javaScriptEnabled={true}
       />
     </View>
   );

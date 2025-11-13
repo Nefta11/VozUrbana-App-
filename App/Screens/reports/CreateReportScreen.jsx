@@ -19,7 +19,7 @@ import CategorySelector from '../../Components/CreateReport/CategorySelector';
 import PrioritySelector from '../../Components/CreateReport/PrioritySelector';
 import MapSelector from '../../Components/CreateReport/MapSelector';
 import ReviewSection from '../../Components/CreateReport/ReviewSection';
-import LeafletMap from '../../Components/maps/LeafletMap';
+import LeafletMap from '../../Components/MapView/LeafletMap';
 
 export default function CreateReportScreen({ navigation }) {
   const [currentStep, setCurrentStep] = useState(1);
@@ -125,9 +125,11 @@ export default function CreateReportScreen({ navigation }) {
     setSelectedCategoryData(cat);
   };
 
-  const handleMapSelect = () => {
-    setCoordenadas('20.274500, -97.955700');
-    setUbicacion('Loma Chica, Colonia Agustín Olvera, Acatlán, Hidalgo, 43703, México');
+  const handleLocationSelect = (lat, lng) => {
+    setCoordenadas(`${lat}, ${lng}`);
+    // Opcional: aquí podrías hacer una llamada a una API de geocoding inverso
+    // para obtener la dirección legible a partir de las coordenadas
+    setUbicacion(`Lat: ${lat}, Lng: ${lng}`);
   };
 
   const handleImageSelect = async () => {
@@ -284,18 +286,16 @@ export default function CreateReportScreen({ navigation }) {
       </View>
 
       <Text style={styles.mapLabel}>Selecciona en el mapa</Text>
-      
-      <TouchableOpacity 
-        style={styles.mapButton}
-        onPress={handleMapSelect}
-      >
-        <MaterialIcons name="location-pin" size={20} color={colors.textWhite} />
-        <Text style={styles.mapButtonText}>Haz clic en el mapa para seleccionar ubicación</Text>
-      </TouchableOpacity>
+      <Text style={styles.mapInstructions}>
+        Toca en cualquier punto del mapa para marcar la ubicación del problema
+      </Text>
 
       {/* Mapa real integrado */}
       <View style={styles.mapContainer}>
-        <LeafletMap />
+        <LeafletMap
+          selectable={true}
+          onLocationSelect={handleLocationSelect}
+        />
       </View>
 
       {/* Sección de carga de imagen */}
@@ -520,22 +520,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: colors.textDark,
-    marginBottom: 12,
+    marginBottom: 8,
   },
-  mapButton: {
-    backgroundColor: colors.primary,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 12,
-    borderRadius: 8,
+  mapInstructions: {
+    fontSize: 14,
+    color: colors.textGray,
     marginBottom: 16,
-    gap: 8,
-  },
-  mapButtonText: {
-    color: colors.textWhite,
-    fontSize: 16,
-    fontWeight: '500',
+    lineHeight: 20,
   },
   mapContainer: {
     height: 300,
