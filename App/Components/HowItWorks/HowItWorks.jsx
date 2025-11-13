@@ -45,8 +45,8 @@ export default function HowItWorks() {
             <View style={styles.stepsContainer}>
                 {steps.map((step, index) => (
                     <View key={step.id} style={styles.stepCard}>
-                        <View style={styles.stepNumber}>
-                            <Text style={styles.stepNumberText}>{step.id}</Text>
+                        <View style={styles.stepIconContainer}>
+                            <MaterialIcons name="priority-high" size={20} color={colors.textWhite} />
                         </View>
                         <View style={styles.stepContent}>
                             <Text style={styles.stepTitle}>{step.title}</Text>
@@ -61,7 +61,7 @@ export default function HowItWorks() {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: colors.backgroundWhite,
+        backgroundColor: colors.backgroundLight,
         paddingVertical: 32,
     },
     header: {
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: colors.borderLight,
     },
-    stepNumber: {
+    stepIconContainer: {
         width: 32,
         height: 32,
         borderRadius: 16,
@@ -106,11 +106,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 16,
-    },
-    stepNumberText: {
-        fontSize: 16,
-        fontWeight: '700',
-        color: colors.textWhite,
     },
     stepContent: {
         alignItems: 'center',
