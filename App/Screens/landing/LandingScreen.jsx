@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -14,10 +14,14 @@ import { LinearGradient } from "expo-linear-gradient";
 import { MaterialIcons } from "@expo/vector-icons";
 import { colors, gradients } from "../../utils/colors";
 import GoogleButtonComponent from "../../Components/auth/GoogleButtonComponent";
+import Toast from "../../Components/generals/Toast";
 
 const { width, height } = Dimensions.get("window");
 
 export default function LandingScreen({ animated = false, onNavigateToLogin, onNavigateToRegister, onNavigateToHome }) {
+  // Toast state
+  const [toast, setToast] = useState({ visible: false, message: '', type: 'success' });
+
   // Animaciones
   const logoSlideUp = useRef(new Animated.Value(animated ? height : 0)).current;
   const welcomeSlideUp = useRef(new Animated.Value(animated ? height + 100 : 0)).current;
@@ -67,6 +71,10 @@ export default function LandingScreen({ animated = false, onNavigateToLogin, onN
     ]).start();
   };
 
+  const showToast = (message, type = 'success') => {
+    setToast({ visible: true, message, type });
+  };
+
   const handleLogin = () => {
     if (onNavigateToLogin) {
       onNavigateToLogin();
@@ -78,9 +86,14 @@ export default function LandingScreen({ animated = false, onNavigateToLogin, onN
   };
 
   const handleGuestEntry = () => {
-    if (onNavigateToHome) {
-      onNavigateToHome();
-    }
+    showToast('¡Bienvenido a Voz Urbana!', 'success');
+
+    // Navegar después de un breve delay para que se vea el toast
+    setTimeout(() => {
+      if (onNavigateToHome) {
+        onNavigateToHome();
+      }
+    }, 1500);
   };
 
   const handleSignUp = () => {
@@ -93,6 +106,15 @@ export default function LandingScreen({ animated = false, onNavigateToLogin, onN
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor={colors.primary} />
+
+      {/* Toast component */}
+      <Toast
+        visible={toast.visible}
+        message={toast.message}
+        type={toast.type}
+        onHide={() => setToast({ ...toast, visible: false })}
+      />
+
       <LinearGradient
         colors={gradients.primaryGradient.colors}
         style={styles.gradient}

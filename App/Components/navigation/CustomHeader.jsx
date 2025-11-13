@@ -62,7 +62,7 @@ const CustomHeader = ({
                             onPress={handleNotificationPress}
                             activeOpacity={0.7}
                         >
-                            <Ionicons name="notifications-outline" size={24} color={colors.textWhite} />
+                            <Ionicons name="notifications" size={24} color={colors.textWhite} />
                         </TouchableOpacity>
                     )}
                 </View>
