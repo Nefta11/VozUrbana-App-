@@ -24,6 +24,8 @@ import { colors, gradients } from '../utils/colors';
 import Constants from 'expo-constants';
 import CustomHeader from '../Components/navigation/CustomHeader';
 import LeafletMap from '../Components/MapView/LeafletMap';
+import FeaturedReportCard from '../Components/ReportCard/FeaturedReportCard';
+import HowItWorks from '../Components/HowItWorks/HowItWorks';
 
 const { width } = Dimensions.get('window');
 
@@ -111,6 +113,31 @@ export default function HomeScreen({ navigation }) {
     },
   ];
 
+  // Reportes destacados de ejemplo
+  const featuredReports = [
+    {
+      id: 1,
+      title: 'Basura con mas de una semana sobre la calle.',
+      category: 'Salud Publica',
+      date: '2025-10-08',
+      location: 'Calle El Calvario, San Agustín Atlixhuacan, Xicotepec, Puebla, 73080, México',
+      imageUrl: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop',
+      priority: 'Favor de atender lo mas pronto posible, puede provocar enfermedades',
+      comments: 0,
+      interactions: 1
+    },
+    {
+      id: 2,
+      title: 'Bache grande en avenida principal',
+      category: 'Infraestructura',
+      date: '2025-10-06',
+      location: 'Av. Juárez, Centro, Xicotepec, Puebla',
+      imageUrl: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop',
+      comments: 3,
+      interactions: 5
+    }
+  ];
+
   const renderCategoryIcon = (category, size = 24) => {
     // Usar color azul para todos los iconos
     return renderFallbackIcon(category.fallbackIcon, category.fallbackType, size, '#465eef');
@@ -152,6 +179,11 @@ export default function HomeScreen({ navigation }) {
 
   const handleNotificationPress = () => {
     Alert.alert('Notificaciones', 'No tienes notificaciones nuevas');
+  };
+
+  const handleReportPress = (report) => {
+    // Navegar al detalle del reporte
+    navigation.navigate('ReportDetail', { reportId: report.id });
   };
 
   return (
@@ -264,7 +296,33 @@ export default function HomeScreen({ navigation }) {
           </View>
         </View>
 
+        {/* Featured Reports Section */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>Reportes Destacados</Text>
+            <Text style={styles.sectionSubtitle}>
+              Los reportes más relevantes de la comunidad
+            </Text>
+          </View>
 
+          {featuredReports.map((report) => (
+            <FeaturedReportCard
+              key={report.id}
+              report={report}
+              onPress={handleReportPress}
+            />
+          ))}
+
+          <TouchableOpacity
+            style={styles.viewAllButton}
+            onPress={handleViewReports}
+          >
+            <Text style={styles.viewAllText}>Ver todos los repotes {'>'}</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* How It Works Section */}
+        <HowItWorks />
 
         {/* Espaciado inferior */}
         <View style={styles.bottomSpacing} />
@@ -509,7 +567,21 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
 
-
+  // View All Button
+  viewAllButton: {
+    alignSelf: 'center',
+    backgroundColor: colors.primary + '15',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 25,
+    marginTop: 16,
+  },
+  viewAllText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: colors.primary,
+    textAlign: 'center',
+  },
 
   // Bottom Spacing
   bottomSpacing: {
