@@ -21,8 +21,11 @@ import MapSelector from '../../Components/CreateReport/MapSelector';
 import ReviewSection from '../../Components/CreateReport/ReviewSection';
 import LeafletMap from '../../Components/MapView/LeafletMap';
 import CustomAlert from '../../Components/generals/CustomAlert';
+import LoadingModal from '../../Components/generals/LoadingModal';
+import { useReport } from '../../context/ReportContext';
 
 export default function CreateReportScreen({ navigation }) {
+  const { createReport, loading: reportLoading } = useReport();
   const [currentStep, setCurrentStep] = useState(1);
   const [titulo, setTitulo] = useState('');
   const [descripcion, setDescripcion] = useState('');
@@ -43,6 +46,9 @@ export default function CreateReportScreen({ navigation }) {
     message: '',
     type: 'error',
   });
+
+  // Estado del loading modal
+  const [showLoading, setShowLoading] = useState(false);
 
   const steps = ['Información', 'Categoria', 'Ubicación', 'Revisar'];
 
@@ -203,7 +209,7 @@ export default function CreateReportScreen({ navigation }) {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (currentStep === 4) {
       // Validar todos los pasos antes de enviar
       const allValid = validateStep(1) && validateStep(2) && validateStep(3);
@@ -218,7 +224,11 @@ export default function CreateReportScreen({ navigation }) {
         return;
       }
 
-      console.log('Enviando reporte:', {
+      // Mostrar loading modal
+      setShowLoading(true);
+
+      // Preparar datos del reporte
+      const reportData = {
         titulo,
         descripcion,
         categoria,
@@ -226,23 +236,59 @@ export default function CreateReportScreen({ navigation }) {
         ubicacion,
         coordenadas,
         imagen,
-      });
+      };
 
-      setAlert({
-        visible: true,
-        title: 'Reporte Enviado',
-        message: 'Tu reporte ha sido enviado satisfactoriamente, en breve recibirás respuesta',
-        type: 'success',
-      });
+      console.log('📝 Enviando reporte:', reportData);
+
+      // Simular tiempo de envío (5 segundos)
+      setTimeout(async () => {
+        // Crear el reporte usando el contexto
+        const result = await createReport(reportData);
+
+        // Ocultar loading modal
+        setShowLoading(false);
+
+        if (result.success) {
+          console.log('✅ Reporte creado exitosamente:', result.data.id);
+          setAlert({
+            visible: true,
+            title: 'Reporte Enviado',
+            message: 'Tu reporte ha sido enviado satisfactoriamente, en breve recibirás respuesta',
+            type: 'success',
+          });
+        } else {
+          console.error('❌ Error al crear reporte:', result.error);
+          setAlert({
+            visible: true,
+            title: 'Error',
+            message: 'Hubo un problema al enviar tu reporte. Por favor intenta de nuevo.',
+            type: 'error',
+          });
+        }
+      }, 5000); // 5 segundos de delay
     }
+  };
+
+  const resetForm = () => {
+    setTitulo('');
+    setDescripcion('');
+    setCategoria(null);
+    setSelectedCategoryData(null);
+    setPrioridad('media');
+    setUbicacion('');
+    setCoordenadas('');
+    setImagen(null);
+    setErrors({});
+    setCurrentStep(1);
   };
 
   const handleCloseAlert = () => {
     const wasSuccess = alert.type === 'success' && alert.visible;
     setAlert({ ...alert, visible: false });
 
-    // Si era un alert de éxito, navegar al Home
+    // Si era un alert de éxito, limpiar formulario y navegar al Home
     if (wasSuccess) {
+      resetForm();
       navigation.navigate('Home');
     }
   };
@@ -475,6 +521,12 @@ export default function CreateReportScreen({ navigation }) {
           </View>
         </View>
       </ScrollView>
+
+      {/* Loading Modal */}
+      <LoadingModal
+        visible={showLoading}
+        message="Enviando reporte"
+      />
 
       {/* Custom Alert */}
       <CustomAlert
