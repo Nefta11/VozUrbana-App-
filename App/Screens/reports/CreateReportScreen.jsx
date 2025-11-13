@@ -285,38 +285,41 @@ export default function CreateReportScreen({ navigation }) {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>Crear Nuevo Reporte</Text>
-          <Text style={styles.headerSubtitle}>
-            Contribuye a mejorar tu comunidad reportando problemas
-          </Text>
-        </View>
-
-        {/* Progress Steps */}
-        <ProgressSteps currentStep={currentStep} steps={steps} />
-
-        {/* Step Content */}
-        {renderStep()}
-
-        {/* Navigation Buttons */}
-        <View style={styles.navigationContainer}>
-          {currentStep > 1 && (
-            <TouchableOpacity style={styles.previousButton} onPress={handlePrevious}>
-              <MaterialIcons name="chevron-left" size={20} color={colors.textGray} />
-              <Text style={styles.previousButtonText}>Anterior</Text>
-            </TouchableOpacity>
-          )}
-
-          <TouchableOpacity
-            style={[styles.nextButton, currentStep === 1 && styles.nextButtonFull]}
-            onPress={currentStep === 4 ? handleSubmit : handleNext}
-          >
-            <Text style={styles.nextButtonText}>
-              {currentStep === 4 ? 'Enviar reporte' : 'Siguiente'}
+        {/* Main Card Container */}
+        <View style={styles.mainCard}>
+          {/* Header */}
+          <View style={styles.header}>
+            <Text style={styles.headerTitle}>Crear Nuevo Reporte</Text>
+            <Text style={styles.headerSubtitle}>
+              Contribuye a mejorar tu comunidad reportando problemas
             </Text>
-            <MaterialIcons name="chevron-right" size={20} color={colors.textWhite} />
-          </TouchableOpacity>
+          </View>
+
+          {/* Progress Steps */}
+          <ProgressSteps currentStep={currentStep} steps={steps} />
+
+          {/* Step Content */}
+          {renderStep()}
+
+          {/* Navigation Buttons */}
+          <View style={styles.navigationContainer}>
+            {currentStep > 1 && (
+              <TouchableOpacity style={styles.previousButton} onPress={handlePrevious}>
+                <MaterialIcons name="chevron-left" size={20} color={colors.textGray} />
+                <Text style={styles.previousButtonText}>Anterior</Text>
+              </TouchableOpacity>
+            )}
+
+            <TouchableOpacity
+              style={[styles.nextButton, currentStep === 1 && styles.nextButtonFull]}
+              onPress={currentStep === 4 ? handleSubmit : handleNext}
+            >
+              <Text style={styles.nextButtonText}>
+                {currentStep === 4 ? 'Enviar reporte' : 'Siguiente'}
+              </Text>
+              <MaterialIcons name="chevron-right" size={20} color={colors.textWhite} />
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
     </View>
@@ -332,14 +335,26 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
+    padding: 16,
     paddingBottom: 100,
+  },
+  mainCard: {
+    backgroundColor: colors.backgroundLight,
+    borderRadius: 16,
+    marginHorizontal: 4,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 5,
   },
   header: {
     padding: 20,
+    paddingBottom: 16,
     alignItems: 'center',
-    backgroundColor: colors.backgroundLight,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.borderLight,
   },
   headerTitle: {
     fontSize: 24,
@@ -411,4 +426,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
+
 });

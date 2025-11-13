@@ -60,17 +60,17 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   categoriesGrid: {
-    gap: 12,
+    gap: 8,
   },
   newCategoryCard: {
     backgroundColor: colors.backgroundLight,
-    borderRadius: 16,
+    borderRadius: 12,
     borderWidth: 1,
     borderColor: colors.borderLight,
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 16,
-    marginBottom: 12,
+    padding: 12,
+    marginBottom: 6,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

@@ -5,24 +5,26 @@ import { colors } from '../../utils/colors';
 const PrioritySelector = ({ priorities, selectedPriority, onSelectPriority }) => {
   return (
     <View style={styles.container}>
-      {priorities.map((p) => (
-        <TouchableOpacity
-          key={p.value}
-          style={[
-            styles.priorityCard,
-            selectedPriority === p.value && styles.priorityCardActive,
-          ]}
-          onPress={() => onSelectPriority(p.value)}
-        >
-          <View style={[styles.priorityDot, { backgroundColor: p.color }]} />
-          <Text style={[
-            styles.priorityLabel,
-            selectedPriority === p.value && { color: p.color }
-          ]}>
-            {p.label}
-          </Text>
-        </TouchableOpacity>
-      ))}
+      <View style={styles.priorityGrid}>
+        {priorities.map((p) => (
+          <TouchableOpacity
+            key={p.value}
+            style={[
+              styles.priorityCard,
+              selectedPriority === p.value && styles.priorityCardActive,
+            ]}
+            onPress={() => onSelectPriority(p.value)}
+          >
+            <View style={[styles.priorityCircle, { backgroundColor: p.color }]} />
+            <Text style={[
+              styles.priorityLabel,
+              selectedPriority === p.value && { color: p.color }
+            ]}>
+              {p.label}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
     </View>
   );
 };
@@ -31,15 +33,19 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 20,
   },
-  priorityCard: {
+  priorityGrid: {
     flexDirection: 'row',
+    justifyContent: 'space-around',
+    gap: 12,
+  },
+  priorityCard: {
+    flex: 1,
     alignItems: 'center',
-    padding: 16,
+    padding: 20,
     backgroundColor: colors.backgroundLight,
-    borderRadius: 16,
-    borderWidth: 1,
+    borderRadius: 12,
+    borderWidth: 2,
     borderColor: colors.borderLight,
-    marginBottom: 12,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -54,16 +60,17 @@ const styles = StyleSheet.create({
     borderColor: colors.primary,
     borderWidth: 2,
   },
-  priorityDot: {
-    width: 16,
-    height: 16,
-    borderRadius: 8,
-    marginRight: 16,
+  priorityCircle: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    marginBottom: 12,
   },
   priorityLabel: {
-    fontSize: 16,
-    fontWeight: '500',
+    fontSize: 14,
+    fontWeight: '600',
     color: colors.textDark,
+    textAlign: 'center',
   },
 });
 
