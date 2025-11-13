@@ -20,6 +20,7 @@ import PrioritySelector from '../../Components/CreateReport/PrioritySelector';
 import MapSelector from '../../Components/CreateReport/MapSelector';
 import ReviewSection from '../../Components/CreateReport/ReviewSection';
 import LeafletMap from '../../Components/MapView/LeafletMap';
+import CustomAlert from '../../Components/generals/CustomAlert';
 
 export default function CreateReportScreen({ navigation }) {
   const [currentStep, setCurrentStep] = useState(1);
@@ -31,6 +32,17 @@ export default function CreateReportScreen({ navigation }) {
   const [ubicacion, setUbicacion] = useState('');
   const [coordenadas, setCoordenadas] = useState('');
   const [imagen, setImagen] = useState(null);
+
+  // Estados de errores
+  const [errors, setErrors] = useState({});
+
+  // Estado del alert personalizado
+  const [alert, setAlert] = useState({
+    visible: false,
+    title: '',
+    message: '',
+    type: 'error',
+  });
 
   const steps = ['Información', 'Categoria', 'Ubicación', 'Revisar'];
 
@@ -91,23 +103,46 @@ export default function CreateReportScreen({ navigation }) {
     { value: 'alta', label: 'Alta', color: colors.danger },
   ];
 
-  const handleNext = () => {
-    if (currentStep === 1) {
-      if (!titulo.trim() || !descripcion.trim()) {
-        Alert.alert('Error', 'Por favor completa todos los campos');
-        return;
+  const validateStep = (step) => {
+    const newErrors = {};
+
+    if (step === 1) {
+      if (!titulo.trim()) {
+        newErrors.titulo = 'El título es obligatorio';
       }
-    } else if (currentStep === 2) {
+      if (!descripcion.trim()) {
+        newErrors.descripcion = 'La descripción es obligatoria';
+      }
+    } else if (step === 2) {
       if (!categoria) {
-        Alert.alert('Error', 'Por favor selecciona una categoría');
-        return;
+        newErrors.categoria = 'Por favor selecciona una categoría';
       }
-    } else if (currentStep === 3) {
+    } else if (step === 3) {
       if (!coordenadas.trim()) {
-        Alert.alert('Error', 'Por favor selecciona una ubicación en el mapa');
-        return;
+        newErrors.coordenadas = 'Por favor selecciona una ubicación en el mapa';
       }
     }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleNext = () => {
+    const isValid = validateStep(currentStep);
+
+    if (!isValid) {
+      // Mostrar alert personalizado cuando hay errores
+      setAlert({
+        visible: true,
+        title: 'Campos incompletos',
+        message: 'Por favor completa todos los campos obligatorios antes de continuar',
+        type: 'warning',
+      });
+      return;
+    }
+
+    // Limpiar errores si todo está bien
+    setErrors({});
 
     if (currentStep < 4) {
       setCurrentStep(currentStep + 1);
@@ -117,12 +152,18 @@ export default function CreateReportScreen({ navigation }) {
   const handlePrevious = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
+      // Limpiar errores al retroceder
+      setErrors({});
     }
   };
 
   const handleSelectCategory = (cat) => {
     setCategoria(cat.id);
     setSelectedCategoryData(cat);
+    // Limpiar error de categoría al seleccionar
+    if (errors.categoria) {
+      setErrors({ ...errors, categoria: null });
+    }
   };
 
   const handleLocationSelect = (lat, lng) => {
@@ -130,6 +171,10 @@ export default function CreateReportScreen({ navigation }) {
     // Opcional: aquí podrías hacer una llamada a una API de geocoding inverso
     // para obtener la dirección legible a partir de las coordenadas
     setUbicacion(`Lat: ${lat}, Lng: ${lng}`);
+    // Limpiar error de coordenadas al seleccionar ubicación
+    if (errors.coordenadas) {
+      setErrors({ ...errors, coordenadas: null });
+    }
   };
 
   const handleImageSelect = async () => {
@@ -160,16 +205,16 @@ export default function CreateReportScreen({ navigation }) {
 
   const handleSubmit = () => {
     if (currentStep === 4) {
-      if (!titulo.trim()) {
-        Alert.alert('Error', 'Por favor ingresa un título');
-        return;
-      }
-      if (!descripcion.trim()) {
-        Alert.alert('Error', 'Por favor ingresa una descripción');
-        return;
-      }
-      if (!categoria) {
-        Alert.alert('Error', 'Por favor selecciona una categoría');
+      // Validar todos los pasos antes de enviar
+      const allValid = validateStep(1) && validateStep(2) && validateStep(3);
+
+      if (!allValid) {
+        setAlert({
+          visible: true,
+          title: 'Campos incompletos',
+          message: 'Por favor revisa que todos los campos obligatorios estén completos',
+          type: 'error',
+        });
         return;
       }
 
@@ -183,17 +228,22 @@ export default function CreateReportScreen({ navigation }) {
         imagen,
       });
 
-      Alert.alert(
-        'Éxito',
-        'Reporte creado correctamente',
-        [
-          {
-            text: 'OK',
-            onPress: () => navigation.navigate('Home'),
-          },
-        ]
-      );
+      setAlert({
+        visible: true,
+        title: 'Éxito',
+        message: 'Tu reporte ha sido creado correctamente y será revisado por las autoridades',
+        type: 'success',
+      });
+
+      // Navegar después de cerrar el alert
+      setTimeout(() => {
+        navigation.navigate('Home');
+      }, 2000);
     }
+  };
+
+  const handleCloseAlert = () => {
+    setAlert({ ...alert, visible: false });
   };
 
   const handleInfoPress = () => {
@@ -230,16 +280,30 @@ export default function CreateReportScreen({ navigation }) {
         label="Titulo*"
         placeholder="Ej. Fuga de agua en Av. Principal"
         value={titulo}
-        onChangeText={setTitulo}
+        onChangeText={(text) => {
+          setTitulo(text);
+          // Limpiar error al escribir
+          if (errors.titulo) {
+            setErrors({ ...errors, titulo: null });
+          }
+        }}
+        error={errors.titulo}
       />
 
       <FormInput
         label="Descripción*"
         placeholder="Describe detalladamente el problema..."
         value={descripcion}
-        onChangeText={setDescripcion}
+        onChangeText={(text) => {
+          setDescripcion(text);
+          // Limpiar error al escribir
+          if (errors.descripcion) {
+            setErrors({ ...errors, descripcion: null });
+          }
+        }}
         multiline
         numberOfLines={6}
+        error={errors.descripcion}
       />
     </View>
   );
@@ -255,6 +319,7 @@ export default function CreateReportScreen({ navigation }) {
         categories={categories}
         selectedCategory={categoria}
         onSelectCategory={handleSelectCategory}
+        error={errors.categoria}
       />
 
       <PrioritySelector
@@ -276,13 +341,22 @@ export default function CreateReportScreen({ navigation }) {
       <View style={styles.formGroup}>
         <Text style={styles.label}>Dirección*</Text>
         <TextInput
-          style={styles.input}
+          style={[
+            styles.input,
+            errors.coordenadas && styles.inputError
+          ]}
           placeholder="20.274500, -97.955700"
           placeholderTextColor={colors.textPlaceholder}
           value={coordenadas}
           onChangeText={setCoordenadas}
           editable={false}
         />
+        {errors.coordenadas && (
+          <View style={styles.errorContainer}>
+            <MaterialIcons name="error-outline" size={16} color={colors.danger} />
+            <Text style={styles.errorText}>{errors.coordenadas}</Text>
+          </View>
+        )}
       </View>
 
       <Text style={styles.mapLabel}>Selecciona en el mapa</Text>
@@ -392,6 +466,15 @@ export default function CreateReportScreen({ navigation }) {
           </View>
         </View>
       </ScrollView>
+
+      {/* Custom Alert */}
+      <CustomAlert
+        visible={alert.visible}
+        title={alert.title}
+        message={alert.message}
+        type={alert.type}
+        onClose={handleCloseAlert}
+      />
     </View>
   );
 }
@@ -515,6 +598,21 @@ const styles = StyleSheet.create({
     color: colors.textDark,
     borderWidth: 1,
     borderColor: colors.borderLight,
+  },
+  inputError: {
+    borderColor: colors.danger,
+    borderWidth: 1.5,
+  },
+  errorContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 6,
+    gap: 6,
+  },
+  errorText: {
+    fontSize: 14,
+    color: colors.danger,
+    flex: 1,
   },
   mapLabel: {
     fontSize: 16,

@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { MaterialIcons, Ionicons } from '@expo/vector-icons';
 import { colors } from '../../utils/colors';
 
-const CategorySelector = ({ categories, selectedCategory, onSelectCategory }) => {
+const CategorySelector = ({ categories, selectedCategory, onSelectCategory, error }) => {
   const renderCategoryIcon = (category, size = 24) => {
     // Usar color azul para todos los iconos como en HomeScreen
     return renderFallbackIcon(category.fallbackIcon, category.fallbackType, size, '#465eef');
@@ -30,6 +30,7 @@ const CategorySelector = ({ categories, selectedCategory, onSelectCategory }) =>
             style={[
               styles.newCategoryCard,
               selectedCategory === category.id && styles.categoryCardActive,
+              error && !selectedCategory && styles.categoryCardError,
             ]}
             onPress={() => onSelectCategory(category)}
             activeOpacity={0.7}
@@ -45,6 +46,12 @@ const CategorySelector = ({ categories, selectedCategory, onSelectCategory }) =>
           </TouchableOpacity>
         ))}
       </View>
+      {error && (
+        <View style={styles.errorContainer}>
+          <MaterialIcons name="error-outline" size={16} color={colors.danger} />
+          <Text style={styles.errorText}>{error}</Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -84,6 +91,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderColor: colors.primary,
     borderWidth: 2,
+  },
+  categoryCardError: {
+    borderColor: colors.danger,
+    borderWidth: 1.5,
+  },
+  errorContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 8,
+    gap: 6,
+  },
+  errorText: {
+    fontSize: 14,
+    color: colors.danger,
+    flex: 1,
   },
   newCategoryIcon: {
     width: 48,
