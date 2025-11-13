@@ -18,7 +18,7 @@ const PrioritySelector = ({ priorities, selectedPriority, onSelectPriority }) =>
             <View style={[styles.priorityCircle, { backgroundColor: p.color }]} />
             <Text style={[
               styles.priorityLabel,
-              selectedPriority === p.value && { color: p.color }
+              selectedPriority === p.value && { color: colors.textDark, fontWeight: '600' }
             ]}>
               {p.label}
             </Text>
@@ -34,41 +34,35 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   priorityGrid: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: 'column',
     gap: 12,
   },
   priorityCard: {
-    flex: 1,
+    flexDirection: 'column',
     alignItems: 'center',
-    padding: 20,
-    backgroundColor: colors.backgroundLight,
+    justifyContent: 'center',
+    paddingVertical: 24,
+    paddingHorizontal: 16,
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
-    borderWidth: 2,
-    borderColor: colors.borderLight,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
+    borderWidth: 1.5,
+    borderColor: '#E5E5E5',
+    minHeight: 100,
   },
   priorityCardActive: {
-    backgroundColor: colors.primary + '10',
-    borderColor: colors.primary,
+    backgroundColor: '#FFFFFF',
+    borderColor: '#2563EB',
     borderWidth: 2,
   },
   priorityCircle: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
     marginBottom: 12,
   },
   priorityLabel: {
-    fontSize: 14,
-    fontWeight: '600',
+    fontSize: 16,
+    fontWeight: '500',
     color: colors.textDark,
     textAlign: 'center',
   },
