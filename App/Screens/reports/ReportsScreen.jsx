@@ -451,7 +451,9 @@ export default function ReportsScreen({ navigation, route }) {
         {viewMode === 'list' ? (
           <View style={styles.reportsContainer}>
             {filteredReports.map((item) => (
-              <ReportCard key={item.id} report={item} onPress={handleReportPress} />
+              <View key={item.id} style={styles.reportCardWrapper}>
+                <ReportCard report={item} onPress={handleReportPress} />
+              </View>
             ))}
             {filteredReports.length === 0 && (
               <View style={styles.emptyContainer}>
@@ -679,7 +681,15 @@ const styles = StyleSheet.create({
   
   // Reports Container
   reportsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    paddingHorizontal: 10,
     paddingBottom: 20,
+    justifyContent: 'space-between',
+  },
+  reportCardWrapper: {
+    width: '48%',
+    marginBottom: 8,
   },
 
   // Empty state\n  emptyContainer: {\n    alignItems: 'center',\n    paddingVertical: 60,\n    width: '100%',\n  },\n  emptyText: {\n    fontSize: 18,\n    fontWeight: '600',\n    color: colors.textDark,\n    marginTop: 16,\n  },\n  emptySubtext: {\n    fontSize: 14,\n    color: colors.textGray,\n    marginTop: 8,\n    textAlign: 'center',\n  },
