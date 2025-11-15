@@ -2,14 +2,14 @@
 
 export const colors = {
     // Colores principales
-    primary: '#4196E3',
+    primary: '#4468E5',
     secondary: '#373598',
     success: '#10b981',
     warning: '#f59e0b',
     danger: '#ef4444',
 
     // Colores de botones
-    buttonPrimary: '#1778F2',
+    buttonPrimary: '#4468E5',
     buttonSecondary: '#039a6c',
     buttonGoogle: '#4285F4',
 
@@ -56,7 +56,7 @@ export const colors = {
 export const gradients = {
     // Gradiente principal de la aplicación
     primaryGradient: {
-        colors: ['#4196E3', '#373598'],
+        colors: ['#4468E5', '#373598'],
         start: { x: 0.1, y: 0 },
         end: { x: 0.9, y: 1 },
         locations: [0.036, 0.515],
