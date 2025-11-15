@@ -296,14 +296,16 @@ const ReportCard = ({ report, onPress }) => {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.backgroundWhite,
-    borderRadius: 20,
+    borderRadius: 16,
     marginBottom: 16,
+    marginHorizontal: 8,
+    width: (width / 2) - 24,
     overflow: 'hidden',
     shadowColor: colors.shadowColor,
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 4,
+    shadowRadius: 4,
+    elevation: 3,
     borderWidth: 1,
     borderColor: colors.borderLight,
   },
@@ -313,7 +315,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     left: 0,
-    width: 6,
+    width: 4,
     height: '100%',
     zIndex: 10,
   },
@@ -321,7 +323,7 @@ const styles = StyleSheet.create({
   // Sección de imagen
   imageSection: {
     position: 'relative',
-    height: 200,
+    height: 140,
     backgroundColor: colors.backgroundLight,
   },
   imageContainer: {
@@ -346,8 +348,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.backgroundLight,
   },
   noImageText: {
-    marginTop: 8,
-    fontSize: 14,
+    marginTop: 4,
+    fontSize: 12,
     color: colors.textGray,
     fontWeight: '500',
   },
@@ -355,88 +357,87 @@ const styles = StyleSheet.create({
   // Status badge
   statusBadgeContainer: {
     position: 'absolute',
-    top: 12,
-    right: 12,
+    top: 8,
+    right: 8,
   },
   statusBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-    gap: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+    gap: 4,
   },
   statusBadgeText: {
-    fontSize: 12,
+    fontSize: 10,
     fontWeight: '700',
     textTransform: 'uppercase',
   },
 
   // Contenido
   content: {
-    padding: 16,
-    paddingLeft: 22, // Espacio para el indicador de prioridad
+    padding: 12,
+    paddingLeft: 16, // Espacio para el indicador de prioridad
   },
   title: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '700',
     color: colors.textDark,
-    marginBottom: 12,
-    lineHeight: 24,
+    marginBottom: 8,
+    lineHeight: 20,
   },
 
   // Meta información
   metaContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-    gap: 10,
-    marginBottom: 12,
+    flexDirection: 'column',
+    gap: 6,
+    marginBottom: 8,
   },
   categoryBadge: {
-    backgroundColor: colors.primary + '15',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 12,
+    alignSelf: 'flex-start',
+    backgroundColor: '#0043CE' + '15',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
   },
   categoryBadgeText: {
-    fontSize: 12,
+    fontSize: 10,
     fontWeight: '600',
-    color: colors.primary,
+    color: '#0043CE',
     textTransform: 'capitalize',
   },
   dateContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 4,
   },
   dateText: {
-    fontSize: 13,
+    fontSize: 11,
     color: colors.textGray,
     fontWeight: '500',
   },
 
   // Descripción
   description: {
-    fontSize: 14,
+    fontSize: 12,
     color: colors.textGray,
-    lineHeight: 20,
-    marginBottom: 12,
+    lineHeight: 16,
+    marginBottom: 8,
   },
 
   // Ubicación
   locationContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    marginBottom: 16,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
+    gap: 4,
+    marginBottom: 10,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
     backgroundColor: colors.backgroundLight,
-    borderRadius: 12,
+    borderRadius: 8,
   },
   locationText: {
-    fontSize: 13,
+    fontSize: 11,
     color: colors.textDark,
     fontWeight: '500',
     flex: 1,
@@ -447,7 +448,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop: 12,
+    paddingTop: 8,
     borderTopWidth: 1,
     borderTopColor: colors.borderLight,
   },
@@ -455,16 +456,16 @@ const styles = StyleSheet.create({
   // Votación
   voteContainer: {
     flexDirection: 'row',
-    gap: 10,
+    gap: 6,
   },
   voteButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    gap: 3,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
     backgroundColor: colors.backgroundLight,
-    borderRadius: 12,
+    borderRadius: 8,
     borderWidth: 1,
     borderColor: colors.borderLight,
   },
@@ -473,11 +474,11 @@ const styles = StyleSheet.create({
     borderColor: colors.primary + '30',
   },
   voteButtonCompact: {
-    paddingHorizontal: 10,
-    paddingVertical: 6,
+    paddingHorizontal: 6,
+    paddingVertical: 3,
   },
   voteText: {
-    fontSize: 14,
+    fontSize: 11,
     fontWeight: '600',
     color: colors.textGray,
   },
@@ -485,19 +486,19 @@ const styles = StyleSheet.create({
     color: colors.textDark,
   },
   voteTextCompact: {
-    fontSize: 13,
+    fontSize: 10,
   },
 
   // Comentarios
   commentsButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    gap: 3,
+    paddingHorizontal: 6,
+    paddingVertical: 4,
   },
   commentsText: {
-    fontSize: 13,
+    fontSize: 10,
     color: colors.textGray,
     fontWeight: '600',
   },

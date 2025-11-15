@@ -17,7 +17,7 @@ import { colors } from '../../utils/colors';
 import { useReports } from '../../hooks/useReports';
 import ReportCard from '../../Components/ReportCard/ReportCard';
 import CustomHeader from '../../Components/navigation/CustomHeader';
-// import MapView from '../Components/MapView/MapView'; // Temporalmente deshabilitado
+import LeafletMap from '../../Components/MapView/LeafletMap';
 
 export default function ReportsScreen({ navigation, route }) {
   const categoryParam = route?.params?.category || null;
@@ -251,46 +251,155 @@ export default function ReportsScreen({ navigation, route }) {
 
   return (
     <View style={styles.container}>
+      {/* Custom Header como en la imagen */}
       <CustomHeader 
         onInfoPress={handleInfoPress}
         onNotificationPress={handleNotificationPress}
       />
+      
+      {/* Content Section */}
+      <View style={styles.contentSection}>
+        <Text style={styles.pageTitle}>Reportes Ciudadanos</Text>
+        <Text style={styles.pageSubtitle}>Explora los reportes enviados por la comunidad</Text>
+        
+        {/* Lista/Mapa Toggle */}
+        <View style={styles.toggleContainer}>
+          <TouchableOpacity
+            style={[styles.toggleButton, viewMode === 'list' && styles.toggleButtonActive]}
+            onPress={() => setViewMode('list')}
+          >
+            <MaterialIcons name="view-list" size={18} color={viewMode === 'list' ? colors.primary : colors.textGray} />
+            <Text style={[styles.toggleText, viewMode === 'list' && styles.toggleTextActive]}>Lista</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity
+            style={[styles.toggleButton, viewMode === 'map' && styles.toggleButtonActive]}
+            onPress={() => setViewMode('map')}
+          >
+            <MaterialIcons name="map" size={18} color={viewMode === 'map' ? colors.primary : colors.textGray} />
+            <Text style={[styles.toggleText, viewMode === 'map' && styles.toggleTextActive]}>Mapa</Text>
+          </TouchableOpacity>
+        </View>
+        
+        {/* Categories Section */}
+        <Text style={styles.sectionTitle}>Categorías</Text>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoriesScroll}>
+          <TouchableOpacity
+            style={[styles.categoryChip, !selectedCategory && styles.categoryChipActive]}
+            onPress={() => setSelectedCategory(null)}
+          >
+            <Text style={[styles.categoryChipText, !selectedCategory && styles.categoryChipTextActive]}>
+              Todas
+            </Text>
+          </TouchableOpacity>
+          {categories.map((cat) => (
+            <TouchableOpacity
+              key={cat.nombre}
+              style={[styles.categoryChip, selectedCategory === cat.nombre.toLowerCase() && styles.categoryChipActive]}
+              onPress={() => setSelectedCategory(cat.nombre.toLowerCase())}
+            >
+              <Text style={[styles.categoryChipText, selectedCategory === cat.nombre.toLowerCase() && styles.categoryChipTextActive]}>
+                {cat.nombre}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
 
+      {/* Filters Panel */}
+      <View style={styles.filtersContainer}>
+        <Text style={styles.filtersTitle}>Filtros</Text>
+        
+        <View style={styles.filterRow}>
+          <Text style={styles.filterLabel}>Estado:</Text>
+          <TouchableOpacity 
+            style={styles.dropdown}
+            onPress={() => {
+              const nextIndex = statuses.findIndex(s => s.value === selectedStatus);
+              const newIndex = (nextIndex + 1) % statuses.length;
+              setSelectedStatus(statuses[newIndex].value);
+            }}
+          >
+            <Text style={styles.dropdownText}>
+              {statuses.find(s => s.value === selectedStatus)?.label || 'Todos'}
+            </Text>
+            <MaterialIcons name="keyboard-arrow-down" size={20} color={colors.textGray} />
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.filterRow}>
+          <Text style={styles.filterLabel}>Ordenar por:</Text>
+          <TouchableOpacity 
+            style={styles.dropdown}
+            onPress={() => {
+              const nextIndex = sortOptions.findIndex(s => s.value === sortBy);
+              const newIndex = (nextIndex + 1) % sortOptions.length;
+              setSortBy(sortOptions[newIndex].value);
+            }}
+          >
+            <Text style={styles.dropdownText}>
+              {sortOptions.find(s => s.value === sortBy)?.label || 'Fecha (más reciente)'}
+            </Text>
+            <MaterialIcons name="keyboard-arrow-down" size={20} color={colors.textGray} />
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.searchSection}>
+          <Text style={styles.searchTitle}>Buscar</Text>
+          <View style={styles.searchContainer}>
+            <MaterialIcons name="search" size={20} color={colors.textGray} />
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Buscar reportes..."
+              placeholderTextColor={colors.textGray}
+              value={searchText}
+              onChangeText={setSearchText}
+            />
+          </View>
+          
+          <TouchableOpacity style={styles.clearButton} onPress={handleClearFilters}>
+            <Text style={styles.clearButtonText}>Limpiar Filtros</Text>
+          </TouchableOpacity>
+        </View>
+        
+        <Text style={styles.resultsCounter}>
+          Mostrando {filteredReports.length} de {filteredReports.length} reporte{filteredReports.length !== 1 ? 's' : ''}
+        </Text>
+      </View>
+
+      {/* Content Area */}
       {viewMode === 'list' ? (
         <FlatList
           data={filteredReports}
-          renderItem={renderReportItem}
+          renderItem={({ item }) => (
+            <ReportCard report={item} onPress={handleReportPress} />
+          )}
           keyExtractor={(item) => item.id.toString()}
-          ListHeaderComponent={renderHeader}
-          contentContainerStyle={styles.listContent}
+          numColumns={2}
+          columnWrapperStyle={styles.row}
+          contentContainerStyle={styles.gridContent}
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
-              <MaterialIcons name="inbox" size={64} color={colors.borderLight} />
+              <MaterialIcons name="search-off" size={64} color={colors.textGray} />
               <Text style={styles.emptyText}>No se encontraron reportes</Text>
               <Text style={styles.emptySubtext}>
-                Intenta ajustar los filtros de búsqueda
+                Intenta ajustar los filtros o busca con otros términos
               </Text>
             </View>
           }
         />
       ) : (
-        <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-          {renderHeader()}
-          <View style={styles.mapContainer}>
-            {/* Placeholder temporal para el mapa */}
-            <View style={styles.mapPlaceholder}>
-              <MaterialIcons name="map" size={64} color={colors.borderLight} />
-              <Text style={styles.mapPlaceholderText}>Vista de mapa</Text>
-              <Text style={styles.mapPlaceholderSubtext}>
-                Próximamente disponible
-              </Text>
-            </View>
-          </View>
-        </ScrollView>
+        <View style={styles.mapContainer}>
+          <LeafletMap
+            reports={filteredReports}
+            onLocationSelect={null}
+            selectable={false}
+          />
+        </View>
       )}
 
-      {/* Botón flotante para crear reporte */}
+      {/* FAB for Create Report */}
       <TouchableOpacity
         style={styles.fab}
         onPress={() => navigation.navigate('CreateReport')}
@@ -307,6 +416,204 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.backgroundLight,
   },
+  
+  // Scroll Container
+  scrollContainer: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingBottom: 100,
+  },
+  
+  // Title Section
+  titleSection: {
+    backgroundColor: colors.backgroundWhite,
+    paddingHorizontal: 20,
+    paddingTop: 30,
+    paddingBottom: 20,
+  },
+  pageTitle: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: colors.textDark,
+    textAlign: 'center',
+    lineHeight: 34,
+    marginBottom: 8,
+  },
+  pageSubtitle: {
+    fontSize: 14,
+    color: colors.textGray,
+    textAlign: 'center',
+    lineHeight: 18,
+    marginBottom: 24,
+  },
+  
+  // Lista/Mapa Toggle
+  toggleContainer: {
+    flexDirection: 'row',
+    backgroundColor: colors.backgroundLight,
+    borderRadius: 8,
+    padding: 3,
+    marginBottom: 24,
+  },
+  toggleButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 6,
+    gap: 6,
+  },
+  toggleButtonActive: {
+    backgroundColor: colors.primary,
+  },
+  toggleText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: colors.primary,
+  },
+  toggleTextActive: {
+    color: colors.textWhite,
+  },
+  
+  // Categories Section
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.textDark,
+    marginBottom: 12,
+  },
+  categoriesScroll: {
+    flexGrow: 0,
+  },
+  categoryChip: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    backgroundColor: colors.backgroundLight,
+    borderRadius: 4,
+    marginRight: 8,
+  },
+  categoryChipActive: {
+    backgroundColor: colors.primary,
+  },
+  categoryChipText: {
+    fontSize: 13,
+    fontWeight: '500',
+    color: colors.textDark,
+  },
+  categoryChipTextActive: {
+    color: colors.textWhite,
+  },
+  
+  // Filters Card
+  filtersCard: {
+    backgroundColor: colors.backgroundWhite,
+    marginHorizontal: 20,
+    marginVertical: 16,
+    padding: 20,
+    borderRadius: 12,
+    shadowColor: colors.shadowColor,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  filtersTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.textDark,
+    marginBottom: 16,
+  },
+  filterRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  filterLabel: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: colors.textDark,
+    flex: 1,
+  },
+  dropdown: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.backgroundLight,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    borderRadius: 8,
+    gap: 8,
+    minWidth: 140,
+    borderWidth: 1,
+    borderColor: colors.borderLight,
+  },
+  dropdownText: {
+    fontSize: 13,
+    color: colors.textDark,
+    flex: 1,
+  },
+  
+  // Search Section
+  searchSection: {
+    marginTop: 8,
+  },
+  searchTitle: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: colors.textDark,
+    marginBottom: 8,
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.backgroundLight,
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    gap: 8,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: colors.borderLight,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 14,
+    color: colors.textDark,
+  },
+  clearButton: {
+    backgroundColor: colors.success,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  clearButtonText: {
+    fontSize: 14,
+    color: colors.textWhite,
+    fontWeight: '600',
+  },
+  resultsCounter: {
+    fontSize: 13,
+    color: colors.textGray,
+    textAlign: 'center',
+  },
+  
+  // Reports Grid
+  reportsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    paddingHorizontal: 10,
+    justifyContent: 'space-between',
+  },
+  reportCardWrapper: {
+    width: '48%',
+    marginBottom: 16,
+  },
+
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -319,143 +626,11 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 
-  // Header
-  header: {
-    backgroundColor: colors.backgroundWhite,
-    paddingHorizontal: 20,
-    paddingTop: 24,
-    paddingBottom: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.borderLight,
-  },
-  searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.backgroundLight,
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    gap: 10,
-  },
-  searchInput: {
-    flex: 1,
-    fontSize: 15,
-    color: colors.textDark,
-  },
-
-  // Controles
-  controlsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 16,
-  },
-  viewModeContainer: {
-    flexDirection: 'row',
-    backgroundColor: colors.backgroundLight,
-    borderRadius: 12,
-    padding: 4,
-  },
-  viewModeButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 8,
-  },
-  viewModeButtonActive: {
-    backgroundColor: colors.backgroundWhite,
-  },
-  filterButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    backgroundColor: colors.primary + '15',
-    borderRadius: 12,
-  },
-  filterButtonText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: colors.primary,
-  },
-
-  // Panel de filtros
-  filtersPanel: {
-    marginTop: 16,
-    paddingTop: 16,
-    borderTopWidth: 1,
-    borderTopColor: colors.borderLight,
-  },
-  filterSection: {
-    marginBottom: 16,
-  },
-  filterSectionTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: colors.textDark,
-    marginBottom: 10,
-  },
-  filterChipsContainer: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-  filterChip: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    backgroundColor: colors.backgroundLight,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: colors.borderLight,
-  },
-  filterChipActive: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
-  },
-  filterChipText: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: colors.textDark,
-  },
-  filterChipTextActive: {
-    color: colors.textWhite,
-  },
-  clearFiltersButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    backgroundColor: colors.danger,
-    paddingVertical: 12,
-    borderRadius: 12,
-    marginTop: 8,
-  },
-  clearFiltersText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: colors.textWhite,
-  },
-
-  // Contador de resultados
-  resultsCounter: {
-    marginTop: 12,
-  },
-  resultsCounterText: {
-    fontSize: 13,
-    color: colors.textGray,
-    fontWeight: '500',
-  },
-
-  // Lista
-  listContent: {
-    paddingHorizontal: 20,
-    paddingTop: 16,
-    paddingBottom: 100,
-  },
-
   // Empty state
   emptyContainer: {
     alignItems: 'center',
     paddingVertical: 60,
+    width: '100%',
   },
   emptyText: {
     fontSize: 18,
@@ -473,28 +648,8 @@ const styles = StyleSheet.create({
   // Mapa
   mapContainer: {
     paddingHorizontal: 20,
-    paddingVertical: 16,
-  },
-  mapPlaceholder: {
-    height: 400,
-    backgroundColor: colors.backgroundLight,
-    borderRadius: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: colors.borderLight,
-    borderStyle: 'dashed',
-  },
-  mapPlaceholderText: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: colors.textDark,
-    marginTop: 16,
-  },
-  mapPlaceholderSubtext: {
-    fontSize: 14,
-    color: colors.textGray,
-    marginTop: 8,
+    paddingTop: 16,
+    paddingBottom: 20,
   },
 
   // FAB
@@ -502,9 +657,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 24,
     right: 24,
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
     backgroundColor: colors.primary,
     justifyContent: 'center',
     alignItems: 'center',

@@ -152,7 +152,21 @@ export default function ReportDetailScreen({ navigation, route }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.backgroundWhite} />
+      <StatusBar barStyle="light-content" backgroundColor="#0043CE" />
+
+      {/* Blue Header with Back Button */}
+      <View style={styles.header}>
+        <TouchableOpacity 
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <MaterialIcons name="arrow-back" size={24} color={colors.textWhite} />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Detalle del Reporte</Text>
+        <TouchableOpacity style={styles.shareButton} onPress={handleShare}>
+          <Ionicons name="share-social" size={22} color={colors.textWhite} />
+        </TouchableOpacity>
+      </View>
 
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -162,7 +176,7 @@ export default function ReportDetailScreen({ navigation, route }) {
           style={styles.scrollView}
           showsVerticalScrollIndicator={false}
         >
-          {/* Imagen del reporte */}
+          {/* Large Report Image */}
           {report.imagen ? (
             <Image source={{ uri: report.imagen }} style={styles.reportImage} />
           ) : (
@@ -172,51 +186,54 @@ export default function ReportDetailScreen({ navigation, route }) {
             </View>
           )}
 
-          {/* Contenido principal */}
+          {/* Content */}
           <View style={styles.content}>
-            {/* Header con estado y compartir */}
-            <View style={styles.headerRow}>
+            {/* Status Badge */}
+            <View style={styles.statusContainer}>
               <View style={[styles.statusBadge, { backgroundColor: statusInfo.bgColor }]}>
-                <MaterialIcons name={statusInfo.icon} size={18} color={statusInfo.color} />
+                <MaterialIcons name={statusInfo.icon} size={16} color={statusInfo.color} />
                 <Text style={[styles.statusText, { color: statusInfo.color }]}>
                   {statusInfo.text}
                 </Text>
               </View>
-              <TouchableOpacity style={styles.shareButton} onPress={handleShare}>
-                <Ionicons name="share-social" size={20} color={colors.primary} />
-              </TouchableOpacity>
             </View>
 
-            {/* Título */}
+            {/* Title */}
             <Text style={styles.title}>{report.titulo}</Text>
 
-            {/* Meta información */}
+            {/* Category and Date */}
             <View style={styles.metaContainer}>
               <View style={styles.categoryBadge}>
                 <Text style={styles.categoryText}>{report.categoria}</Text>
               </View>
               <View style={styles.dateContainer}>
-                <MaterialIcons name="calendar-today" size={14} color={colors.textGray} />
+                <MaterialIcons name="schedule" size={16} color={colors.textGray} />
                 <Text style={styles.dateText}>{formatDate(report.fecha_creacion)}</Text>
               </View>
             </View>
 
-            {/* Descripción */}
+            {/* Description */}
             <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Descripción</Text>
               <Text style={styles.description}>{report.descripcion}</Text>
             </View>
 
-            {/* Ubicación */}
+            {/* Location with Map Preview */}
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Ubicación</Text>
-              <View style={styles.locationContainer}>
-                <MaterialIcons name="location-on" size={20} color={colors.primary} />
-                <Text style={styles.locationText}>{report.ubicacion}</Text>
+              <View style={styles.locationCard}>
+                <View style={styles.locationInfo}>
+                  <MaterialIcons name="location-on" size={20} color="#0043CE" />
+                  <Text style={styles.locationText}>{report.ubicacion}</Text>
+                </View>
+                
+                <View style={styles.mapPreview}>
+                  <MaterialIcons name="map" size={40} color={colors.textGray} />
+                  <Text style={styles.mapText}>Ver en mapa</Text>
+                </View>
               </View>
             </View>
 
-            {/* Votación */}
+            {/* Voting Section */}
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>¿Es útil este reporte?</Text>
               <View style={styles.voteContainer}>
@@ -226,15 +243,10 @@ export default function ReportDetailScreen({ navigation, route }) {
                 >
                   <Ionicons
                     name={userVote === 'up' ? 'thumbs-up' : 'thumbs-up-outline'}
-                    size={24}
-                    color={userVote === 'up' ? colors.success : colors.textGray}
+                    size={22}
+                    color={userVote === 'up' ? "#0043CE" : colors.textGray}
                   />
-                  <Text
-                    style={[
-                      styles.voteText,
-                      userVote === 'up' && styles.voteTextActive,
-                    ]}
-                  >
+                  <Text style={[styles.voteText, userVote === 'up' && styles.voteTextActive]}>
                     {votes.positivos}
                   </Text>
                   <Text style={styles.voteLabel}>Útil</Text>
@@ -246,15 +258,10 @@ export default function ReportDetailScreen({ navigation, route }) {
                 >
                   <Ionicons
                     name={userVote === 'down' ? 'thumbs-down' : 'thumbs-down-outline'}
-                    size={24}
+                    size={22}
                     color={userVote === 'down' ? colors.danger : colors.textGray}
                   />
-                  <Text
-                    style={[
-                      styles.voteText,
-                      userVote === 'down' && styles.voteTextActive,
-                    ]}
-                  >
+                  <Text style={[styles.voteText, userVote === 'down' && styles.voteTextActive]}>
                     {votes.negativos}
                   </Text>
                   <Text style={styles.voteLabel}>No útil</Text>
@@ -262,13 +269,13 @@ export default function ReportDetailScreen({ navigation, route }) {
               </View>
             </View>
 
-            {/* Comentarios */}
+            {/* Comments Section */}
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>
                 Comentarios ({report.comentarios?.length || 0})
               </Text>
 
-              {/* Campo para agregar comentario */}
+              {/* Add Comment */}
               <View style={styles.addCommentContainer}>
                 <TextInput
                   style={styles.commentInput}
@@ -282,17 +289,17 @@ export default function ReportDetailScreen({ navigation, route }) {
                   style={styles.sendButton}
                   onPress={handleAddComment}
                 >
-                  <MaterialIcons name="send" size={20} color={colors.textWhite} />
+                  <MaterialIcons name="send" size={18} color={colors.textWhite} />
                 </TouchableOpacity>
               </View>
 
-              {/* Lista de comentarios */}
+              {/* Comments List */}
               {report.comentarios && report.comentarios.length > 0 ? (
                 report.comentarios.map((comment, index) => (
                   <View key={index} style={styles.commentItem}>
                     <View style={styles.commentHeader}>
                       <View style={styles.commentAvatar}>
-                        <MaterialIcons name="person" size={20} color={colors.textWhite} />
+                        <MaterialIcons name="person" size={18} color={colors.textWhite} />
                       </View>
                       <View style={styles.commentInfo}>
                         <Text style={styles.commentAuthor}>
@@ -331,6 +338,42 @@ const styles = StyleSheet.create({
   flex: {
     flex: 1,
   },
+  
+  // Blue Header
+  header: {
+    backgroundColor: '#0043CE',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop: 10,
+    paddingBottom: 16,
+    paddingHorizontal: 20,
+    justifyContent: 'space-between',
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: colors.textWhite + '20',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: colors.textWhite,
+    flex: 1,
+    textAlign: 'center',
+    marginHorizontal: 16,
+  },
+  shareButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: colors.textWhite + '20',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  
   scrollView: {
     flex: 1,
   },
@@ -358,19 +401,8 @@ const styles = StyleSheet.create({
     marginTop: 16,
     marginBottom: 24,
   },
-  backButton: {
-    backgroundColor: colors.primary,
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    borderRadius: 12,
-  },
-  backButtonText: {
-    color: colors.textWhite,
-    fontSize: 15,
-    fontWeight: '600',
-  },
 
-  // Imagen
+  // Large Image
   reportImage: {
     width: '100%',
     height: 300,
@@ -389,65 +421,56 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 
-  // Contenido
+  // Content
   content: {
     padding: 20,
   },
-  headerRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  
+  // Status Badge
+  statusContainer: {
+    alignItems: 'flex-start',
     marginBottom: 16,
   },
   statusBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-    gap: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    gap: 6,
   },
   statusText: {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: '700',
     textTransform: 'uppercase',
   },
-  shareButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.primary + '15',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
 
-  // Título
+  // Title
   title: {
     fontSize: 24,
-    fontWeight: '700',
+    fontWeight: 'bold',
     color: colors.textDark,
     marginBottom: 16,
     lineHeight: 32,
   },
 
-  // Meta
+  // Meta Information
   metaContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    flexWrap: 'wrap',
-    gap: 12,
-    marginBottom: 24,
+    gap: 16,
+    marginBottom: 20,
   },
   categoryBadge: {
-    backgroundColor: colors.primary + '15',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 16,
+    backgroundColor: '#0043CE' + '15',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 12,
   },
   categoryText: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: '600',
-    color: colors.primary,
+    color: '#0043CE',
     textTransform: 'capitalize',
   },
   dateContainer: {
@@ -456,35 +479,38 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   dateText: {
-    fontSize: 13,
+    fontSize: 12,
     color: colors.textGray,
     fontWeight: '500',
   },
 
-  // Secciones
+  // Sections
   section: {
     marginBottom: 24,
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: '700',
+    fontWeight: 'bold',
     color: colors.textDark,
     marginBottom: 12,
   },
   description: {
-    fontSize: 15,
+    fontSize: 16,
     color: colors.textGray,
     lineHeight: 24,
   },
 
-  // Ubicación
-  locationContainer: {
+  // Location with Map
+  locationCard: {
+    backgroundColor: colors.backgroundLight,
+    borderRadius: 12,
+    padding: 16,
+    gap: 12,
+  },
+  locationInfo: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    padding: 16,
-    backgroundColor: colors.backgroundLight,
-    borderRadius: 12,
   },
   locationText: {
     fontSize: 15,
@@ -492,8 +518,24 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     flex: 1,
   },
+  mapPreview: {
+    height: 120,
+    backgroundColor: colors.backgroundWhite,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: colors.borderLight,
+    borderStyle: 'dashed',
+  },
+  mapText: {
+    fontSize: 14,
+    color: colors.textGray,
+    marginTop: 8,
+    fontWeight: '500',
+  },
 
-  // Votación
+  // Voting
   voteContainer: {
     flexDirection: 'row',
     gap: 12,
@@ -508,26 +550,26 @@ const styles = StyleSheet.create({
     borderColor: colors.borderLight,
   },
   voteButtonActive: {
-    backgroundColor: colors.primary + '10',
-    borderColor: colors.primary + '30',
+    backgroundColor: '#0043CE' + '10',
+    borderColor: '#0043CE' + '30',
   },
   voteText: {
-    fontSize: 20,
-    fontWeight: '700',
+    fontSize: 18,
+    fontWeight: 'bold',
     color: colors.textDark,
     marginTop: 8,
   },
   voteTextActive: {
-    color: colors.primary,
+    color: '#0043CE',
   },
   voteLabel: {
-    fontSize: 13,
+    fontSize: 12,
     color: colors.textGray,
     fontWeight: '600',
     marginTop: 4,
   },
 
-  // Comentarios
+  // Comments
   addCommentContainer: {
     flexDirection: 'row',
     alignItems: 'flex-end',
@@ -545,10 +587,10 @@ const styles = StyleSheet.create({
     maxHeight: 100,
   },
   sendButton: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: colors.primary,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: '#0043CE',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -564,10 +606,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   commentAvatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.primary,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#0043CE',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -576,13 +618,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   commentAuthor: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '600',
     color: colors.textDark,
     marginBottom: 2,
   },
   commentDate: {
-    fontSize: 12,
+    fontSize: 11,
     color: colors.textGray,
   },
   commentText: {
