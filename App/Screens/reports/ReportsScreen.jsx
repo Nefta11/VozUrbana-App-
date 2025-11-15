@@ -29,6 +29,7 @@ export default function ReportsScreen({ navigation, route }) {
   const [sortBy, setSortBy] = useState('newest');
   const [viewMode, setViewMode] = useState('list'); // 'list' o 'map'
   const [showFilters, setShowFilters] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState(null); // 'status', 'priority', 'sort'
 
   // Hook de reportes con filtros
   const { filteredReports, categories, isLoading } = useReports({
@@ -81,6 +82,40 @@ export default function ReportsScreen({ navigation, route }) {
     setSelectedStatus(null);
     setSelectedPriority(null);
     setSortBy('newest');
+  };
+
+  const renderDropdownMenu = (options, currentValue, onSelect, dropdownKey) => {
+    if (openDropdown !== dropdownKey) return null;
+
+    return (
+      <View style={styles.dropdownMenu}>
+        {options.map((option, index) => (
+          <TouchableOpacity
+            key={index}
+            style={[
+              styles.dropdownOption,
+              currentValue === option.value && styles.dropdownOptionSelected,
+            ]}
+            onPress={() => {
+              onSelect(option.value);
+              setOpenDropdown(null);
+            }}
+          >
+            <Text
+              style={[
+                styles.dropdownOptionText,
+                currentValue === option.value && styles.dropdownOptionTextSelected,
+              ]}
+            >
+              {option.label}
+            </Text>
+            {currentValue === option.value && (
+              <MaterialIcons name="check" size={18} color={colors.primary} />
+            )}
+          </TouchableOpacity>
+        ))}
+      </View>
+    );
   };
 
   const renderFilterChip = (label, isActive, onPress) => (
@@ -334,24 +369,47 @@ export default function ReportsScreen({ navigation, route }) {
           
           <View style={styles.filterRow}>
             <Text style={styles.filterLabel}>Estado:</Text>
-            <TouchableOpacity 
-              style={styles.dropdown}
-              onPress={() => {
-                const nextIndex = statuses.findIndex(s => s.value === selectedStatus);
-                const newIndex = (nextIndex + 1) % statuses.length;
-                setSelectedStatus(statuses[newIndex].value);
-              }}
-            >
-              <Text style={styles.dropdownText}>
-                {statuses.find(s => s.value === selectedStatus)?.label || 'Todos'}
-              </Text>
-              <MaterialIcons name="keyboard-arrow-down" size={20} color={colors.textGray} />
-            </TouchableOpacity>
+            <View style={styles.dropdownContainer}>
+              <TouchableOpacity
+                style={styles.dropdown}
+                onPress={() => setOpenDropdown(openDropdown === 'status' ? null : 'status')}
+              >
+                <Text style={styles.dropdownText}>
+                  {statuses.find(s => s.value === selectedStatus)?.label || 'Todos'}
+                </Text>
+                <MaterialIcons
+                  name={openDropdown === 'status' ? 'keyboard-arrow-up' : 'keyboard-arrow-down'}
+                  size={20}
+                  color={colors.textGray}
+                />
+              </TouchableOpacity>
+              {renderDropdownMenu(statuses, selectedStatus, setSelectedStatus, 'status')}
+            </View>
+          </View>
+
+          <View style={styles.filterRow}>
+            <Text style={styles.filterLabel}>Prioridad:</Text>
+            <View style={styles.dropdownContainer}>
+              <TouchableOpacity
+                style={styles.dropdown}
+                onPress={() => setOpenDropdown(openDropdown === 'priority' ? null : 'priority')}
+              >
+                <Text style={styles.dropdownText}>
+                  {priorities.find(p => p.value === selectedPriority)?.label || 'Todas'}
+                </Text>
+                <MaterialIcons
+                  name={openDropdown === 'priority' ? 'keyboard-arrow-up' : 'keyboard-arrow-down'}
+                  size={20}
+                  color={colors.textGray}
+                />
+              </TouchableOpacity>
+              {renderDropdownMenu(priorities, selectedPriority, setSelectedPriority, 'priority')}
+            </View>
           </View>
 
           <View style={styles.filterRow}>
             <Text style={styles.filterLabel}>Ordenar por:</Text>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.dropdown}
               onPress={() => {
                 const nextIndex = sortOptions.findIndex(s => s.value === sortBy);
@@ -391,11 +449,9 @@ export default function ReportsScreen({ navigation, route }) {
 
         {/* Content Area */}
         {viewMode === 'list' ? (
-          <View style={styles.reportsGrid}>
+          <View style={styles.reportsContainer}>
             {filteredReports.map((item) => (
-              <View key={item.id} style={styles.reportCardWrapper}>
-                <ReportCard report={item} onPress={handleReportPress} />
-              </View>
+              <ReportCard key={item.id} report={item} onPress={handleReportPress} />
             ))}
             {filteredReports.length === 0 && (
               <View style={styles.emptyContainer}>
@@ -621,16 +677,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   
-  // Reports Grid
-  reportsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    paddingHorizontal: 10,
-    justifyContent: 'space-between',
-  },
-  reportCardWrapper: {
-    width: '48%',
-    marginBottom: 16,
+  // Reports Container
+  reportsContainer: {
+    paddingBottom: 20,
   },
 
   // Empty state\n  emptyContainer: {\n    alignItems: 'center',\n    paddingVertical: 60,\n    width: '100%',\n  },\n  emptyText: {\n    fontSize: 18,\n    fontWeight: '600',\n    color: colors.textDark,\n    marginTop: 16,\n  },\n  emptySubtext: {\n    fontSize: 14,\n    color: colors.textGray,\n    marginTop: 8,\n    textAlign: 'center',\n  },

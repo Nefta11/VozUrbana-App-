@@ -70,12 +70,56 @@ const formatDate = (dateString) => {
   return date.toLocaleDateString('es-ES', options);
 };
 
+// Configuración de categorías
+const CATEGORY_CONFIG = {
+  'salud publica': {
+    icon: 'favorite',
+    color: '#ef4444',
+    bgColor: '#fef2f2',
+  },
+  'infraestructura': {
+    icon: 'build',
+    color: '#f59e0b',
+    bgColor: '#fffbeb',
+  },
+  'servicios': {
+    icon: 'miscellaneous-services',
+    color: colors.primary,
+    bgColor: colors.primary + '15',
+  },
+  'seguridad': {
+    icon: 'security',
+    color: '#dc2626',
+    bgColor: '#fef2f2',
+  },
+  'medio ambiente': {
+    icon: 'eco',
+    color: '#16a34a',
+    bgColor: '#f0fdf4',
+  },
+  'transporte': {
+    icon: 'directions-bus',
+    color: '#9333ea',
+    bgColor: '#faf5ff',
+  },
+};
+
 // Componente de badge de categoría
-const CategoryBadge = ({ category }) => (
-  <View style={styles.categoryBadge}>
-    <Text style={styles.categoryBadgeText}>{category}</Text>
-  </View>
-);
+const CategoryBadge = ({ category }) => {
+  const categoryKey = category?.toLowerCase() || '';
+  const categoryInfo = CATEGORY_CONFIG[categoryKey] || {
+    icon: 'label',
+    color: colors.primary,
+    bgColor: colors.primary + '15',
+  };
+
+  return (
+    <View style={[styles.categoryBadge, { backgroundColor: categoryInfo.bgColor }]}>
+      <MaterialIcons name={categoryInfo.icon} size={16} color={categoryInfo.color} />
+      <Text style={[styles.categoryBadgeText, { color: categoryInfo.color }]}>{category}</Text>
+    </View>
+  );
+};
 
 // Componente de badge de estado
 const StatusBadge = ({ status }) => {
@@ -164,7 +208,10 @@ const VoteButtons = ({ reportId, initialVotes, compact = false }) => {
       <TouchableOpacity
         style={[
           styles.voteButton,
-          userVote === 'up' && styles.voteButtonActive,
+          {
+            backgroundColor: userVote === 'up' ? '#16a34a' : 'transparent',
+            borderColor: '#16a34a',
+          },
           compact && styles.voteButtonCompact,
         ]}
         onPress={() => handleVote('up')}
@@ -172,12 +219,12 @@ const VoteButtons = ({ reportId, initialVotes, compact = false }) => {
         <Ionicons
           name={userVote === 'up' ? 'thumbs-up' : 'thumbs-up-outline'}
           size={compact ? 16 : 18}
-          color={userVote === 'up' ? colors.success : colors.textGray}
+          color={userVote === 'up' ? '#ffffff' : '#16a34a'}
         />
         <Text
           style={[
             styles.voteText,
-            userVote === 'up' && styles.voteTextActive,
+            { color: userVote === 'up' ? '#ffffff' : '#16a34a' },
             compact && styles.voteTextCompact,
           ]}
         >
@@ -188,7 +235,10 @@ const VoteButtons = ({ reportId, initialVotes, compact = false }) => {
       <TouchableOpacity
         style={[
           styles.voteButton,
-          userVote === 'down' && styles.voteButtonActive,
+          {
+            backgroundColor: userVote === 'down' ? '#dc2626' : 'transparent',
+            borderColor: '#dc2626',
+          },
           compact && styles.voteButtonCompact,
         ]}
         onPress={() => handleVote('down')}
@@ -196,12 +246,12 @@ const VoteButtons = ({ reportId, initialVotes, compact = false }) => {
         <Ionicons
           name={userVote === 'down' ? 'thumbs-down' : 'thumbs-down-outline'}
           size={compact ? 16 : 18}
-          color={userVote === 'down' ? colors.danger : colors.textGray}
+          color={userVote === 'down' ? '#ffffff' : '#dc2626'}
         />
         <Text
           style={[
             styles.voteText,
-            userVote === 'down' && styles.voteTextActive,
+            { color: userVote === 'down' ? '#ffffff' : '#dc2626' },
             compact && styles.voteTextCompact,
           ]}
         >
@@ -243,50 +293,42 @@ const ReportCard = ({ report, onPress }) => {
 
       {/* Contenido del reporte */}
       <View style={styles.content}>
-        {/* Título */}
+        {/* Título y categoría */}
         <Text style={styles.title} numberOfLines={2}>
           {report.titulo}
         </Text>
-
-        {/* Meta información */}
-        <View style={styles.metaContainer}>
-          <CategoryBadge category={report.categoria} />
-          <View style={styles.dateContainer}>
-            <MaterialIcons name="calendar-today" size={14} color={colors.textGray} />
-            <Text style={styles.dateText}>{formattedDate}</Text>
-          </View>
-        </View>
+        
+        <CategoryBadge category={report.categoria} />
 
         {/* Descripción */}
         <Text style={styles.description} numberOfLines={3}>
           {report.descripcion}
         </Text>
 
-        {/* Ubicación */}
-        <View style={styles.locationContainer}>
-          <MaterialIcons name="location-on" size={16} color={colors.primary} />
-          <Text style={styles.locationText} numberOfLines={1}>
-            {report.ubicacion}
-          </Text>
+        {/* Fecha */}
+        <View style={styles.dateContainer}>
+          <MaterialIcons name="calendar-today" size={16} color={colors.textGray} />
+          <Text style={styles.dateText}>{formattedDate}</Text>
         </View>
 
-        {/* Footer con votación y comentarios */}
-        <View style={styles.footer}>
+        {/* Botones de votación */}
+        <View style={styles.voteSection}>
           <VoteButtons
             reportId={report.id}
             initialVotes={{
               positivos: report.votos_positivos,
               negativos: report.votos_negativos,
             }}
-            compact
+            compact={false}
           />
+        </View>
 
-          <TouchableOpacity style={styles.commentsButton} onPress={handlePress}>
-            <MaterialIcons name="comment" size={18} color={colors.textGray} />
-            <Text style={styles.commentsText}>
-              {commentsCount} comentario{commentsCount !== 1 ? 's' : ''}
-            </Text>
-          </TouchableOpacity>
+        {/* Comentarios */}
+        <View style={styles.commentsSection}>
+          <MaterialIcons name="chat-bubble-outline" size={16} color={colors.textGray} />
+          <Text style={styles.commentsText}>
+            {commentsCount} comentario{commentsCount !== 1 ? 's' : ''}
+          </Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -296,10 +338,9 @@ const ReportCard = ({ report, onPress }) => {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.backgroundWhite,
-    borderRadius: 16,
+    borderRadius: 12,
     marginBottom: 16,
-    marginHorizontal: 8,
-    width: (width / 2) - 24,
+    marginHorizontal: 16,
     overflow: 'hidden',
     shadowColor: colors.shadowColor,
     shadowOffset: { width: 0, height: 2 },
@@ -323,7 +364,7 @@ const styles = StyleSheet.create({
   // Sección de imagen
   imageSection: {
     position: 'relative',
-    height: 140,
+    height: 200,
     backgroundColor: colors.backgroundLight,
   },
   imageContainer: {
@@ -357,19 +398,19 @@ const styles = StyleSheet.create({
   // Status badge
   statusBadgeContainer: {
     position: 'absolute',
-    top: 8,
-    right: 8,
+    top: 12,
+    right: 12,
   },
   statusBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
     gap: 4,
   },
   statusBadgeText: {
-    fontSize: 10,
+    fontSize: 11,
     fontWeight: '700',
     textTransform: 'uppercase',
   },
@@ -380,11 +421,11 @@ const styles = StyleSheet.create({
     paddingLeft: 16, // Espacio para el indicador de prioridad
   },
   title: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '700',
     color: colors.textDark,
-    marginBottom: 8,
-    lineHeight: 20,
+    marginBottom: 12,
+    lineHeight: 22,
   },
 
   // Meta información
@@ -394,25 +435,32 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   categoryBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
     alignSelf: 'flex-start',
-    backgroundColor: '#0043CE' + '15',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+    gap: 6,
   },
   categoryBadgeText: {
-    fontSize: 10,
+    fontSize: 12,
     fontWeight: '600',
-    color: '#0043CE',
     textTransform: 'capitalize',
   },
   dateContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    justifyContent: 'center',
+    backgroundColor: colors.backgroundLight,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 8,
+    gap: 6,
+    marginBottom: 12,
   },
   dateText: {
-    fontSize: 11,
+    fontSize: 12,
     color: colors.textGray,
     fontWeight: '500',
   },
@@ -425,82 +473,56 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
 
-  // Ubicación
-  locationContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    marginBottom: 10,
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-    backgroundColor: colors.backgroundLight,
-    borderRadius: 8,
-  },
-  locationText: {
-    fontSize: 11,
-    color: colors.textDark,
-    fontWeight: '500',
-    flex: 1,
-  },
-
-  // Footer
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingTop: 8,
-    borderTopWidth: 1,
-    borderTopColor: colors.borderLight,
-  },
-
   // Votación
+  voteSection: {
+    marginBottom: 12,
+  },
   voteContainer: {
     flexDirection: 'row',
-    gap: 6,
+    gap: 8,
   },
   voteButton: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 3,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    backgroundColor: colors.backgroundLight,
+    justifyContent: 'center',
+    gap: 6,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
     borderRadius: 8,
-    borderWidth: 1,
-    borderColor: colors.borderLight,
+    borderWidth: 2,
   },
   voteButtonActive: {
     backgroundColor: colors.primary + '10',
     borderColor: colors.primary + '30',
   },
   voteButtonCompact: {
-    paddingHorizontal: 6,
-    paddingVertical: 3,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
   },
   voteText: {
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: '600',
-    color: colors.textGray,
+    color: colors.textDark,
   },
   voteTextActive: {
     color: colors.textDark,
   },
   voteTextCompact: {
-    fontSize: 10,
+    fontSize: 12,
   },
 
   // Comentarios
-  commentsButton: {
+  commentsSection: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 3,
-    paddingHorizontal: 6,
-    paddingVertical: 4,
+    justifyContent: 'center',
+    gap: 6,
   },
   commentsText: {
-    fontSize: 10,
+    fontSize: 12,
     color: colors.textGray,
-    fontWeight: '600',
+    fontWeight: '500',
   },
 });
 
