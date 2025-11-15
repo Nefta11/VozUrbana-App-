@@ -23,7 +23,7 @@ export default function ReportsScreen({ navigation, route }) {
   const categoryParam = route?.params?.category || null;
 
   const [searchText, setSearchText] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState(categoryParam);
+  const [selectedCategory, setSelectedCategory] = useState('infraestructura');
   const [selectedStatus, setSelectedStatus] = useState(null);
   const [selectedPriority, setSelectedPriority] = useState(null);
   const [sortBy, setSortBy] = useState('newest');
@@ -251,153 +251,172 @@ export default function ReportsScreen({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-      {/* Custom Header como en la imagen */}
+      {/* Custom Header */}
       <CustomHeader 
         onInfoPress={handleInfoPress}
         onNotificationPress={handleNotificationPress}
       />
       
-      {/* Content Section */}
-      <View style={styles.contentSection}>
-        <Text style={styles.pageTitle}>Reportes Ciudadanos</Text>
-        <Text style={styles.pageSubtitle}>Explora los reportes enviados por la comunidad</Text>
-        
-        {/* Lista/Mapa Toggle */}
-        <View style={styles.toggleContainer}>
-          <TouchableOpacity
-            style={[styles.toggleButton, viewMode === 'list' && styles.toggleButtonActive]}
-            onPress={() => setViewMode('list')}
-          >
-            <MaterialIcons name="view-list" size={18} color={viewMode === 'list' ? colors.primary : colors.textGray} />
-            <Text style={[styles.toggleText, viewMode === 'list' && styles.toggleTextActive]}>Lista</Text>
-          </TouchableOpacity>
+      {/* Scrollable Content */}
+      <ScrollView 
+        style={styles.scrollContainer}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContent}
+      >
+        {/* Title Section */}
+        <View style={styles.titleSection}>
+          <Text style={styles.pageTitle}>Reportes{"\n"}Ciudadanos</Text>
+          <Text style={styles.pageSubtitle}>Explora los reportes enviados por la{"\n"}comunidad</Text>
           
-          <TouchableOpacity
-            style={[styles.toggleButton, viewMode === 'map' && styles.toggleButtonActive]}
-            onPress={() => setViewMode('map')}
-          >
-            <MaterialIcons name="map" size={18} color={viewMode === 'map' ? colors.primary : colors.textGray} />
-            <Text style={[styles.toggleText, viewMode === 'map' && styles.toggleTextActive]}>Mapa</Text>
-          </TouchableOpacity>
-        </View>
-        
-        {/* Categories Section */}
-        <Text style={styles.sectionTitle}>Categorías</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoriesScroll}>
-          <TouchableOpacity
-            style={[styles.categoryChip, !selectedCategory && styles.categoryChipActive]}
-            onPress={() => setSelectedCategory(null)}
-          >
-            <Text style={[styles.categoryChipText, !selectedCategory && styles.categoryChipTextActive]}>
-              Todas
-            </Text>
-          </TouchableOpacity>
-          {categories.map((cat) => (
+          {/* Lista/Mapa Toggle */}
+          <View style={styles.toggleContainer}>
             <TouchableOpacity
-              key={cat.nombre}
-              style={[styles.categoryChip, selectedCategory === cat.nombre.toLowerCase() && styles.categoryChipActive]}
-              onPress={() => setSelectedCategory(cat.nombre.toLowerCase())}
+              style={[styles.toggleButton, viewMode === 'list' && styles.toggleButtonActive]}
+              onPress={() => setViewMode('list')}
             >
-              <Text style={[styles.categoryChipText, selectedCategory === cat.nombre.toLowerCase() && styles.categoryChipTextActive]}>
-                {cat.nombre}
-              </Text>
+              <MaterialIcons name="view-list" size={18} color={viewMode === 'list' ? colors.textWhite : colors.primary} />
+              <Text style={[styles.toggleText, viewMode === 'list' && styles.toggleTextActive]}>Lista</Text>
             </TouchableOpacity>
-          ))}
-        </ScrollView>
-      </View>
-
-      {/* Filters Panel */}
-      <View style={styles.filtersContainer}>
-        <Text style={styles.filtersTitle}>Filtros</Text>
-        
-        <View style={styles.filterRow}>
-          <Text style={styles.filterLabel}>Estado:</Text>
-          <TouchableOpacity 
-            style={styles.dropdown}
-            onPress={() => {
-              const nextIndex = statuses.findIndex(s => s.value === selectedStatus);
-              const newIndex = (nextIndex + 1) % statuses.length;
-              setSelectedStatus(statuses[newIndex].value);
-            }}
-          >
-            <Text style={styles.dropdownText}>
-              {statuses.find(s => s.value === selectedStatus)?.label || 'Todos'}
-            </Text>
-            <MaterialIcons name="keyboard-arrow-down" size={20} color={colors.textGray} />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.filterRow}>
-          <Text style={styles.filterLabel}>Ordenar por:</Text>
-          <TouchableOpacity 
-            style={styles.dropdown}
-            onPress={() => {
-              const nextIndex = sortOptions.findIndex(s => s.value === sortBy);
-              const newIndex = (nextIndex + 1) % sortOptions.length;
-              setSortBy(sortOptions[newIndex].value);
-            }}
-          >
-            <Text style={styles.dropdownText}>
-              {sortOptions.find(s => s.value === sortBy)?.label || 'Fecha (más reciente)'}
-            </Text>
-            <MaterialIcons name="keyboard-arrow-down" size={20} color={colors.textGray} />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.searchSection}>
-          <Text style={styles.searchTitle}>Buscar</Text>
-          <View style={styles.searchContainer}>
-            <MaterialIcons name="search" size={20} color={colors.textGray} />
-            <TextInput
-              style={styles.searchInput}
-              placeholder="Buscar reportes..."
-              placeholderTextColor={colors.textGray}
-              value={searchText}
-              onChangeText={setSearchText}
-            />
+            
+            <TouchableOpacity
+              style={[styles.toggleButton, viewMode === 'map' && styles.toggleButtonActive]}
+              onPress={() => setViewMode('map')}
+            >
+              <MaterialIcons name="map" size={18} color={viewMode === 'map' ? colors.textWhite : colors.primary} />
+              <Text style={[styles.toggleText, viewMode === 'map' && styles.toggleTextActive]}>Mapa</Text>
+            </TouchableOpacity>
           </View>
           
-          <TouchableOpacity style={styles.clearButton} onPress={handleClearFilters}>
-            <Text style={styles.clearButtonText}>Limpiar Filtros</Text>
-          </TouchableOpacity>
-        </View>
-        
-        <Text style={styles.resultsCounter}>
-          Mostrando {filteredReports.length} de {filteredReports.length} reporte{filteredReports.length !== 1 ? 's' : ''}
-        </Text>
-      </View>
-
-      {/* Content Area */}
-      {viewMode === 'list' ? (
-        <FlatList
-          data={filteredReports}
-          renderItem={({ item }) => (
-            <ReportCard report={item} onPress={handleReportPress} />
-          )}
-          keyExtractor={(item) => item.id.toString()}
-          numColumns={2}
-          columnWrapperStyle={styles.row}
-          contentContainerStyle={styles.gridContent}
-          showsVerticalScrollIndicator={false}
-          ListEmptyComponent={
-            <View style={styles.emptyContainer}>
-              <MaterialIcons name="search-off" size={64} color={colors.textGray} />
-              <Text style={styles.emptyText}>No se encontraron reportes</Text>
-              <Text style={styles.emptySubtext}>
-                Intenta ajustar los filtros o busca con otros términos
+          {/* Categories Section */}
+          <Text style={styles.sectionTitle}>Categorías</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoriesScroll}>
+            <TouchableOpacity
+              style={[styles.categoryChip, selectedCategory === 'infraestructura' && styles.categoryChipActive]}
+              onPress={() => setSelectedCategory('infraestructura')}
+            >
+              <Text style={[styles.categoryChipText, selectedCategory === 'infraestructura' && styles.categoryChipTextActive]}>
+                Infraestructura
               </Text>
-            </View>
-          }
-        />
-      ) : (
-        <View style={styles.mapContainer}>
-          <LeafletMap
-            reports={filteredReports}
-            onLocationSelect={null}
-            selectable={false}
-          />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.categoryChip, selectedCategory === 'servicios' && styles.categoryChipActive]}
+              onPress={() => setSelectedCategory('servicios')}
+            >
+              <Text style={[styles.categoryChipText, selectedCategory === 'servicios' && styles.categoryChipTextActive]}>
+                Servicios Públicos
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.categoryChip, selectedCategory === 'seguridad' && styles.categoryChipActive]}
+              onPress={() => setSelectedCategory('seguridad')}
+            >
+              <Text style={[styles.categoryChipText, selectedCategory === 'seguridad' && styles.categoryChipTextActive]}>
+                Seguridad
+              </Text>
+            </TouchableOpacity>
+            {categories.map((cat) => (
+              <TouchableOpacity
+                key={cat.nombre}
+                style={[styles.categoryChip, selectedCategory === cat.nombre.toLowerCase() && styles.categoryChipActive]}
+                onPress={() => setSelectedCategory(cat.nombre.toLowerCase())}
+              >
+                <Text style={[styles.categoryChipText, selectedCategory === cat.nombre.toLowerCase() && styles.categoryChipTextActive]}>
+                  {cat.nombre}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
         </View>
-      )}
+
+        {/* Filters Card */}
+        <View style={styles.filtersCard}>
+          <Text style={styles.filtersTitle}>Filtros</Text>
+          
+          <View style={styles.filterRow}>
+            <Text style={styles.filterLabel}>Estado:</Text>
+            <TouchableOpacity 
+              style={styles.dropdown}
+              onPress={() => {
+                const nextIndex = statuses.findIndex(s => s.value === selectedStatus);
+                const newIndex = (nextIndex + 1) % statuses.length;
+                setSelectedStatus(statuses[newIndex].value);
+              }}
+            >
+              <Text style={styles.dropdownText}>
+                {statuses.find(s => s.value === selectedStatus)?.label || 'Todos'}
+              </Text>
+              <MaterialIcons name="keyboard-arrow-down" size={20} color={colors.textGray} />
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.filterRow}>
+            <Text style={styles.filterLabel}>Ordenar por:</Text>
+            <TouchableOpacity 
+              style={styles.dropdown}
+              onPress={() => {
+                const nextIndex = sortOptions.findIndex(s => s.value === sortBy);
+                const newIndex = (nextIndex + 1) % sortOptions.length;
+                setSortBy(sortOptions[newIndex].value);
+              }}
+            >
+              <Text style={styles.dropdownText}>
+                {sortOptions.find(s => s.value === sortBy)?.label || 'Fecha (más reciente)'}
+              </Text>
+              <MaterialIcons name="keyboard-arrow-down" size={20} color={colors.textGray} />
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.searchSection}>
+            <Text style={styles.searchTitle}>Buscar</Text>
+            <View style={styles.searchContainer}>
+              <MaterialIcons name="search" size={20} color={colors.textGray} />
+              <TextInput
+                style={styles.searchInput}
+                placeholder="Buscar reportes..."
+                placeholderTextColor={colors.textGray}
+                value={searchText}
+                onChangeText={setSearchText}
+              />
+            </View>
+            
+            <TouchableOpacity style={styles.clearButton} onPress={handleClearFilters}>
+              <Text style={styles.clearButtonText}>Limpiar Filtros</Text>
+            </TouchableOpacity>
+          </View>
+          
+          <Text style={styles.resultsCounter}>
+            Mostrando {filteredReports.length} de {filteredReports.length} reporte{filteredReports.length !== 1 ? 's' : ''}
+          </Text>
+        </View>
+
+        {/* Content Area */}
+        {viewMode === 'list' ? (
+          <View style={styles.reportsGrid}>
+            {filteredReports.map((item) => (
+              <View key={item.id} style={styles.reportCardWrapper}>
+                <ReportCard report={item} onPress={handleReportPress} />
+              </View>
+            ))}
+            {filteredReports.length === 0 && (
+              <View style={styles.emptyContainer}>
+                <MaterialIcons name="search-off" size={64} color={colors.textGray} />
+                <Text style={styles.emptyText}>No se encontraron reportes</Text>
+                <Text style={styles.emptySubtext}>
+                  Intenta ajustar los filtros o busca con otros términos
+                </Text>
+              </View>
+            )}
+          </View>
+        ) : (
+          <View style={styles.mapContainer}>
+            <LeafletMap
+              reports={filteredReports}
+              onLocationSelect={null}
+              selectable={false}
+            />
+          </View>
+        )}
+      </ScrollView>
 
       {/* FAB for Create Report */}
       <TouchableOpacity
@@ -613,6 +632,8 @@ const styles = StyleSheet.create({
     width: '48%',
     marginBottom: 16,
   },
+
+  // Empty state\n  emptyContainer: {\n    alignItems: 'center',\n    paddingVertical: 60,\n    width: '100%',\n  },\n  emptyText: {\n    fontSize: 18,\n    fontWeight: '600',\n    color: colors.textDark,\n    marginTop: 16,\n  },\n  emptySubtext: {\n    fontSize: 14,\n    color: colors.textGray,\n    marginTop: 8,\n    textAlign: 'center',\n  },
 
   loadingContainer: {
     flex: 1,
