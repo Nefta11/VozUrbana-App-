@@ -24,22 +24,15 @@ import LeafletMap from '../../Components/MapView/LeafletMap';
 
 export default function ReportDetailScreen({ navigation, route }) {
   const { reportId } = route.params;
-  const { getReportById } = useReports();
+  const { getReportById, isLoading: reportsLoading } = useReports();
 
   const [report, setReport] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [commentText, setCommentText] = useState('');
   const [userVote, setUserVote] = useState(null);
   const [votes, setVotes] = useState({ positivos: 0, negativos: 0 });
 
   useEffect(() => {
-    loadReport();
-  }, [reportId]);
-
-  const loadReport = () => {
-    setIsLoading(true);
-    // Simular carga
-    setTimeout(() => {
+    if (!reportsLoading) {
       const reportData = getReportById(reportId);
       if (reportData) {
         setReport(reportData);
@@ -48,9 +41,8 @@ export default function ReportDetailScreen({ navigation, route }) {
           negativos: reportData.votos_negativos,
         });
       }
-      setIsLoading(false);
-    }, 500);
-  };
+    }
+  }, [reportId, reportsLoading]);
 
   const handleVote = (voteType) => {
     if (userVote === voteType) {
@@ -96,7 +88,7 @@ export default function ReportDetailScreen({ navigation, route }) {
     Alert.alert('Notificaciones', 'No tienes notificaciones nuevas');
   };
 
-  if (isLoading) {
+  if (reportsLoading) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
