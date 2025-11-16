@@ -19,6 +19,8 @@ import { colors } from '../../utils/colors';
 import { useReports } from '../../hooks/useReports';
 import { getStatusConfig } from '../../utils/reportConfig';
 import { formatDateLong } from '../../utils/dateHelpers';
+import CustomHeader from '../../Components/navigation/CustomHeader';
+import LeafletMap from '../../Components/MapView/LeafletMap';
 
 export default function ReportDetailScreen({ navigation, route }) {
   const { reportId } = route.params;
@@ -86,6 +88,14 @@ export default function ReportDetailScreen({ navigation, route }) {
     Alert.alert('Compartir', 'Funcionalidad de compartir en desarrollo');
   };
 
+  const handleInfoPress = () => {
+    Alert.alert('Información', 'Detalle del reporte seleccionado');
+  };
+
+  const handleNotificationPress = () => {
+    Alert.alert('Notificaciones', 'No tienes notificaciones nuevas');
+  };
+
   if (isLoading) {
     return (
       <SafeAreaView style={styles.container}>
@@ -117,34 +127,34 @@ export default function ReportDetailScreen({ navigation, route }) {
   const statusInfo = getStatusConfig(report.estado);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#0043CE" />
-
-      {/* Blue Header with Back Button */}
-      <View style={styles.header}>
+    <View style={styles.container}>
+      {/* Custom Header */}
+      <CustomHeader 
+        onInfoPress={handleInfoPress}
+        onNotificationPress={handleNotificationPress}
+      />
+      
+      {/* Back to Reports */}
+      <View style={styles.backContainer}>
         <TouchableOpacity 
           style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
-          <MaterialIcons name="arrow-back" size={24} color={colors.textWhite} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Detalle del Reporte</Text>
-        <TouchableOpacity style={styles.shareButton} onPress={handleShare}>
-          <Ionicons name="share-social" size={22} color={colors.textWhite} />
+          <MaterialIcons name="arrow-back-ios" size={16} color={colors.primary} />
+          <Text style={styles.backText}>Volver a Reportes</Text>
         </TouchableOpacity>
       </View>
 
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.flex}
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContent}
       >
-        <ScrollView
-          style={styles.scrollView}
-          showsVerticalScrollIndicator={false}
-        >
+        {/* Report Content */}
+        <View style={styles.reportContainer}>
           {/* Large Report Image */}
           {report.imagen ? (
-            <Image source={{ uri: report.imagen }} style={styles.reportImage} />
+            <Image source={{ uri: report.imagen }} style={styles.reportImage} resizeMode="cover" />
           ) : (
             <View style={styles.noImageContainer}>
               <MaterialIcons name="image" size={64} color={colors.borderLight} />
@@ -152,197 +162,319 @@ export default function ReportDetailScreen({ navigation, route }) {
             </View>
           )}
 
-          {/* Content */}
-          <View style={styles.content}>
-            {/* Status Badge */}
-            <View style={styles.statusContainer}>
-              <View style={[styles.statusBadge, { backgroundColor: statusInfo.bgColor }]}>
-                <MaterialIcons name={statusInfo.icon} size={16} color={statusInfo.color} />
-                <Text style={[styles.statusText, { color: statusInfo.color }]}>
-                  {statusInfo.text}
-                </Text>
-              </View>
-            </View>
-
-            {/* Title */}
-            <Text style={styles.title}>{report.titulo}</Text>
-
-            {/* Category and Date */}
-            <View style={styles.metaContainer}>
-              <View style={styles.categoryBadge}>
-                <Text style={styles.categoryText}>{report.categoria}</Text>
-              </View>
-              <View style={styles.dateContainer}>
-                <MaterialIcons name="schedule" size={16} color={colors.textGray} />
-                <Text style={styles.dateText}>{formatDateLong(report.fecha_creacion)}</Text>
-              </View>
-            </View>
-
-            {/* Description */}
-            <View style={styles.section}>
-              <Text style={styles.description}>{report.descripcion}</Text>
-            </View>
-
-            {/* Location with Map Preview */}
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Ubicación</Text>
-              <View style={styles.locationCard}>
-                <View style={styles.locationInfo}>
-                  <MaterialIcons name="location-on" size={20} color="#0043CE" />
-                  <Text style={styles.locationText}>{report.ubicacion}</Text>
-                </View>
-                
-                <View style={styles.mapPreview}>
-                  <MaterialIcons name="map" size={40} color={colors.textGray} />
-                  <Text style={styles.mapText}>Ver en mapa</Text>
-                </View>
-              </View>
-            </View>
-
-            {/* Voting Section */}
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>¿Es útil este reporte?</Text>
-              <View style={styles.voteContainer}>
-                <TouchableOpacity
-                  style={[styles.voteButton, userVote === 'up' && styles.voteButtonActive]}
-                  onPress={() => handleVote('up')}
-                >
-                  <Ionicons
-                    name={userVote === 'up' ? 'thumbs-up' : 'thumbs-up-outline'}
-                    size={22}
-                    color={userVote === 'up' ? "#0043CE" : colors.textGray}
-                  />
-                  <Text style={[styles.voteText, userVote === 'up' && styles.voteTextActive]}>
-                    {votes.positivos}
-                  </Text>
-                  <Text style={styles.voteLabel}>Útil</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={[styles.voteButton, userVote === 'down' && styles.voteButtonActive]}
-                  onPress={() => handleVote('down')}
-                >
-                  <Ionicons
-                    name={userVote === 'down' ? 'thumbs-down' : 'thumbs-down-outline'}
-                    size={22}
-                    color={userVote === 'down' ? colors.danger : colors.textGray}
-                  />
-                  <Text style={[styles.voteText, userVote === 'down' && styles.voteTextActive]}>
-                    {votes.negativos}
-                  </Text>
-                  <Text style={styles.voteLabel}>No útil</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            {/* Comments Section */}
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>
-                Comentarios ({report.comentarios?.length || 0})
+          {/* Status Badge - positioned over image */}
+          <View style={styles.statusBadgeContainer}>
+            <View style={[styles.statusBadge, { backgroundColor: statusInfo.bgColor }]}>
+              <MaterialIcons name={statusInfo.icon} size={16} color={statusInfo.color} />
+              <Text style={[styles.statusText, { color: statusInfo.color }]}>
+                {statusInfo.text}
               </Text>
-
-              {/* Add Comment */}
-              <View style={styles.addCommentContainer}>
-                <TextInput
-                  style={styles.commentInput}
-                  placeholder="Escribe un comentario..."
-                  placeholderTextColor={colors.textPlaceholder}
-                  value={commentText}
-                  onChangeText={setCommentText}
-                  multiline
-                />
-                <TouchableOpacity
-                  style={styles.sendButton}
-                  onPress={handleAddComment}
-                >
-                  <MaterialIcons name="send" size={18} color={colors.textWhite} />
-                </TouchableOpacity>
-              </View>
-
-              {/* Comments List */}
-              {report.comentarios && report.comentarios.length > 0 ? (
-                report.comentarios.map((comment, index) => (
-                  <View key={index} style={styles.commentItem}>
-                    <View style={styles.commentHeader}>
-                      <View style={styles.commentAvatar}>
-                        <MaterialIcons name="person" size={18} color={colors.textWhite} />
-                      </View>
-                      <View style={styles.commentInfo}>
-                        <Text style={styles.commentAuthor}>
-                          {comment.usuario || 'Usuario'}
-                        </Text>
-                        <Text style={styles.commentDate}>
-                          {formatDateLong(comment.fecha || report.fecha_creacion)}
-                        </Text>
-                      </View>
-                    </View>
-                    <Text style={styles.commentText}>
-                      {comment.texto || 'Comentario de ejemplo'}
-                    </Text>
-                  </View>
-                ))
-              ) : (
-                <View style={styles.noCommentsContainer}>
-                  <Text style={styles.noCommentsText}>
-                    No hay comentarios aún. ¡Sé el primero en comentar!
-                  </Text>
-                </View>
-              )}
             </View>
           </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+        </View>
+
+        {/* Content - Outside the image container */}
+        <View style={styles.contentContainer}>
+          {/* Title */}
+          <Text style={styles.title}>{report.titulo}</Text>
+
+          {/* Category Badge */}
+          <View style={styles.categoryBadge}>
+            <Text style={styles.categoryText}>{report.categoria}</Text>
+          </View>
+
+          {/* Description */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Descripción</Text>
+            <Text style={styles.description}>{report.descripcion}</Text>
+          </View>
+
+          {/* Meta Info */}
+          <View style={styles.metaRow}>
+            <View style={styles.metaItem}>
+              <MaterialIcons name="person" size={16} color={colors.textGray} />
+              <Text style={styles.metaText}>{report.usuario || 'Grimaldo Mendez Martins'}</Text>
+            </View>
+            
+            <View style={styles.metaItem}>
+              <MaterialIcons name="calendar-today" size={16} color={colors.textGray} />
+              <Text style={styles.metaText}>22 de Octubre 25</Text>
+            </View>
+            
+            <View style={styles.metaItem}>
+              <MaterialIcons name="location-on" size={16} color={colors.textGray} />
+              <Text style={styles.metaText}>Unidad Deportiva Oceancanta, Xicotepec, Puebla, 73500 México</Text>
+            </View>
+          </View>
+
+          {/* Voting Section */}
+          <View style={styles.voteContainer}>
+            <TouchableOpacity
+              style={[styles.voteButton, {
+                backgroundColor: userVote === 'up' ? '#16a34a' : 'transparent',
+                borderColor: '#16a34a',
+              }]}
+              onPress={() => handleVote('up')}
+            >
+              <Ionicons
+                name={userVote === 'up' ? 'thumbs-up' : 'thumbs-up-outline'}
+                size={18}
+                color={userVote === 'up' ? '#ffffff' : '#16a34a'}
+              />
+              <Text style={[styles.voteText, { color: userVote === 'up' ? '#ffffff' : '#16a34a' }]}>
+                {votes.positivos}
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.voteButton, {
+                backgroundColor: userVote === 'down' ? '#dc2626' : 'transparent',
+                borderColor: '#dc2626',
+              }]}
+              onPress={() => handleVote('down')}
+            >
+              <Ionicons
+                name={userVote === 'down' ? 'thumbs-down' : 'thumbs-down-outline'}
+                size={18}
+                color={userVote === 'down' ? '#ffffff' : '#dc2626'}
+              />
+              <Text style={[styles.voteText, { color: userVote === 'down' ? '#ffffff' : '#dc2626' }]}>
+                {votes.negativos}
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Comments Counter */}
+          <View style={styles.commentsCounter}>
+            <MaterialIcons name="chat-bubble-outline" size={16} color={colors.textGray} />
+            <Text style={styles.commentsCountText}>
+              {report.comentarios?.length || 0} comentario{(report.comentarios?.length || 0) !== 1 ? 's' : ''}
+            </Text>
+          </View>
+        </View>
+
+        {/* Map Section */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Ubicación</Text>
+          <View style={styles.mapContainer}>
+            <LeafletMap
+              reports={[report]}
+              onLocationSelect={null}
+              selectable={false}
+              style={styles.mapView}
+            />
+          </View>
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.backgroundWhite,
-  },
-  flex: {
-    flex: 1,
+    backgroundColor: colors.backgroundLight,
   },
   
-  // Blue Header
-  header: {
-    backgroundColor: '#0043CE',
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingTop: 10,
-    paddingBottom: 16,
+  // Back Navigation
+  backContainer: {
+    backgroundColor: colors.backgroundWhite,
     paddingHorizontal: 20,
-    justifyContent: 'space-between',
+    paddingVertical: 12,
   },
   backButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.textWhite + '20',
-    justifyContent: 'center',
+    flexDirection: 'row',
     alignItems: 'center',
+    gap: 8,
   },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: colors.textWhite,
-    flex: 1,
-    textAlign: 'center',
-    marginHorizontal: 16,
-  },
-  shareButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.textWhite + '20',
-    justifyContent: 'center',
-    alignItems: 'center',
+  backText: {
+    fontSize: 14,
+    color: colors.primary,
+    fontWeight: '500',
   },
   
   scrollView: {
     flex: 1,
   },
+  scrollContent: {
+    paddingBottom: 20,
+  },
+  
+  // Report Container - Only for image
+  reportContainer: {
+    backgroundColor: colors.backgroundWhite,
+    marginHorizontal: 16,
+    marginTop: 16,
+    borderRadius: 12,
+    overflow: 'hidden',
+    shadowColor: colors.shadowColor,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  
+  // Large Image
+  reportImage: {
+    width: '100%',
+    height: 250,
+  },
+  noImageContainer: {
+    width: '100%',
+    height: 250,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.backgroundLight,
+  },
+  noImageText: {
+    marginTop: 12,
+    fontSize: 14,
+    color: colors.textGray,
+    fontWeight: '500',
+  },
+  
+  // Status Badge - positioned over image
+  statusBadgeContainer: {
+    position: 'absolute',
+    top: 12,
+    right: 12,
+  },
+  statusBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    gap: 4,
+  },
+  statusText: {
+    fontSize: 11,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+  },
+
+  // Content Container - Separate from image
+  contentContainer: {
+    backgroundColor: colors.backgroundWhite,
+    marginHorizontal: 16,
+    marginTop: 16,
+    padding: 16,
+    borderRadius: 12,
+    shadowColor: colors.shadowColor,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: colors.textDark,
+    marginBottom: 12,
+    lineHeight: 24,
+  },
+  
+  categoryBadge: {
+    alignSelf: 'flex-start',
+    backgroundColor: '#fef2f2',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+    marginBottom: 16,
+  },
+  categoryText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#ef4444',
+  },
+  
+  // Sections
+  section: {
+    marginBottom: 20,
+    marginHorizontal: 16,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: colors.textDark,
+    marginBottom: 8,
+  },
+  description: {
+    fontSize: 14,
+    color: colors.textGray,
+    lineHeight: 20,
+  },
+  
+  // Meta Information
+  metaRow: {
+    marginBottom: 16,
+  },
+  metaItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginBottom: 8,
+  },
+  metaText: {
+    fontSize: 12,
+    color: colors.textGray,
+    fontWeight: '500',
+    flex: 1,
+  },
+  
+  // Voting
+  voteContainer: {
+    flexDirection: 'row',
+    gap: 12,
+    marginBottom: 16,
+  },
+  voteButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 8,
+    borderWidth: 2,
+  },
+  voteText: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  
+  // Comments Counter
+  commentsCounter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+  },
+  commentsCountText: {
+    fontSize: 12,
+    color: colors.textGray,
+    fontWeight: '500',
+  },
+  
+  // Map
+  mapContainer: {
+    backgroundColor: colors.backgroundWhite,
+    borderRadius: 12,
+    overflow: 'hidden',
+    shadowColor: colors.shadowColor,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    height: 300,
+  },
+  mapView: {
+    height: 300,
+  },
+  
+  // Loading and Error States
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -366,245 +498,5 @@ const styles = StyleSheet.create({
     color: colors.textDark,
     marginTop: 16,
     marginBottom: 24,
-  },
-
-  // Large Image
-  reportImage: {
-    width: '100%',
-    height: 300,
-  },
-  noImageContainer: {
-    width: '100%',
-    height: 300,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: colors.backgroundLight,
-  },
-  noImageText: {
-    marginTop: 12,
-    fontSize: 16,
-    color: colors.textGray,
-    fontWeight: '500',
-  },
-
-  // Content
-  content: {
-    padding: 20,
-  },
-  
-  // Status Badge
-  statusContainer: {
-    alignItems: 'flex-start',
-    marginBottom: 16,
-  },
-  statusBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
-    gap: 6,
-  },
-  statusText: {
-    fontSize: 12,
-    fontWeight: '700',
-    textTransform: 'uppercase',
-  },
-
-  // Title
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: colors.textDark,
-    marginBottom: 16,
-    lineHeight: 32,
-  },
-
-  // Meta Information
-  metaContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 16,
-    marginBottom: 20,
-  },
-  categoryBadge: {
-    backgroundColor: '#0043CE' + '15',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 12,
-  },
-  categoryText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#0043CE',
-    textTransform: 'capitalize',
-  },
-  dateContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-  },
-  dateText: {
-    fontSize: 12,
-    color: colors.textGray,
-    fontWeight: '500',
-  },
-
-  // Sections
-  section: {
-    marginBottom: 24,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: colors.textDark,
-    marginBottom: 12,
-  },
-  description: {
-    fontSize: 16,
-    color: colors.textGray,
-    lineHeight: 24,
-  },
-
-  // Location with Map
-  locationCard: {
-    backgroundColor: colors.backgroundLight,
-    borderRadius: 12,
-    padding: 16,
-    gap: 12,
-  },
-  locationInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  locationText: {
-    fontSize: 15,
-    color: colors.textDark,
-    fontWeight: '500',
-    flex: 1,
-  },
-  mapPreview: {
-    height: 120,
-    backgroundColor: colors.backgroundWhite,
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: colors.borderLight,
-    borderStyle: 'dashed',
-  },
-  mapText: {
-    fontSize: 14,
-    color: colors.textGray,
-    marginTop: 8,
-    fontWeight: '500',
-  },
-
-  // Voting
-  voteContainer: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-  voteButton: {
-    flex: 1,
-    alignItems: 'center',
-    padding: 16,
-    backgroundColor: colors.backgroundLight,
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: colors.borderLight,
-  },
-  voteButtonActive: {
-    backgroundColor: '#0043CE' + '10',
-    borderColor: '#0043CE' + '30',
-  },
-  voteText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: colors.textDark,
-    marginTop: 8,
-  },
-  voteTextActive: {
-    color: '#0043CE',
-  },
-  voteLabel: {
-    fontSize: 12,
-    color: colors.textGray,
-    fontWeight: '600',
-    marginTop: 4,
-  },
-
-  // Comments
-  addCommentContainer: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    gap: 12,
-    marginBottom: 20,
-  },
-  commentInput: {
-    flex: 1,
-    backgroundColor: colors.backgroundLight,
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    fontSize: 15,
-    color: colors.textDark,
-    maxHeight: 100,
-  },
-  sendButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: '#0043CE',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  commentItem: {
-    backgroundColor: colors.backgroundLight,
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 12,
-  },
-  commentHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  commentAvatar: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: '#0043CE',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
-  },
-  commentInfo: {
-    flex: 1,
-  },
-  commentAuthor: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: colors.textDark,
-    marginBottom: 2,
-  },
-  commentDate: {
-    fontSize: 11,
-    color: colors.textGray,
-  },
-  commentText: {
-    fontSize: 14,
-    color: colors.textGray,
-    lineHeight: 20,
-  },
-  noCommentsContainer: {
-    padding: 20,
-    alignItems: 'center',
-  },
-  noCommentsText: {
-    fontSize: 14,
-    color: colors.textGray,
-    textAlign: 'center',
   },
 });

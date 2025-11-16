@@ -103,7 +103,7 @@ const AppStack = () => {
                     name="ReportDetail"
                     component={ReportDetailScreen}
                     options={{
-                        title: 'Detalle del Reporte',
+                        headerShown: false,
                         animation: 'slide_from_right',
                         animationDuration: 350,
                     }}
