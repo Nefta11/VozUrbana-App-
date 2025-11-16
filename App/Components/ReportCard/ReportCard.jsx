@@ -5,113 +5,22 @@ import {
   Image,
   TouchableOpacity,
   StyleSheet,
-  Dimensions,
   ActivityIndicator,
 } from 'react-native';
 import { MaterialIcons, Ionicons } from '@expo/vector-icons';
 import { colors } from '../../utils/colors';
-
-const { width } = Dimensions.get('window');
-
-// Configuración de prioridades
-const PRIORITY_CONFIG = {
-  alta: {
-    color: '#ef4444',
-    text: 'Alta Prioridad',
-  },
-  media: {
-    color: '#f59e0b',
-    text: 'Prioridad Media',
-  },
-  baja: {
-    color: '#10b981',
-    text: 'Baja Prioridad',
-  },
-};
-
-// Configuración de estados
-const STATUS_CONFIG = {
-  nuevo: {
-    text: 'Nuevo',
-    icon: 'report-problem',
-    color: colors.primary,
-    bgColor: 'rgba(59, 130, 246, 0.15)',
-  },
-  en_proceso: {
-    text: 'En Proceso',
-    icon: 'schedule',
-    color: colors.warning,
-    bgColor: 'rgba(245, 158, 11, 0.15)',
-  },
-  resuelto: {
-    text: 'Resuelto',
-    icon: 'check-circle',
-    color: colors.success,
-    bgColor: 'rgba(16, 185, 129, 0.15)',
-  },
-  cerrado: {
-    text: 'Cerrado',
-    icon: 'cancel',
-    color: colors.textGray,
-    bgColor: 'rgba(107, 114, 128, 0.15)',
-  },
-  no_aprobado: {
-    text: 'No Aprobado',
-    icon: 'close',
-    color: colors.danger,
-    bgColor: 'rgba(239, 68, 68, 0.15)',
-  },
-};
-
-// Función para formatear fechas
-const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  const options = { day: '2-digit', month: 'short', year: 'numeric' };
-  return date.toLocaleDateString('es-ES', options);
-};
-
-// Configuración de categorías
-const CATEGORY_CONFIG = {
-  'salud publica': {
-    icon: 'favorite',
-    color: '#ef4444',
-    bgColor: '#fef2f2',
-  },
-  'infraestructura': {
-    icon: 'build',
-    color: '#f59e0b',
-    bgColor: '#fffbeb',
-  },
-  'servicios': {
-    icon: 'miscellaneous-services',
-    color: colors.primary,
-    bgColor: colors.primary + '15',
-  },
-  'seguridad': {
-    icon: 'security',
-    color: '#dc2626',
-    bgColor: '#fef2f2',
-  },
-  'medio ambiente': {
-    icon: 'eco',
-    color: '#16a34a',
-    bgColor: '#f0fdf4',
-  },
-  'transporte': {
-    icon: 'directions-bus',
-    color: '#9333ea',
-    bgColor: '#faf5ff',
-  },
-};
+import {
+  STATUS_CONFIG,
+  PRIORITY_CONFIG,
+  getCategoryConfig,
+  getStatusConfig,
+  getPriorityConfig,
+} from '../../utils/reportConfig';
+import { formatDate } from '../../utils/dateHelpers';
 
 // Componente de badge de categoría
 const CategoryBadge = ({ category }) => {
-  const categoryKey = category?.toLowerCase() || '';
-  const categoryInfo = CATEGORY_CONFIG[categoryKey] || {
-    icon: 'label',
-    color: colors.primary,
-    bgColor: colors.primary + '15',
-  };
+  const categoryInfo = getCategoryConfig(category);
 
   return (
     <View style={[styles.categoryBadge, { backgroundColor: categoryInfo.bgColor }]}>
@@ -123,7 +32,7 @@ const CategoryBadge = ({ category }) => {
 
 // Componente de badge de estado
 const StatusBadge = ({ status }) => {
-  const statusInfo = STATUS_CONFIG[status] || STATUS_CONFIG.nuevo;
+  const statusInfo = getStatusConfig(status);
 
   return (
     <View style={[styles.statusBadge, { backgroundColor: statusInfo.bgColor }]}>
@@ -177,7 +86,7 @@ const ReportImage = ({ imageUrl, title }) => {
 };
 
 // Componente de botones de votación
-const VoteButtons = ({ reportId, initialVotes, compact = false }) => {
+const VoteButtons = ({ initialVotes, compact = false }) => {
   const [votes, setVotes] = useState(initialVotes);
   const [userVote, setUserVote] = useState(null);
 
@@ -264,7 +173,7 @@ const VoteButtons = ({ reportId, initialVotes, compact = false }) => {
 
 // Componente principal ReportCard
 const ReportCard = ({ report, onPress }) => {
-  const priorityInfo = PRIORITY_CONFIG[report.prioridad] || PRIORITY_CONFIG.media;
+  const priorityInfo = getPriorityConfig(report.prioridad);
   const commentsCount = report.comentarios?.length || 0;
   const formattedDate = formatDate(report.fecha_creacion);
 
@@ -314,7 +223,6 @@ const ReportCard = ({ report, onPress }) => {
         {/* Botones de votación */}
         <View style={styles.voteSection}>
           <VoteButtons
-            reportId={report.id}
             initialVotes={{
               positivos: report.votos_positivos,
               negativos: report.votos_negativos,
@@ -492,10 +400,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 2,
   },
-  voteButtonActive: {
-    backgroundColor: colors.primary + '10',
-    borderColor: colors.primary + '30',
-  },
   voteButtonCompact: {
     paddingHorizontal: 12,
     paddingVertical: 8,
@@ -503,9 +407,6 @@ const styles = StyleSheet.create({
   voteText: {
     fontSize: 12,
     fontWeight: '600',
-    color: colors.textDark,
-  },
-  voteTextActive: {
     color: colors.textDark,
   },
   voteTextCompact: {

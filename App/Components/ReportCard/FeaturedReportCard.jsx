@@ -8,33 +8,11 @@ import {
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { colors } from '../../utils/colors';
+import { getCategoryConfig } from '../../utils/reportConfig';
+import { formatDate } from '../../utils/dateHelpers';
 
 export default function FeaturedReportCard({ report, onPress }) {
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('es-ES', {
-            day: '2-digit',
-            month: 'short',
-            year: 'numeric'
-        });
-    };
-
-    const getCategoryColor = (category) => {
-        switch (category.toLowerCase()) {
-            case 'salud publica':
-                return colors.categoryRed;
-            case 'infraestructura':
-                return colors.categoryOrange;
-            case 'saneamiento':
-                return colors.categoryBlue;
-            case 'seguridad':
-                return colors.categoryPurple;
-            case 'medio ambiente':
-                return colors.categoryGreen;
-            default:
-                return colors.primary;
-        }
-    };
+    const categoryConfig = getCategoryConfig(report.category);
 
     return (
         <TouchableOpacity style={styles.card} onPress={() => onPress(report)} activeOpacity={0.8}>
@@ -44,7 +22,8 @@ export default function FeaturedReportCard({ report, onPress }) {
                 <Text style={styles.title} numberOfLines={2}>{report.title}</Text>
 
                 <View style={styles.categoryContainer}>
-                    <View style={[styles.categoryTag, { backgroundColor: getCategoryColor(report.category) }]}>
+                    <View style={[styles.categoryTag, { backgroundColor: categoryConfig.color }]}>
+                        <MaterialIcons name={categoryConfig.icon} size={16} color={colors.textWhite} />
                         <Text style={styles.categoryText}>{report.category}</Text>
                     </View>
                 </View>
@@ -125,10 +104,13 @@ const styles = StyleSheet.create({
         marginBottom: 8,
     },
     categoryTag: {
+        flexDirection: 'row',
+        alignItems: 'center',
         alignSelf: 'flex-start',
         paddingHorizontal: 8,
         paddingVertical: 4,
         borderRadius: 12,
+        gap: 4,
     },
     categoryText: {
         fontSize: 12,

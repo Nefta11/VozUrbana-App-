@@ -17,42 +17,8 @@ import {
 import { MaterialIcons, Ionicons } from '@expo/vector-icons';
 import { colors } from '../../utils/colors';
 import { useReports } from '../../hooks/useReports';
-
-// Configuración de estados
-const STATUS_CONFIG = {
-  nuevo: {
-    text: 'Nuevo',
-    icon: 'report-problem',
-    color: colors.primary,
-    bgColor: 'rgba(59, 130, 246, 0.15)',
-  },
-  en_proceso: {
-    text: 'En Proceso',
-    icon: 'schedule',
-    color: colors.warning,
-    bgColor: 'rgba(245, 158, 11, 0.15)',
-  },
-  resuelto: {
-    text: 'Resuelto',
-    icon: 'check-circle',
-    color: colors.success,
-    bgColor: 'rgba(16, 185, 129, 0.15)',
-  },
-
-};
-
-// Función para formatear fechas
-const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  const options = {
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  };
-  return date.toLocaleDateString('es-ES', options);
-};
+import { getStatusConfig } from '../../utils/reportConfig';
+import { formatDateLong } from '../../utils/dateHelpers';
 
 export default function ReportDetailScreen({ navigation, route }) {
   const { reportId } = route.params;
@@ -148,7 +114,7 @@ export default function ReportDetailScreen({ navigation, route }) {
     );
   }
 
-  const statusInfo = STATUS_CONFIG[report.estado] || STATUS_CONFIG.nuevo;
+  const statusInfo = getStatusConfig(report.estado);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -208,7 +174,7 @@ export default function ReportDetailScreen({ navigation, route }) {
               </View>
               <View style={styles.dateContainer}>
                 <MaterialIcons name="schedule" size={16} color={colors.textGray} />
-                <Text style={styles.dateText}>{formatDate(report.fecha_creacion)}</Text>
+                <Text style={styles.dateText}>{formatDateLong(report.fecha_creacion)}</Text>
               </View>
             </View>
 
@@ -306,7 +272,7 @@ export default function ReportDetailScreen({ navigation, route }) {
                           {comment.usuario || 'Usuario'}
                         </Text>
                         <Text style={styles.commentDate}>
-                          {formatDate(comment.fecha || report.fecha_creacion)}
+                          {formatDateLong(comment.fecha || report.fecha_creacion)}
                         </Text>
                       </View>
                     </View>
